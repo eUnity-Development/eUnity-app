@@ -6,6 +6,12 @@ Welcome to eUnity, where connections thrive! eUnity is a dating app designed to 
 
 ## Backend set up
 
+First install node.js from:
+
+  ```
+  https://nodejs.org/en
+  ```
+
 Once full repo is in local repository run the follwoing command to install all packages
   ```
   npm install
