@@ -12,7 +12,7 @@ First install node.js from:
   https://nodejs.org/en
   ```
 
-Once full repo is in local repository run the follwoing command to install all packages
+Then clone github repo into your local repository and run the following command in terminal to install all packages
   ```
   npm install
   ```
@@ -29,7 +29,7 @@ To run the server enter the following in the terminal
   ```
   npm run devStart
   ```
-Ensure you are in the backend folder before running these commands
+ENSURE YOU ARE IN THE BACKEND FOLDER BEFORE RUNNING THESE COMMANDS
 
 ## Features
 
