@@ -23,6 +23,8 @@ To run the server enter the following in the terminal
   ```
   npm run devStart
   ```
+Ensure you are in the backend folder before running these commands
+
 ## Features
 
 ### Home Screen
