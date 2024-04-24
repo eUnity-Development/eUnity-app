@@ -4,6 +4,25 @@
 
 Welcome to eUnity, where connections thrive! eUnity is a dating app designed to help you find meaningful relationships with like-minded individuals. This README serves as your guide to understanding the app's features and functionalities.
 
+## Backend set up
+
+Once full repo is in local repository run the follwoing command to install all packages
+  ```
+  npm install
+  ```
+This will install dotenv, express, mongoose, and nodemon
+
+After, create an empty file called ".env"
+Then add this to the file:
+  ```
+  DATABASE_URL=mongodb://localhost/userInfo
+  ```
+This URL is just a place holder for now until the database is created
+
+To run the server enter the following in the terminal
+  ```
+  npm run devStart
+  ```
 ## Features
 
 ### Home Screen
