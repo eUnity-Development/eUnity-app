@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:frontend/views/ScreenOne.dart';
-import 'package:frontend/views/ScreenTwo.dart';
-import 'package:frontend/views/ScreenThree.dart';
-import 'package:frontend/views/ScreenFour.dart';
-import 'package:frontend/views/ScreenFive.dart';
+import 'package:frontend/views/Swiping.dart';
+import 'package:frontend/views/PremiumFeatures.dart';
+import 'package:frontend/views/Messages.dart';
+import 'package:frontend/views/Profile.dart';
 
 class CoreTemplate extends StatefulWidget {
   const CoreTemplate({super.key});
@@ -15,12 +14,15 @@ class CoreTemplate extends StatefulWidget {
 
 class _CoreTemplateState extends State<CoreTemplate> {
   int selectedIndex = 0;
+  bool colorRed = true;
+  Color unselectedColor = Color.fromARGB(255, 56, 56, 56);
+  Color selectedColor = Color.fromARGB(255, 247, 112, 112);
+
   final screens = [
-    const ScreenOne(),
-    const ScreenTwo(),
-    const ScreenThree(),
-    const ScreenFour(),
-    const ScreenFive(),
+    const Swiping(),
+    const PremiumFeatures(),
+    const Messages(),
+    const Profile(),
   ];
 
   void onItemTapped(int index) async {
@@ -31,18 +33,11 @@ class _CoreTemplateState extends State<CoreTemplate> {
 
   @override
   Widget build(BuildContext context) {
-    Color unselectedColor = Color.fromARGB(255, 56, 56, 56);
-    Color selectedColor = Color.fromARGB(255, 247, 112, 112);
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 232, 232, 232),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(
-              height: 75,
-              width: 75,
-              child: Image.asset("assets/e-unity-logo.png"),
-            ),
             Container(
               height: 1.0, // Set the desired height of the line
               color: const Color(0x5f000000),
@@ -55,6 +50,40 @@ class _CoreTemplateState extends State<CoreTemplate> {
             ),
           ],
         ),
+      ),
+      appBar: AppBar(
+        title: Row(children: [
+          SizedBox(
+            height: 50,
+            width: 50,
+            child: colorRed
+                ? Image.asset("assets/e-unity-logo.png")
+                : Image.asset("assets/alt-e-unity-logo.png"),
+          ),
+          SizedBox(
+            width: 5,
+          ),
+          Text(
+            "eUnity",
+            style: TextStyle(color: selectedColor, fontWeight: FontWeight.bold),
+          )
+        ]),
+        backgroundColor: Color.fromARGB(255, 232, 232, 232),
+        actions: [
+          SizedBox(
+            child: IconButton(
+              icon: SvgPicture.asset('assets/NavBarUI/icon-bell.svg'),
+              onPressed: () {
+                setState(() {
+                  colorRed
+                      ? selectedColor = Color.fromARGB(255, 2, 162, 236)
+                      : selectedColor = Color.fromARGB(255, 247, 112, 112);
+                  colorRed = !colorRed;
+                });
+              },
+            ),
+          )
+        ],
       ),
       bottomNavigationBar: SizedBox(
         height: 80,
@@ -86,25 +115,9 @@ class _CoreTemplateState extends State<CoreTemplate> {
                   width: 40,
                   height: 40,
                   child: SvgPicture.asset(
-                    'assets/NavBarUI/icon-magnifying-glass.svg',
+                    'assets/NavBarUI/icon-sparkles.svg',
                     color: unselectedColor,
                   ),
-                ),
-                activeIcon: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: SvgPicture.asset(
-                      'assets/NavBarUI/icon-magnifying-glass.svg',
-                      color: selectedColor),
-                ),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: SvgPicture.asset('assets/NavBarUI/icon-sparkles.svg',
-                      color: unselectedColor),
                 ),
                 activeIcon: SizedBox(
                   width: 40,
@@ -135,10 +148,8 @@ class _CoreTemplateState extends State<CoreTemplate> {
                 icon: SizedBox(
                   width: 40,
                   height: 40,
-                  child: SvgPicture.asset(
-                    'assets/NavBarUI/icon-shadow.svg',
-                    color: unselectedColor,
-                  ),
+                  child: SvgPicture.asset('assets/NavBarUI/icon-shadow.svg',
+                      color: unselectedColor),
                 ),
                 activeIcon: SizedBox(
                   width: 40,
