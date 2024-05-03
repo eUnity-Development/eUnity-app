@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	docs "eunity.com/backend-main/docs"
+	"eunity.com/backend-main/helpers/DBManager"
 	"eunity.com/backend-main/routes"
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
@@ -11,8 +12,12 @@ import (
 )
 
 func main() {
+
 	//init server
 	router := gin.Default()
+
+	//init DbManager
+	DBManager.Init()
 
 	//set default endpoint
 	docs.SwaggerInfo.BasePath = "/api/v1"
@@ -31,5 +36,7 @@ func main() {
 		swaggerfiles.Handler,
 	))
 	router.Run(":3200")
+
+	defer DBManager.Disconnect()
 
 }

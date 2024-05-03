@@ -1,0 +1,27 @@
+The structure of the project follows a
+model, route, controller framework
+
+The project also contains a helper folder, 
+each helper is inclosed in it's own 
+folder such that they can encompass their own package.
+
+This allows use to treat each helper as a static class, that we can call 
+for common tasks needed on the controllers.
+
+
+Since go does not discern on the basis of file at the package level
+all controllers functions are actually methods belonging to empty
+structs/classes that share their name with the file. 
+This is done purely for namespacing purposes when in the routes folder. 
+
+Ex: 
+
+//empty struct
+type User_controllers struct {
+}
+//method belonging to that struct
+func (u *User_controllers) GET_me(c *gin.Context) {
+	c.JSON(200, "Hello from user routes")
+}
+
+
