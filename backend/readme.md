@@ -21,3 +21,18 @@ Alternatively you can use the makefile
     make run
 
 
+Must add export PATH=$(go env GOPATH)/bin:$PATH to path
+
+Must also install air, and swag
+
+go install github.com/cosmtrek/air@latest
+
+go install github.com/swaggo/swag/cmd/swag@latest
+
+
+resources : 
+    
+    https://github.com/cosmtrek/air
+
+    https://github.com/swaggo/gin-swagger
+

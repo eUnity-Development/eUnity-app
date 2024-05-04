@@ -1,6 +1,36 @@
 info:
   contact: {}
 paths:
+  /users/login:
+    post:
+      consumes:
+      - multipart/form-data
+      description: logs in a user
+      parameters:
+      - description: Email
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: Password
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: User login route
+      tags:
+      - example
   /users/me:
     get:
       consumes:
@@ -14,6 +44,36 @@ paths:
           schema:
             type: string
       summary: User test route
+      tags:
+      - example
+  /users/signup:
+    post:
+      consumes:
+      - multipart/form-data
+      description: creates a new user
+      parameters:
+      - description: Email
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: Password
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: User signup route
       tags:
       - example
 swagger: "2.0"

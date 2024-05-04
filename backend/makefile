@@ -1,6 +1,6 @@
 
 
-run: 
+run: get_packages swag
 	air
 
 serve: compile
@@ -13,3 +13,6 @@ compile: get_packages
 
 get_packages:
 	@go get
+
+swag:
+	swag init
