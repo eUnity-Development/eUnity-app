@@ -4,6 +4,8 @@ import 'package:frontend/views/Swiping.dart';
 import 'package:frontend/views/PremiumFeatures.dart';
 import 'package:frontend/views/Messages.dart';
 import 'package:frontend/views/Profile.dart';
+import 'package:frontend/widgets/HomeTopBar.dart';
+import 'package:frontend/classes/DesignVariables.dart';
 
 class CoreTemplate extends StatefulWidget {
   const CoreTemplate({super.key});
@@ -16,7 +18,7 @@ class _CoreTemplateState extends State<CoreTemplate> {
   int selectedIndex = 0;
   bool colorRed = true;
   Color unselectedColor = Color.fromARGB(255, 56, 56, 56);
-  Color selectedColor = Color.fromARGB(255, 247, 112, 112);
+  Color selectedColor = DesignVariables.primaryRed;
 
   final screens = [
     const Swiping(),
@@ -38,11 +40,6 @@ class _CoreTemplateState extends State<CoreTemplate> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              height: 1.0, // Set the desired height of the line
-              color: const Color(0x5f000000),
-              margin: const EdgeInsets.symmetric(vertical: 0),
-            ),
             SizedBox(
               height: 734,
               width: 412,
@@ -51,44 +48,11 @@ class _CoreTemplateState extends State<CoreTemplate> {
           ],
         ),
       ),
-      appBar: AppBar(
-        title: Row(children: [
-          SizedBox(
-            height: 50,
-            width: 50,
-            child: colorRed
-                ? Image.asset("assets/e-unity-logo.png")
-                : Image.asset("assets/alt-e-unity-logo.png"),
-          ),
-          SizedBox(
-            width: 5,
-          ),
-          Text(
-            "eUnity",
-            style: TextStyle(color: selectedColor, fontWeight: FontWeight.bold),
-          )
-        ]),
-        backgroundColor: Color.fromARGB(255, 232, 232, 232),
-        actions: [
-          SizedBox(
-            child: IconButton(
-              icon: SvgPicture.asset('assets/NavBarUI/icon-bell.svg'),
-              onPressed: () {
-                setState(() {
-                  colorRed
-                      ? selectedColor = Color.fromARGB(255, 2, 162, 236)
-                      : selectedColor = Color.fromARGB(255, 247, 112, 112);
-                  colorRed = !colorRed;
-                });
-              },
-            ),
-          )
-        ],
-      ),
+      appBar: HomeTopBar(selectedIndex: selectedIndex),
       bottomNavigationBar: SizedBox(
         height: 80,
         child: BottomNavigationBar(
-            backgroundColor: Color.fromARGB(255, 232, 232, 232),
+            backgroundColor: Color.fromARGB(255, 245, 245, 245),
             type: BottomNavigationBarType.fixed,
             showSelectedLabels: false,
             showUnselectedLabels: false,
