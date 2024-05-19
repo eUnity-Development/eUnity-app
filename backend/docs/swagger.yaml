@@ -30,7 +30,26 @@ paths:
             type: string
       summary: User login route
       tags:
-      - example
+      - user
+  /users/logout:
+    post:
+      consumes:
+      - multipart/form-data
+      description: logs out a user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: User logout route
+      tags:
+      - user
   /users/me:
     get:
       consumes:
@@ -45,7 +64,33 @@ paths:
             type: string
       summary: User test route
       tags:
-      - example
+      - user
+    patch:
+      consumes:
+      - application/json
+      description: takes in a json object and attempts to update the user, does not
+        modify base fields such as email, it is a protected route
+      parameters:
+      - description: Data
+        in: body
+        name: data
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: User update route
+      tags:
+      - user
   /users/signup:
     post:
       consumes:
@@ -75,5 +120,5 @@ paths:
             type: string
       summary: User signup route
       tags:
-      - example
+      - user
 swagger: "2.0"
