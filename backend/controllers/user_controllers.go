@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"fmt"
+	"reflect"
 	"regexp"
 	"time"
 
@@ -83,13 +84,72 @@ func (u *User_controllers) PATCH_me(c *gin.Context) {
 	err := c.BindJSON(&user)
 	if err != nil {
 		c.JSON(400, gin.H{
-			"response": "Unable to update user",
+			"response": "Unable to update user 1",
 		})
 		return
 	}
 
+	//get user id
+	user_id, err := c.Cookie("user_id")
+	if err != nil {
+		c.JSON(400, gin.H{
+			"response": "No user found",
+		})
+		return
+	}
+
+	// //turn string id into bson object id
+	bson_user_id, err := primitive.ObjectIDFromHex(user_id)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"response": "Invalid user ID",
+		})
+		return
+	}
+
+	// user_copy := user
+
+	//get values and types from user object
+	v := reflect.ValueOf(user)
+	typeOfUser := v.Type()
+	for i := 0; i < v.NumField(); i++ {
+		// Get the bson tag of the field
+		bsonTag := typeOfUser.Field(i).Tag.Get("bson")
+
+		// If the bson tag is "-", the field is ignored
+		if bsonTag == "-" {
+			continue
+		}
+
+		// If the bson tag is not empty, use it as the key
+		key := bsonTag
+		if key == "" {
+			// If the bson tag is empty, use the field name as the key
+			key = typeOfUser.Field(i).Name
+		}
+
+		value := v.Field(i)
+		//check if nill
+		if (value.Kind() == reflect.Ptr || value.Kind() == reflect.Slice || value.Kind() == reflect.Map || value.Kind() == reflect.Interface || value.Kind() == reflect.Chan || value.Kind() == reflect.Func) && value.IsNil() {
+			continue
+		}
+
+		if (value.Kind() == reflect.Slice || value.Kind() == reflect.Array || value.Kind() == reflect.String) && value.Len() == 0 {
+			// Handle the case where the value is empty
+			continue
+		} else {
+			_, err = DBManager.DB.Collection("users").UpdateOne(context.Background(), bson.M{"_id": bson_user_id}, bson.M{"$set": bson.M{key: value.Interface()}})
+			if err != nil {
+				c.JSON(400, gin.H{
+					"response": "Unable to update user 2",
+				})
+				return
+			}
+		}
+	}
+
 	c.JSON(200, gin.H{
-		"response": user,
+		"response": "User updated",
 	})
 
 }
