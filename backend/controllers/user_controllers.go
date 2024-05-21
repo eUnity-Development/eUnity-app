@@ -231,12 +231,14 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 		return
 	}
 
-	//we do not store the users password in the database
-	new_user := models.User{
-		Email:        credentials.Email,
-		PasswordHash: password_hash,
-		Verified:     false,
-	}
+   //we do not store the users password in the database
+    objectID := primitive.NewObjectID()
+    new_user := models.User{
+        ID:           &objectID,
+        Email:        credentials.Email,
+        PasswordHash: password_hash,
+        Verified:     false,
+    }
 
 	_, err = DBManager.DB.Collection("users").InsertOne(context.Background(), new_user)
 	if err != nil {
