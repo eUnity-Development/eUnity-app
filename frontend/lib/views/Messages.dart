@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/classes/ConnectionTester.dart';
 
-class ScreenThree extends StatefulWidget {
-  const ScreenThree({super.key});
+class Messages extends StatefulWidget {
+  const Messages({super.key});
 
   @override
-  State<ScreenThree> createState() => _CreatePostState();
+  State<Messages> createState() => _CreatePostState();
 }
 
-class _CreatePostState extends State<ScreenThree> {
+class _CreatePostState extends State<Messages> {
   bool init = true;
   String? testData;
 
@@ -35,7 +35,7 @@ class _CreatePostState extends State<ScreenThree> {
     print(testData);
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
-      body: Center(child: Text("Screen Three")),
+      body: Center(child: Text("Messages")),
     );
   }
 }
