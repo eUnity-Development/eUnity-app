@@ -232,10 +232,9 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 	}
 
 	//we do not store the users password in the database
-	objectId := primitive.NewObjectID()
+	objectID := primitive.NewObjectID()
 	new_user := models.User{
 		ID:           &objectID,
-		ID:           &objectId,
 		Email:        credentials.Email,
 		PasswordHash: password_hash,
 		Verified:     false,
