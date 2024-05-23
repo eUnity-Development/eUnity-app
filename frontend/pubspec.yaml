@@ -37,6 +37,11 @@ dependencies:
   cupertino_icons: ^1.0.2
   dio: ^5.3.3
   flutter_svg: ^2.0.10+1
+  equatable: ^2.0.5
+  cookie_jar: ^4.0.8
+  dio_cookie_manager: ^3.1.1
+  path_provider: ^2.1.3
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +69,7 @@ flutter:
   assets:
     - assets/
     - assets/NavBarUI/
+    - assets/FakePeople/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
