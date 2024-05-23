@@ -19,7 +19,7 @@ class RouteHandler {
     dio.interceptors.add(CookieManager(RouteHandler.cookieJar));
     dio.options.connectTimeout = const Duration(seconds: 30);
     started = true;
-    checkForExpiredCookies();
+    //checkForExpiredCookies();
     //check if cookies are expired
   }
 

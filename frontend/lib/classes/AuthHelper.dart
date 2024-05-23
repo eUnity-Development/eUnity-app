@@ -45,9 +45,7 @@ class AuthHelper {
     for (var cookie in cookies) {
       if (cookie.name == key) {
         var decoded = Uri.decodeFull(cookie.value);
-        //replace + with spaces
-        decoded = decoded.replaceAll("+", " ");
-        return json.decode(decoded);
+        return decoded;
       }
     }
   }
