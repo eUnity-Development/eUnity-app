@@ -25,7 +25,7 @@ type DateOfBirth struct {
 }
 
 type Height struct {
-	Feet        int `json:"feet,omitempty"`
-	Inches      int `json:"inches,omitempty"`
-	Centimeters int `json:"centimeters,omitempty"`
+	Feet        int `bson:"ft" json:"ft,omitempty" `
+	Inches      int `bson:"in" json:"in,omitempty"`
+	Centimeters int `bson:"cm" json:"cm,omitempty" `
 }

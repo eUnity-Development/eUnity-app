@@ -134,6 +134,19 @@ func (u *User_controllers) PATCH_me(c *gin.Context) {
 			continue
 		}
 
+		//if value is email or password, send error
+		if key == "email" || key == "password" {
+			//if value is null or empty, send error
+			if value.Interface() == "" {
+				continue
+			} else {
+				c.JSON(400, gin.H{
+					"response": "cannot patch email or password",
+				})
+				return
+			}
+		}
+
 		if (value.Kind() == reflect.Slice || value.Kind() == reflect.Array || value.Kind() == reflect.String) && value.Len() == 0 {
 			// Handle the case where the value is empty
 			continue
@@ -234,7 +247,6 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 	//we do not store the users password in the database
 	objectId := primitive.NewObjectID()
 	new_user := models.User{
-		ID:           &objectID,
 		ID:           &objectId,
 		Email:        credentials.Email,
 		PasswordHash: password_hash,
