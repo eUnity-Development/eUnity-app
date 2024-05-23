@@ -344,9 +344,9 @@ func (u *User_controllers) POST_login(c *gin.Context) {
 	cookie := generate_secure_cookie(result)
 
 	//set cookie
-	c.SetCookie("session_id", cookie["session_id"].(string), 3600, "/", "localhost", false, true)
-	c.SetCookie("user_id", cookie["user_id"].(string), 3600, "/", "localhost", false, true)
-	c.SetCookie("expires_at", cookie["expires_at"].(string), 3600, "/", "localhost", false, true)
+	c.SetCookie("session_id", cookie["session_id"].(string), 3600, "/", "/", false, true)
+	c.SetCookie("user_id", cookie["user_id"].(string), 3600, "/", "/", false, true)
+	c.SetCookie("expires_at", cookie["expires_at"].(string), 3600, "/", "/", false, true)
 
 	//turn cookie into bson to store in database
 	session_bson := bson.M{
