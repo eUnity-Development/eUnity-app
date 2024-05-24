@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"eunity.com/backend-main/helpers/DBManager"
+	"eunity.com/backend-main/helpers/EmailSender"
 	"eunity.com/backend-main/helpers/PasswordHasher"
 	"eunity.com/backend-main/models"
 	"github.com/gin-gonic/gin"
@@ -244,6 +245,16 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 		return
 	}
 
+	err = EmailSender.Send(credentials.Email)
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(400, gin.H{
+			"response": "Unable to send email",
+		})
+		return
+
+	}
+
 	//we do not store the users password in the database
 	objectId := primitive.NewObjectID()
 	new_user := models.User{
@@ -261,6 +272,8 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 		})
 		return
 	}
+
+	//send email
 
 	c.JSON(200, gin.H{
 		"response": "Successfully created account, please verify email",
