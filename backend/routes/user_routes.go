@@ -6,6 +6,7 @@ import (
 )
 
 var controller = controllers.User_controllers{}
+var auth_controller = controllers.Auth_controllers{}
 
 func User_routes(r *gin.RouterGroup) {
 
@@ -15,6 +16,13 @@ func User_routes(r *gin.RouterGroup) {
 	//LOGIN
 	r.POST("/login", controller.POST_login)
 
+	//GOOGLE AUTH
+	r.GET("/auth/google", auth_controller.BeginGoogleAuth)
+
+	r.GET("/auth/google/callback", auth_controller.OAuthCallback)
+
+	//LOGOUT
+	r.GET("/auth/google/logout", controller.POST_logout)
 }
 
 func Protected_user_routes(r *gin.RouterGroup) {

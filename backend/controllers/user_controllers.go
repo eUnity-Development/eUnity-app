@@ -288,7 +288,7 @@ func (u *User_controllers) POST_login(c *gin.Context) {
 		return
 	}
 	// check if password is correct
-	var result models.User
+	var result models.User 
 	err = user.Decode(&result)
 
 	if err != nil {
