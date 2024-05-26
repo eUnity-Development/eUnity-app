@@ -2,18 +2,22 @@ package DBManager
 
 import (
 	"context"
+	"os"
 	"time"
 
+	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // must replace default db and host using .env variables
-var Host = "mongodb://localhost:27017"
+var Host string
 var Client *mongo.Client
 var DB *mongo.Database
 
 func Init() {
+	godotenv.Load()
+	Host = os.Getenv("DATABASE_URL")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(Host))
