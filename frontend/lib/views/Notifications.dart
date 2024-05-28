@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/widgets/NotificationWidgets/NotificationGroup.dart';
-import 'package:frontend/widgets/NotificationWidgets/NotificationsTopBar.dart';
+import 'package:frontend/widgets/TopBars/PushedScreenWithIconTopBar.dart';
 import 'dart:math';
 
 class Notifications extends StatefulWidget {
@@ -119,7 +119,10 @@ class _NotificationsState extends State<Notifications> {
   Widget build(BuildContext context) {
     firstload();
     return Scaffold(
-      appBar: NotificationsTopBar(),
+      appBar: PushedScreenWithIconTopBar(
+        title: "Recent Notifications",
+        assetPath: "assets/NavBarUI/icon-bell.svg",
+      ),
       body: notificationGroups.isNotEmpty
           ? _buildList()
           : Center(

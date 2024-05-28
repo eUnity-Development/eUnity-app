@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/views/MatchPreferences.dart';
 import 'package:frontend/views/Notifications.dart';
 
 class HomeTopBar extends StatefulWidget implements PreferredSizeWidget {
@@ -18,6 +19,13 @@ class _HomeTopBarState extends State<HomeTopBar> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => Notifications()),
+    );
+  }
+
+  void navigateToMatchPreferences() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MatchPreferences()),
     );
   }
 
@@ -44,11 +52,7 @@ class _HomeTopBarState extends State<HomeTopBar> {
                       'assets/NavBarUI/icon-adjustments.svg',
                       width: 35,
                     ),
-                    onPressed: () {
-                      setState(() {
-                        print('Clicked');
-                      });
-                    },
+                    onPressed: navigateToMatchPreferences,
                   )
                 : const SizedBox(),
             IconButton(

@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class NotificationsTopBar extends StatefulWidget
+class PushedScreenWithIconTopBar extends StatefulWidget
     implements PreferredSizeWidget {
-  const NotificationsTopBar({super.key});
+  final String assetPath;
+  final String title;
+  const PushedScreenWithIconTopBar(
+      {super.key, required this.assetPath, required this.title});
 
   @override
-  State<NotificationsTopBar> createState() => _NotificationsTopBarState();
+  State<PushedScreenWithIconTopBar> createState() =>
+      _PushedScreenWithIconTopBarState();
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-class _NotificationsTopBarState extends State<NotificationsTopBar> {
+class _PushedScreenWithIconTopBarState
+    extends State<PushedScreenWithIconTopBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -38,11 +43,11 @@ class _NotificationsTopBarState extends State<NotificationsTopBar> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    child: SvgPicture.asset("assets/NavBarUI/icon-bell.svg"),
+                    child: SvgPicture.asset(widget.assetPath),
                     height: 30,
                   ),
                   Text(
-                    "Recent Notifications",
+                    widget.title,
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
                   ),
                 ],
