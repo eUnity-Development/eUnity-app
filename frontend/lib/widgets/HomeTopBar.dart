@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/views/Notifications.dart';
 
 class HomeTopBar extends StatefulWidget implements PreferredSizeWidget {
   final int selectedIndex;
@@ -13,6 +14,13 @@ class HomeTopBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _HomeTopBarState extends State<HomeTopBar> {
+  void navigateToNotifications() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Notifications()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -26,6 +34,7 @@ class _HomeTopBarState extends State<HomeTopBar> {
         ),
       ]),
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      surfaceTintColor: Colors.transparent,
       actions: [
         Row(
           children: [
@@ -44,11 +53,7 @@ class _HomeTopBarState extends State<HomeTopBar> {
                 : const SizedBox(),
             IconButton(
               icon: SvgPicture.asset('assets/NavBarUI/icon-bell.svg'),
-              onPressed: () {
-                setState(() {
-                  print("Clicked.");
-                });
-              },
+              onPressed: navigateToNotifications,
             ),
           ],
         )
