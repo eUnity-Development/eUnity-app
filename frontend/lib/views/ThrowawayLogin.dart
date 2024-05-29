@@ -50,44 +50,58 @@ class _ThrowawayLoginState extends State<ThrowawayLogin> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          GestureDetector(
-            child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    border:
-                        Border.all(width: 1, color: DesignVariables.greyLines),
-                    color: DesignVariables.primaryRed),
-                height: 51,
-                width: 207,
-                child: Text(
-                  "Test Signup Button",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600),
-                )),
-            onTap: testSignup,
+          Center(
+            child: GestureDetector(
+              child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    color: DesignVariables.primaryRed
+                  ),
+
+                  height: 52,
+                  width: 334.67,
+
+                  child: Center(
+                    child: Text (
+                      "Sign Up Here!",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 21,
+                          fontWeight: FontWeight.w700
+                        ),
+                    )
+                  )
+              ),
+              onTap: testSignup,
+            ),
           ),
           SizedBox(
             height: 20,
           ),
-          GestureDetector(
-            child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    border:
-                        Border.all(width: 1, color: DesignVariables.greyLines),
-                    color: DesignVariables.primaryRed),
-                height: 51,
-                width: 207,
-                child: Text(
-                  "Test Login Button",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600),
-                )),
-            onTap: testLogin,
+          Center(
+            child: GestureDetector(
+              child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    color: DesignVariables.primaryRed
+                  ),
+
+                  height: 52,
+                  width: 334.67,
+
+                  child: Center(
+                    child: Text (
+                      "Login",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 21,
+                          fontWeight: FontWeight.w700
+                        ),
+                    )
+                  )
+              ),
+              onTap: testLogin,
+            ),
           ),
         ],
       ),
