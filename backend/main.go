@@ -34,6 +34,7 @@ func main() {
 
 	//protected routes
 	routes.Protected_user_routes(r.Group("/users", AuthRequired()))
+	routes.Media_routes(r.Group("/media", AuthRequired()))
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Serve Swagger UI at /docs
