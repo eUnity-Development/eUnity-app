@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/classes/DesignVariables.dart';
 import 'package:frontend/classes/AuthHelper.dart';
 import 'package:frontend/views/CoreTemplate.dart';
+import 'package:frontend/widgets/splash_screen_button.dart';
 
 class ThrowawayLogin extends StatefulWidget {
   const ThrowawayLogin({super.key});
@@ -50,58 +51,60 @@ class _ThrowawayLoginState extends State<ThrowawayLogin> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Center(
-            child: GestureDetector(
-              child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
-                    color: DesignVariables.primaryRed
-                  ),
-
-                  height: 52,
-                  width: 334.67,
-
-                  child: Center(
-                    child: Text (
-                      "Sign Up Here!",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 21,
-                          fontWeight: FontWeight.w700
-                        ),
-                    )
-                  )
-              ),
-              onTap: testSignup,
-            ),
+          SplashScreenButton(
+            text: "Sign Up Here!",
+            color: Colors.transparent,
+            borderColor: DesignVariables.primaryRed,
+            textColor: DesignVariables.primaryRed,
+            onTap: testSignup,
           ),
-          SizedBox(
-            height: 20,
+          
+          const SizedBox(
+            height: 92,
           ),
-          Center(
-            child: GestureDetector(
-              child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
-                    color: DesignVariables.primaryRed
-                  ),
 
-                  height: 52,
-                  width: 334.67,
+          SplashScreenButton(
+            text: "Login",
+            color: DesignVariables.primaryRed,
+            borderColor: Colors.transparent,
+            textColor: Colors.white,
+            onTap: testLogin,
+          ),
 
-                  child: Center(
-                    child: Text (
-                      "Login",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 21,
-                          fontWeight: FontWeight.w700
-                        ),
-                    )
-                  )
-              ),
-              onTap: testLogin,
-            ),
+          const SizedBox(
+            height: 31,
+          ),
+
+          SplashScreenButton(
+            text: "Phone Number",
+            color: DesignVariables.primaryRed,
+            borderColor: Colors.transparent,
+            textColor: Colors.white,
+            onTap: testLogin,
+          ),
+
+          const SizedBox(
+            height: 31,
+          ),
+
+          SplashScreenButton(
+            text: "Google",
+            color: DesignVariables.primaryRed,
+            borderColor: Colors.transparent,
+            textColor: Colors.white,
+            onTap: testLogin,
+          ),
+
+          const SizedBox(
+            height: 31,
+          ),
+
+          SplashScreenButton(
+            text: "Facebook",
+            color: DesignVariables.primaryRed,
+            borderColor: Colors.transparent,
+            textColor: Colors.white,
+            onTap: testLogin,
           ),
         ],
       ),
