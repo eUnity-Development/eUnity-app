@@ -6,10 +6,10 @@ class Swiping extends StatefulWidget {
   const Swiping({super.key});
 
   @override
-  State<Swiping> createState() => _CreatePostState();
+  State<Swiping> createState() => _SwipingState();
 }
 
-class _CreatePostState extends State<Swiping> {
+class _SwipingState extends State<Swiping> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

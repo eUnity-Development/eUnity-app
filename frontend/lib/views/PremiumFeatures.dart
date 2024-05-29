@@ -7,10 +7,10 @@ class PremiumFeatures extends StatefulWidget {
   const PremiumFeatures({super.key});
 
   @override
-  State<PremiumFeatures> createState() => _CreatePostState();
+  State<PremiumFeatures> createState() => _PremiumFeaturesState();
 }
 
-class _CreatePostState extends State<PremiumFeatures> {
+class _PremiumFeaturesState extends State<PremiumFeatures> {
   int selectedIndex = 0;
 
   final screens = [
