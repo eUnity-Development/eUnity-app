@@ -51,6 +51,34 @@ class _ThrowawayLoginState extends State<ThrowawayLogin> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+
+          const Center(
+            child: Image(
+              image: AssetImage('assets/e-unity-logo-and-name.png'),
+              width: 330,
+              height: 118.75,
+            ),
+          ),
+
+          const SizedBox(
+            height: 45,
+          ),
+
+          Center(
+            child: Text(
+              "Unite with your soulmate!",
+              style: TextStyle(
+                color: DesignVariables.primaryRed,
+                fontSize: 24,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+
+          const SizedBox(
+            height: 73,
+          ),
+
           SplashScreenButton(
             text: "Sign Up Here!",
             color: Colors.transparent,
