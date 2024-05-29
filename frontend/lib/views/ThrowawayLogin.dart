@@ -47,21 +47,35 @@ class _ThrowawayLoginState extends State<ThrowawayLogin> {
 
   @override
   Widget build(BuildContext context) {
+    /*
+    Since we used an iPhone 15 pro max (size: 430x932) for Figma, it's important to
+    consider other screen sizes. This is why I've made a ratio of the sizes we have
+    on Figma divided by the iPhone's size, which ensures that ratio will be mantained
+    on other devices.
+    
+    TLDR: Makes things scale nicely on smaller screens, so it'll look closer to Figma.
+    */
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    final btnWidth = (334.67/430) * screenWidth;
+    final btnHeight = (52/932) * screenHeight;
+
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
 
-          const Center(
+          Center(
             child: Image(
-              image: AssetImage('assets/e-unity-logo-and-name.png'),
-              width: 330,
-              height: 118.75,
+              image: const AssetImage('assets/e-unity-logo-and-name.png'),
+              width: ((330/430) * screenWidth),
+              height: ((118.75/932) * screenHeight),
             ),
           ),
 
-          const SizedBox(
-            height: 45,
+          SizedBox(
+            height: ((45/932) * screenHeight),
           ),
 
           Center(
@@ -75,8 +89,8 @@ class _ThrowawayLoginState extends State<ThrowawayLogin> {
             ),
           ),
 
-          const SizedBox(
-            height: 73,
+          SizedBox(
+            height: ((73/932) * screenHeight)
           ),
 
           SplashScreenButton(
@@ -84,11 +98,13 @@ class _ThrowawayLoginState extends State<ThrowawayLogin> {
             color: Colors.transparent,
             borderColor: DesignVariables.primaryRed,
             textColor: DesignVariables.primaryRed,
+            height: btnHeight,
+            width: btnWidth,
             onTap: testSignup,
           ),
           
-          const SizedBox(
-            height: 92,
+          SizedBox(
+            height: ((92/932) * screenHeight)
           ),
 
           SplashScreenButton(
@@ -96,11 +112,13 @@ class _ThrowawayLoginState extends State<ThrowawayLogin> {
             color: DesignVariables.primaryRed,
             borderColor: Colors.transparent,
             textColor: Colors.white,
+            height: btnHeight,
+            width: btnWidth,
             onTap: testLogin,
           ),
 
-          const SizedBox(
-            height: 31,
+          SizedBox(
+            height: ((31/932) * screenHeight)
           ),
 
           SplashScreenButton(
@@ -108,11 +126,13 @@ class _ThrowawayLoginState extends State<ThrowawayLogin> {
             color: DesignVariables.primaryRed,
             borderColor: Colors.transparent,
             textColor: Colors.white,
+            height: btnHeight,
+            width: btnWidth,
             onTap: testLogin,
           ),
 
-          const SizedBox(
-            height: 31,
+          SizedBox(
+            height: ((31/932) * screenHeight)
           ),
 
           SplashScreenButton(
@@ -120,11 +140,13 @@ class _ThrowawayLoginState extends State<ThrowawayLogin> {
             color: DesignVariables.primaryRed,
             borderColor: Colors.transparent,
             textColor: Colors.white,
+            height: btnHeight,
+            width: btnWidth,
             onTap: testLogin,
           ),
 
-          const SizedBox(
-            height: 31,
+          SizedBox(
+            height: ((31/932) * screenHeight)
           ),
 
           SplashScreenButton(
@@ -132,6 +154,8 @@ class _ThrowawayLoginState extends State<ThrowawayLogin> {
             color: DesignVariables.primaryRed,
             borderColor: Colors.transparent,
             textColor: Colors.white,
+            height: btnHeight,
+            width: btnWidth,
             onTap: testLogin,
           ),
         ],
