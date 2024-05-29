@@ -11,6 +11,8 @@ require (
 	golang.org/x/crypto v0.22.0
 )
 
+require github.com/h2non/bimg v1.1.9 // indirect
+
 require (
 	dario.cat/mergo v1.0.0 // indirect
 	github.com/KyleBanks/depth v1.2.1 // indirect
