@@ -13,4 +13,6 @@ func Media_routes(r *gin.RouterGroup) {
 
 	r.GET("/user_image/:image_id", Media_controllers.Get_user_image)
 
+	r.DELETE("/user_image/:image_id", Media_controllers.Delete_user_image)
+
 }

@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"os"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -67,4 +69,41 @@ func (m *Media_controllers) Get_user_image(c *gin.Context) {
 
 	//return image
 	c.File("images/" + user_id + "/" + image_id + ".jpg")
+}
+
+// @Summary Deletes user image
+// @Schemes
+// @Deletes image from user profile
+// @Tags Media
+// @Accept json
+// @Produce json
+// @Param image_id path string true "Image ID"
+// @Success 200 {string} Image ID
+// @Router /media/user_image/{image_id} [delete]
+func (m *Media_controllers) Delete_user_image(c *gin.Context) {
+	//get user_id from cookies
+	user_id, err := c.Cookie("user_id")
+	if err != nil {
+		c.JSON(401, gin.H{
+			"response": "Unauthorized",
+		})
+		return
+	}
+
+	//get image_id from params
+	image_id := c.Param("image_id")
+
+	//delete image
+	err = os.Remove("images/" + user_id + "/" + image_id + ".jpg")
+	if err != nil {
+		c.JSON(500, gin.H{
+			"response": "Internal Server Error",
+		})
+		return
+	}
+
+	//return image_id
+	c.JSON(200, gin.H{
+		"image_id": image_id,
+	})
 }
