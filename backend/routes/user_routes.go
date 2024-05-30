@@ -7,7 +7,7 @@ import (
 
 var User_controllers = controllers.User_controllers{}
 
-func User_routes(r *gin.RouterGroup) {
+func Pub_User_routes(r *gin.RouterGroup) {
 
 	//SIGNUP
 	r.POST("/signup", User_controllers.POST_signup)
@@ -17,7 +17,7 @@ func User_routes(r *gin.RouterGroup) {
 
 }
 
-func Protected_user_routes(r *gin.RouterGroup) {
+func User_routes(r *gin.RouterGroup) {
 
 	//GET ME
 	r.GET("/me", User_controllers.GET_me)
