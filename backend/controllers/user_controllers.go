@@ -274,6 +274,7 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 		Email:        credentials.Email,
 		PasswordHash: password_hash,
 		Verified:     false,
+		MediaFiles:   []string{},
 	}
 
 	_, err = DBManager.DB.Collection("users").InsertOne(context.Background(), new_user)

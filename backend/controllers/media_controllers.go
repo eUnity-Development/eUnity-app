@@ -1,10 +1,15 @@
 package controllers
 
 import (
+	"context"
 	"fmt"
 	"os"
 
+	"eunity.com/backend-main/helpers/DBManager"
+	"eunity.com/backend-main/models"
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Media_controllers struct {
@@ -34,9 +39,44 @@ func (m *Media_controllers) Add_user_image(c *gin.Context) {
 	//we will use the user_id as the folder name
 	image_id := generate_secure_token(10)
 
-	//take image and save it images file
-	//attach original extension to the image
+	//check how many images the user has in the database
+	//if the user has more than 9 images, return error
+	bson_user_id, err := primitive.ObjectIDFromHex(user_id)
+	if err != nil {
+		c.JSON(500, gin.H{
+			"response": "Internal Server Error",
+		})
+		return
+	}
 
+	user := DBManager.DB.Collection("users").FindOne(context.Background(), bson.M{"_id": bson_user_id})
+	if user.Err() != nil {
+		c.JSON(500, gin.H{
+			"response": "Internal Server Error",
+		})
+		return
+	}
+	var user_obj models.User
+	err = user.Decode(&user_obj)
+	if err != nil {
+		c.JSON(500, gin.H{
+			"response": "Internal Server Error",
+		})
+		return
+	}
+	if len(user_obj.MediaFiles) >= 9 {
+		c.JSON(400, gin.H{
+			"response": "User has reached maximum number of images",
+		})
+	}
+	link := "http://localhost:3200/api/v1/media/" + user_id + "/" + image_id
+	//add image to user profile
+	_, err = DBManager.DB.Collection("users").UpdateOne(context.Background(), bson.M{"_id": bson_user_id}, bson.M{"$push": bson.M{"media_files": link}})
+	if err != nil {
+		c.JSON(500, gin.H{
+			"response": "Internal Server Error",
+		})
+	}
 	file, _ := c.FormFile("image")
 	c.SaveUploadedFile(file, "images/"+user_id+"/"+image_id+".jpg")
 

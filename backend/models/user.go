@@ -16,7 +16,7 @@ type User struct {
 	DateOfBirth       *DateOfBirth        `bson:"dob" json:"dob,omitempty"`
 	FirstName         string              `bson:"first_name" json:"first_name,omitempty"`
 	LastName          string              `bson:"last_name" json:"last_name,omitempty"`
-	MediaFiles        []string            `bson:"media_files" json:"media_files,omitempty" maxItems:"9"`
+	MediaFiles        []string            `bson:"media_files" json:"media_files,omitempty"`
 }
 
 type DateOfBirth struct {
