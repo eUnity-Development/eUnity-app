@@ -16,6 +16,7 @@ type User struct {
 	DateOfBirth       *DateOfBirth        `bson:"dob" json:"dob,omitempty"`
 	FirstName         string              `bson:"first_name" json:"first_name,omitempty"`
 	LastName          string              `bson:"last_name" json:"last_name,omitempty"`
+	ThirdPartyConnections map[string]string `bson:"third_party_connections" json:"third_party_connections,omitempty"`
 }
 
 type DateOfBirth struct {

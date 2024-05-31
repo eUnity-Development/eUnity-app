@@ -222,6 +222,7 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 
 	}
 
+	
 	//hash the password
 	password_hash, err := PasswordHasher.HashPassword(credentials.Password)
 	if err != nil {
@@ -238,7 +239,28 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
         Email:        credentials.Email,
         PasswordHash: password_hash,
         Verified:     false,
+		ThirdPartyConnections: make(map[string]string),
     }
+
+	// #TODO @AggressiveGas if there is a third party id, we need to add it to the user object
+	third_party_provider, err := c.Cookie("thirdParty_provider")
+	//fmt.Println(third_party_provider)
+	if err != nil { // if there is a provider check for a third party id
+		third_party_id, err := c.Cookie("thirdParty_id")
+		//fmt.Println(third_party_id)
+		if err == nil { //if there is none print a message
+			//fmt.Println("No third party id found")
+		} else { // if there is one then we push the two to the map
+			new_user.ThirdPartyConnections = map[string]string{"provider": third_party_provider, "third_party_id": third_party_id}
+		}
+	}
+	
+	
+	
+	
+
+
+
 
 	_, err = DBManager.DB.Collection("users").InsertOne(context.Background(), new_user)
 	if err != nil {

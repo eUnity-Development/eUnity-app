@@ -21,7 +21,7 @@ func User_routes(r *gin.RouterGroup) {
 
 	r.GET("/auth/google/callback", auth_controller.OAuthCallback)
 
-	//LOGOUT
+	//LOGOUT #TODO: make this work @AggressiveGas
 	r.GET("/auth/google/logout", controller.POST_logout)
 }
 

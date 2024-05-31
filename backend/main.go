@@ -23,7 +23,7 @@ func main() {
 	//init DbManager
 	DBManager.Init()
 
-	// #TODO: remove, its for testing purposes
+	// #TODO: remove, its for testing purposes @AggressiveGas
 	//router.LoadHTMLGlob("*.html")
 
 	//set default endpoint

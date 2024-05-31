@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	//"fmt" //#TODO
+	//"fmt" // for debugging 
 	"net/http"
 	"os" // to access .env file
 	"time"
