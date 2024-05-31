@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"fmt"
+	//"fmt" //#TODO
 	"net/http"
 	"os" // to access .env file
 	"time"
@@ -17,19 +17,15 @@ import (
 
 type Auth_controllers struct{}
 
-// google env variables
+// required google env variables
 var GoogleClientID string
 var GoogleClientSecret string
 var GoogleRedirectURI string
 
-//var r = gin.Default()
-
 func init() {
 	godotenv.Load() //loads the .env file
 	goth.UseProviders(
-
 		google.New(os.Getenv("GOOGLE_KEY"), os.Getenv("GOOGLE_SECRET"), "http://localhost:3200/api/v1/users/auth/google/callback", "email", "profile"),
-
 	)
 }
 
@@ -52,12 +48,18 @@ func (ac *Auth_controllers) OAuthCallback(c *gin.Context) { //#TODO finish this 
 
 	//@TODO make the cookie here
 	cookie := generate_secure_cookie_third_party(user)
-	fmt.Println(cookie)
+	//fmt.Println(cookie)
+	//fmt.Println("Provider: ",cookie["provider"])
+	//fmt.Println("Third Party ID: ",cookie["third_party_id"])
+	//fmt.Println("Expires: " ,cookie["expires_at"])
+
+	c.SetCookie("thirdParty_provider", cookie["provider"].(string), 3600, "/", "localhost", false, true)
+	c.SetCookie("thirdParty_id", cookie["third_party_id"].(string), 3600, "/", "localhost", false, true)
+	c.SetCookie("thirdparty_expires", cookie["expires_at"].(string), 3600, "/", "localhost", false, true)
+
 
 	//fmt.Println(user.UserID)
 	//fmt.Println(user.Provider)
-
-	
 
 }
 
@@ -77,5 +79,3 @@ func generate_secure_cookie_third_party(gothUser goth.User) gin.H {
 
 	return cookie
 }
-
-

@@ -23,8 +23,8 @@ func main() {
 	//init DbManager
 	DBManager.Init()
 
-	// for testing purposes #TODO: remove
-	router.LoadHTMLGlob("*.html")
+	// #TODO: remove, its for testing purposes
+	//router.LoadHTMLGlob("*.html")
 
 	//set default endpoint
 	docs.SwaggerInfo.BasePath = "/api/v1"
