@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/views/ThrowawayLogin.dart';
+import 'package:frontend/views/LoginSignup.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -18,7 +18,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: ThrowawayLogin(),
+      body: LoginSignup(),
     );
   }
 }
