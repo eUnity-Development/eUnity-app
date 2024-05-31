@@ -36,7 +36,7 @@ func (ac *Auth_controllers) BeginGoogleAuth(c *gin.Context) {
 	gothic.BeginAuthHandler(c.Writer, c.Request)
 }
 
-func (ac *Auth_controllers) OAuthCallback(c *gin.Context) { //#TODO finish this garbo code @AggressiveGas - by @AggressiveGas
+func (ac *Auth_controllers) OAuthCallback(c *gin.Context) {
 	q := c.Request.URL.Query()
 	q.Add("provider", "google")
 	c.Request.URL.RawQuery = q.Encode()

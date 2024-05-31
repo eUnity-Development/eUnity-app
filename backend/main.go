@@ -23,9 +23,6 @@ func main() {
 	//init DbManager
 	DBManager.Init()
 
-	// #TODO: remove, its for testing purposes @AggressiveGas
-	//router.LoadHTMLGlob("*.html")
-
 	//set default endpoint
 	docs.SwaggerInfo.BasePath = "/api/v1"
 	r := router.Group("/api/v1")
