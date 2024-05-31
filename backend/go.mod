@@ -133,7 +133,11 @@ require (
 	software.sslmate.com/src/go-pkcs12 v0.2.0 // indirect
 )
 
-require github.com/h2non/bimg v1.1.9 // indirect
+require (
+	github.com/h2non/bimg v1.1.9 // indirect
+	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
+	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df // indirect
+)
 
 require (
 	dario.cat/mergo v1.0.0 // indirect

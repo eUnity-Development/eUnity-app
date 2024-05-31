@@ -288,7 +288,6 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 			"response": "Unable to send email",
 		})
 		return
-
 	}
 
 	//we do not store the users password in the database
