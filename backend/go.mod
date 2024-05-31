@@ -133,6 +133,8 @@ require (
 	software.sslmate.com/src/go-pkcs12 v0.2.0 // indirect
 )
 
+require github.com/h2non/bimg v1.1.9 // indirect
+
 require (
 	dario.cat/mergo v1.0.0 // indirect
 	github.com/KyleBanks/depth v1.2.1 // indirect

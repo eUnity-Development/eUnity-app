@@ -5,27 +5,27 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var controller = controllers.User_controllers{}
+var User_controllers = controllers.User_controllers{}
 
 func User_routes(r *gin.RouterGroup) {
 
 	//SIGNUP
-	r.POST("/signup", controller.POST_signup)
+	r.POST("/signup", User_controllers.POST_signup)
 
 	//LOGIN
-	r.POST("/login", controller.POST_login)
+	r.POST("/login", User_controllers.POST_login)
 
 }
 
 func Protected_user_routes(r *gin.RouterGroup) {
 
 	//GET ME
-	r.GET("/me", controller.GET_me)
+	r.GET("/me", User_controllers.GET_me)
 
 	//PATCH ME
-	r.PATCH("/me", controller.PATCH_me)
+	r.PATCH("/me", User_controllers.PATCH_me)
 
 	//LOGOUT
-	r.POST("/logout", controller.POST_logout)
+	r.POST("/logout", User_controllers.POST_logout)
 
 }
