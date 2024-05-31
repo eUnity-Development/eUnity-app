@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class SplashScreenButton extends StatelessWidget {
+class LoginSignupButton extends StatelessWidget {
 
   final Color color;
   final VoidCallback onTap;
@@ -9,7 +9,7 @@ class SplashScreenButton extends StatelessWidget {
   final double width;
   final Widget buttonContent;
 
-  const SplashScreenButton({
+  const LoginSignupButton({
     super.key,
     required this.color,
     required this.onTap,

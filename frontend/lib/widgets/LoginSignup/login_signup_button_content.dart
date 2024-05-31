@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class SplashScreenButtonContent extends StatelessWidget {
+class LoginSignupButtonContent extends StatelessWidget {
   final double svgOffset;
   final String svgPath;
   final double svgDimensions;
@@ -9,7 +9,7 @@ class SplashScreenButtonContent extends StatelessWidget {
   final double fontSize;
   final Color fontColor;
 
-  const SplashScreenButtonContent({
+  const LoginSignupButtonContent({
     super.key,
     required this.svgOffset,
     required this.svgPath,

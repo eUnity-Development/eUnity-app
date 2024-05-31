@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:frontend/classes/DesignVariables.dart';
 import 'package:frontend/classes/AuthHelper.dart';
 import 'package:frontend/views/CoreTemplate.dart';
-import 'package:frontend/widgets/splash_screen_button.dart';
-import 'package:frontend/widgets/splash_screen_button_content.dart';
+import 'package:frontend/widgets/LoginSignup/login_signup_button.dart';
+import 'package:frontend/widgets/LoginSignup/login_signup_button_content.dart';
 
-class ThrowawayLogin extends StatefulWidget {
-  const ThrowawayLogin({super.key});
+class LoginSignup extends StatefulWidget {
+  const LoginSignup({super.key});
 
   @override
-  State<ThrowawayLogin> createState() => _ThrowawayLoginState();
+  State<LoginSignup> createState() => _LoginSignupState();
 }
 
-class _ThrowawayLoginState extends State<ThrowawayLogin> {
+class _LoginSignupState extends State<LoginSignup> {
   @override
   void initState() {
     super.initState();
@@ -105,7 +105,7 @@ class _ThrowawayLoginState extends State<ThrowawayLogin> {
           ),
 
           // Sign up
-          SplashScreenButton(
+          LoginSignupButton(
             color: DesignVariables.primaryRed,
             borderColor: Colors.transparent,
             buttonContent: const Text(
@@ -126,10 +126,10 @@ class _ThrowawayLoginState extends State<ThrowawayLogin> {
           ),
 
           // Email login
-          SplashScreenButton(
+          LoginSignupButton(
             color: loginBackground,
             borderColor: loginBorder,
-            buttonContent: SplashScreenButtonContent(
+            buttonContent: LoginSignupButtonContent(
               svgOffset: svgOffset, 
               svgPath: 'assets/login/envelope.svg', 
               svgDimensions: svgDimensions, 
@@ -148,10 +148,10 @@ class _ThrowawayLoginState extends State<ThrowawayLogin> {
           ),
 
           // Phone login
-          SplashScreenButton(
+          LoginSignupButton(
             color: loginBackground,
             borderColor: loginBorder,
-            buttonContent: SplashScreenButtonContent(
+            buttonContent: LoginSignupButtonContent(
               svgOffset: svgOffset, 
               svgPath: 'assets/login/phone.svg', 
               svgDimensions: svgDimensions, 
@@ -169,10 +169,10 @@ class _ThrowawayLoginState extends State<ThrowawayLogin> {
           ),
 
           // Google login
-          SplashScreenButton(
+          LoginSignupButton(
             color: loginBackground,
             borderColor: loginBorder,
-            buttonContent: SplashScreenButtonContent(
+            buttonContent: LoginSignupButtonContent(
               svgOffset: svgOffset, 
               svgPath: 'assets/login/google_icon.svg', 
               svgDimensions: svgDimensions, 
@@ -190,10 +190,10 @@ class _ThrowawayLoginState extends State<ThrowawayLogin> {
           ),
 
           // Facebook login
-          SplashScreenButton(
+          LoginSignupButton(
             color: loginBackground,
             borderColor: loginBorder,
-            buttonContent: SplashScreenButtonContent(
+            buttonContent: LoginSignupButtonContent(
               svgOffset: svgOffset, 
               svgPath: 'assets/login/facebook_icon.svg', 
               svgDimensions: svgDimensions, 
