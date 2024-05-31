@@ -3,6 +3,7 @@ import 'package:frontend/classes/DesignVariables.dart';
 import 'package:frontend/classes/AuthHelper.dart';
 import 'package:frontend/views/CoreTemplate.dart';
 import 'package:frontend/widgets/splash_screen_button.dart';
+import 'package:frontend/widgets/splash_screen_button_content.dart';
 
 class ThrowawayLogin extends StatefulWidget {
   const ThrowawayLogin({super.key});
@@ -55,11 +56,21 @@ class _ThrowawayLoginState extends State<ThrowawayLogin> {
     
     TLDR: Makes things scale nicely on smaller screens, so it'll look closer to Figma.
     */
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
 
-    final btnWidth = (334.67/430) * screenWidth;
-    final btnHeight = (52/932) * screenHeight;
+    final double btnWidth = (334.67/430) * screenWidth;
+    final double btnHeight = (52/932) * screenHeight;
+
+    final double svgOffset = (20/430) * screenWidth; 
+    const double svgDimensions = 27;
+    const double fontSize = 16.5;
+    const Color fontColor = Color.fromRGBO(0, 0, 0, 0.5);
+
+    final Color loginBorder = DesignVariables.greyLines;
+    const Color loginBackground = Colors.transparent;
+
+    final double spaceBetweenLogin = ((31/932) * screenHeight);
 
     return Scaffold(
       body: Column(
@@ -93,11 +104,18 @@ class _ThrowawayLoginState extends State<ThrowawayLogin> {
             height: ((73/932) * screenHeight)
           ),
 
+          // Sign up
           SplashScreenButton(
-            text: "Sign Up Here!",
-            color: Colors.transparent,
-            borderColor: DesignVariables.primaryRed,
-            textColor: DesignVariables.primaryRed,
+            color: DesignVariables.primaryRed,
+            borderColor: Colors.transparent,
+            buttonContent: const Text(
+              "Sign Up Here!",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 21,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             height: btnHeight,
             width: btnWidth,
             onTap: testSignup,
@@ -107,53 +125,82 @@ class _ThrowawayLoginState extends State<ThrowawayLogin> {
             height: ((92/932) * screenHeight)
           ),
 
+          // Email login
           SplashScreenButton(
-            text: "Login",
-            color: DesignVariables.primaryRed,
-            borderColor: Colors.transparent,
-            textColor: Colors.white,
+            color: loginBackground,
+            borderColor: loginBorder,
+            buttonContent: SplashScreenButtonContent(
+              svgOffset: svgOffset, 
+              svgPath: 'assets/login/envelope.svg', 
+              svgDimensions: svgDimensions, 
+              text: 'Log in with email', 
+              fontSize: fontSize, 
+              fontColor: fontColor
+            ),
+            
             height: btnHeight,
             width: btnWidth,
             onTap: testLogin,
           ),
 
           SizedBox(
-            height: ((31/932) * screenHeight)
+            height: spaceBetweenLogin
           ),
 
+          // Phone login
           SplashScreenButton(
-            text: "Phone Number",
-            color: DesignVariables.primaryRed,
-            borderColor: Colors.transparent,
-            textColor: Colors.white,
+            color: loginBackground,
+            borderColor: loginBorder,
+            buttonContent: SplashScreenButtonContent(
+              svgOffset: svgOffset, 
+              svgPath: 'assets/login/phone.svg', 
+              svgDimensions: svgDimensions, 
+              text: 'Log in with phone number', 
+              fontSize: fontSize, 
+              fontColor: fontColor
+            ),
             height: btnHeight,
             width: btnWidth,
             onTap: testLogin,
           ),
 
           SizedBox(
-            height: ((31/932) * screenHeight)
+            height: spaceBetweenLogin
           ),
 
+          // Google login
           SplashScreenButton(
-            text: "Google",
-            color: DesignVariables.primaryRed,
-            borderColor: Colors.transparent,
-            textColor: Colors.white,
+            color: loginBackground,
+            borderColor: loginBorder,
+            buttonContent: SplashScreenButtonContent(
+              svgOffset: svgOffset, 
+              svgPath: 'assets/login/google_icon.svg', 
+              svgDimensions: svgDimensions, 
+              text: 'Log in with Google',
+              fontSize: fontSize, 
+              fontColor: fontColor
+            ),
             height: btnHeight,
             width: btnWidth,
             onTap: testLogin,
           ),
 
           SizedBox(
-            height: ((31/932) * screenHeight)
+            height: spaceBetweenLogin
           ),
 
+          // Facebook login
           SplashScreenButton(
-            text: "Facebook",
-            color: DesignVariables.primaryRed,
-            borderColor: Colors.transparent,
-            textColor: Colors.white,
+            color: loginBackground,
+            borderColor: loginBorder,
+            buttonContent: SplashScreenButtonContent(
+              svgOffset: svgOffset, 
+              svgPath: 'assets/login/facebook_icon.svg', 
+              svgDimensions: svgDimensions, 
+              text: 'Log in with Facebook', 
+              fontSize: fontSize, 
+              fontColor: fontColor
+            ),
             height: btnHeight,
             width: btnWidth,
             onTap: testLogin,
