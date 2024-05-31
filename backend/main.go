@@ -34,10 +34,11 @@ func main() {
 	//ROUTE GROUPS
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//unprotected routes
-	routes.User_routes(r.Group("/users"))
+	routes.Pub_User_routes(r.Group("/users"))
+	routes.Pub_Media_routes(r.Group("/media"))
 
 	//protected routes
-	routes.Protected_user_routes(r.Group("/users", AuthRequired()))
+	routes.User_routes(r.Group("/users", AuthRequired()))
 	routes.Media_routes(r.Group("/media", AuthRequired()))
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

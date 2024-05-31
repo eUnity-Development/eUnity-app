@@ -18,14 +18,14 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// create empty struct to attach methods to
+// create empty struct to attach methods touser
 type User_controllers struct {
 }
 
 // @Summary User test route
 // @Schemes
 // @Description returns a string from user routes
-// @Tags user
+// @Tags User
 // @Accept json
 // @Produce json
 // @Success 200 {string} Hello from user routes
@@ -72,7 +72,7 @@ func (u *User_controllers) GET_me(c *gin.Context) {
 // @Summary User update route
 // @Schemes
 // @Description takes in a json object and attempts to update the user, does not modify base fields such as email, it is a protected route
-// @Tags user
+// @Tags User
 // @Accept json
 // @Produce json
 // @Param data body string true "Data"
@@ -168,10 +168,46 @@ func (u *User_controllers) PATCH_me(c *gin.Context) {
 
 }
 
+// @Summary User logout route
+// @Schemes
+// @Description logs out a user
+// @Tags User
+// @Accept mpfd
+// @Produce json
+// @Success 200 {string} Logged out
+// @Success 400 {string} Unable to logout
+// @Router /users/logout [post]
+func (u *User_controllers) POST_logout(c *gin.Context) {
+	session_id, err := c.Cookie("session_id")
+	if err != nil {
+		c.JSON(400, gin.H{
+			"response": "No session found",
+		})
+		return
+	}
+
+	_, err = DBManager.DB.Collection("session_ids").DeleteOne(context.Background(), bson.M{session_id: bson.M{"$exists": true}})
+	if err != nil {
+		c.JSON(400, gin.H{
+			"response": "Unable to logout",
+		})
+		return
+	}
+
+	//remove cookies
+	c.SetCookie("session_id", "", -1, "/", "localhost", false, true)
+	c.SetCookie("user_id", "", -1, "/", "localhost", false, true)
+	c.SetCookie("expires_at", "", -1, "/", "localhost", false, true)
+
+	c.JSON(200, gin.H{
+		"response": "Logged out",
+	})
+}
+
 // @Summary User signup route
 // @Schemes
 // @Description creates a new user
-// @Tags user
+// @Tags Public User
 // @Accept mpfd
 // @Produce json
 // @Param email formData string true "Email"
@@ -262,6 +298,7 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 		Email:        credentials.Email,
 		PasswordHash: password_hash,
 		Verified:     false,
+		MediaFiles:   []string{},
 	}
 
 	_, err = DBManager.DB.Collection("users").InsertOne(context.Background(), new_user)
@@ -283,7 +320,7 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 // @Summary User login route
 // @Schemes
 // @Description logs in a user
-// @Tags user
+// @Tags Public User
 // @Accept mpfd
 // @Produce json
 // @Param email formData string true "Email"
@@ -405,40 +442,4 @@ func generate_secure_token(length int) string {
 		return ""
 	}
 	return hex.EncodeToString(b)
-}
-
-// @Summary User logout route
-// @Schemes
-// @Description logs out a user
-// @Tags user
-// @Accept mpfd
-// @Produce json
-// @Success 200 {string} Logged out
-// @Success 400 {string} Unable to logout
-// @Router /users/logout [post]
-func (u *User_controllers) POST_logout(c *gin.Context) {
-	session_id, err := c.Cookie("session_id")
-	if err != nil {
-		c.JSON(400, gin.H{
-			"response": "No session found",
-		})
-		return
-	}
-
-	_, err = DBManager.DB.Collection("session_ids").DeleteOne(context.Background(), bson.M{session_id: bson.M{"$exists": true}})
-	if err != nil {
-		c.JSON(400, gin.H{
-			"response": "Unable to logout",
-		})
-		return
-	}
-
-	//remove cookies
-	c.SetCookie("session_id", "", -1, "/", "localhost", false, true)
-	c.SetCookie("user_id", "", -1, "/", "localhost", false, true)
-	c.SetCookie("expires_at", "", -1, "/", "localhost", false, true)
-
-	c.JSON(200, gin.H{
-		"response": "Logged out",
-	})
 }
