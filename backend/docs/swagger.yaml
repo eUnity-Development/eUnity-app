@@ -1,0 +1,124 @@
+info:
+  contact: {}
+paths:
+  /users/login:
+    post:
+      consumes:
+      - multipart/form-data
+      description: logs in a user
+      parameters:
+      - description: Email
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: Password
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: User login route
+      tags:
+      - user
+  /users/logout:
+    post:
+      consumes:
+      - multipart/form-data
+      description: logs out a user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: User logout route
+      tags:
+      - user
+  /users/me:
+    get:
+      consumes:
+      - application/json
+      description: returns a string from user routes
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: User test route
+      tags:
+      - user
+    patch:
+      consumes:
+      - application/json
+      description: takes in a json object and attempts to update the user, does not
+        modify base fields such as email, it is a protected route
+      parameters:
+      - description: Data
+        in: body
+        name: data
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: User update route
+      tags:
+      - user
+  /users/signup:
+    post:
+      consumes:
+      - multipart/form-data
+      description: creates a new user
+      parameters:
+      - description: Email
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: Password
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: User signup route
+      tags:
+      - user
+swagger: "2.0"

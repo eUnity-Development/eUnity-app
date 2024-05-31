@@ -4,7 +4,7 @@ import 'package:frontend/views/Swiping.dart';
 import 'package:frontend/views/PremiumFeatures.dart';
 import 'package:frontend/views/Messages.dart';
 import 'package:frontend/views/Profile.dart';
-import 'package:frontend/widgets/HomeTopBar.dart';
+import 'package:frontend/widgets/TopBars/HomeTopBar.dart';
 import 'package:frontend/classes/DesignVariables.dart';
 
 class CoreTemplate extends StatefulWidget {
