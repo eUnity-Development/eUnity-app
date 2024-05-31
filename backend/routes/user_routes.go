@@ -16,13 +16,19 @@ func User_routes(r *gin.RouterGroup) {
 	//LOGIN
 	r.POST("/login", controller.POST_login)
 
-	//GOOGLE AUTH
-	r.GET("/auth/google", auth_controller.BeginGoogleAuth)
 
-	r.GET("/auth/google/callback", auth_controller.OAuthCallback)
+}
 
+func SSO_routes(r *gin.RouterGroup) {
+	
+	//GOOGLE SIGNUP AUTH
+	r.GET("/auth/googlesignup", auth_controller.BeginGoogleAuthSignUp)
+
+	r.GET("/auth/google/callbacksignup", auth_controller.OAuthCallbackSignUp)
+
+	
 	//LOGOUT #TODO: make this work @AggressiveGas
-	r.GET("/auth/google/logout", controller.POST_logout)
+	//r.GET("/auth/google/logout", controller.POST_logout)
 }
 
 func Protected_user_routes(r *gin.RouterGroup) {

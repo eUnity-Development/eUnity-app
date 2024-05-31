@@ -25,18 +25,18 @@ var GoogleRedirectURI string
 func init() {
 	godotenv.Load() //loads the .env file
 	goth.UseProviders(
-		google.New(os.Getenv("GOOGLE_KEY"), os.Getenv("GOOGLE_SECRET"), "http://localhost:3200/api/v1/users/auth/google/callback", "email", "profile"),
+		google.New(os.Getenv("GOOGLE_KEY"), os.Getenv("GOOGLE_SECRET"), "http://localhost:3200/api/v1/users/auth/google/callbacksignup", "email", "profile"),
 	)
 }
 
-func (ac *Auth_controllers) BeginGoogleAuth(c *gin.Context) {
+func (ac *Auth_controllers) BeginGoogleAuthSignUp(c *gin.Context) {
 	q := c.Request.URL.Query()
 	q.Add("provider", "google")
 	c.Request.URL.RawQuery = q.Encode()
 	gothic.BeginAuthHandler(c.Writer, c.Request)
 }
 
-func (ac *Auth_controllers) OAuthCallback(c *gin.Context) {
+func (ac *Auth_controllers) OAuthCallbackSignUp(c *gin.Context) { // #TODO clean this up - @AggressiveGas
 	q := c.Request.URL.Query()
 	q.Add("provider", "google")
 	c.Request.URL.RawQuery = q.Encode()

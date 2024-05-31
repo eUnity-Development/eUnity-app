@@ -32,6 +32,9 @@ func main() {
 	//unprotected routes
 	routes.User_routes(r.Group("/users"))
 
+	//SSO routes
+	routes.SSO_routes(r.Group("/users"))
+
 	//protected routes
 	routes.Protected_user_routes(r.Group("/users", AuthRequired()))
 
