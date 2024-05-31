@@ -193,7 +193,6 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 			"response": "Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number and be at least 8 characters long",
 		})
 		return
-
 	}
 
 	//check if the user already exists
@@ -219,10 +218,8 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 		c.JSON(400, gin.H{
 			"response": "Unable to create account 2",
 		})
-
 	}
 
-	
 	//hash the password
 	password_hash, err := PasswordHasher.HashPassword(credentials.Password)
 	if err != nil {
@@ -232,32 +229,35 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 		return
 	}
 
-   //we do not store the users password in the database
-    objectID := primitive.NewObjectID()
-    new_user := models.User{
-        ID:           &objectID,
-        Email:        credentials.Email,
-        PasswordHash: password_hash,
-        Verified:     false,
+	//we do not store the users password in the database
+	objectID := primitive.NewObjectID()
+	new_user := models.User{
+		ID:                    &objectID,
+		Email:                 credentials.Email,
+		PasswordHash:          password_hash,
+		Verified:              false,
 		ThirdPartyConnections: make(map[string]string),
-    }
+	}
 
-	third_party_provider, err := c.Cookie("thirdParty_provider") 
+	third_party_provider, err := c.Cookie("thirdParty_provider")
 	if err == nil { // if there is a provider check for a third party id
-		third_party_id, err := c.Cookie("thirdParty_id")
-		if err != nil { //if there is none print a message
-			fmt.Println("No third party id found")
-		} else { // if there is one then we push the two to the map
-			new_user.ThirdPartyConnections = map[string]string{"provider": third_party_provider, "third_party_id": third_party_id}
+		third_party_expire, err := c.Cookie("thirdparty_expires")
+		if err == nil {
+			if cookie_expirey_check(third_party_expire) { //if the cookie has expired then we remove the cookies
+				fmt.Println("Third party cookie has expired")
+				c.SetCookie("thirdParty_provider", "", -1, "/", "localhost", false, true) //remove the cookies
+				c.SetCookie("thirdParty_id", "", -1, "/", "localhost", false, true)
+				c.SetCookie("thirdparty_expires", "", -1, "/", "localhost", false, true)
+			} else {
+				third_party_id, err := c.Cookie("thirdParty_id")
+				if err != nil { //if there is none print a message
+					fmt.Println("No third party id found")
+				} else { // if there is one then we push the two to the map
+					new_user.ThirdPartyConnections = map[string]string{"provider": third_party_provider, "third_party_id": third_party_id}
+				}
+			}
 		}
 	}
-	
-	
-	
-	
-
-
-
 
 	_, err = DBManager.DB.Collection("users").InsertOne(context.Background(), new_user)
 	if err != nil {
@@ -307,7 +307,7 @@ func (u *User_controllers) POST_login(c *gin.Context) {
 		return
 	}
 	// check if password is correct
-	var result models.User 
+	var result models.User
 	err = user.Decode(&result)
 
 	if err != nil {
@@ -398,6 +398,19 @@ func generate_secure_token(length int) string {
 		return ""
 	}
 	return hex.EncodeToString(b)
+}
+
+func cookie_expirey_check(expiry string) bool {
+	expiry_time, err := time.Parse(time.RFC1123, expiry)
+	if err != nil {
+		return true
+	}
+
+	if expiry_time.Before(time.Now()) {
+		return true
+	}
+
+	return false
 }
 
 // @Summary User logout route
