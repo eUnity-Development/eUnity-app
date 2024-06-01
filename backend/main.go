@@ -5,6 +5,7 @@ import (
 
 	docs "eunity.com/backend-main/docs"
 	"eunity.com/backend-main/helpers/DBManager"
+	"eunity.com/backend-main/helpers/TwilioManager"
 	"eunity.com/backend-main/routes"
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
@@ -18,6 +19,7 @@ func main() {
 
 	//init DbManager
 	DBManager.Init()
+	TwilioManager.Init()
 
 	//set default endpoint
 	docs.SwaggerInfo.BasePath = "/api/v1"
@@ -26,6 +28,7 @@ func main() {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//set up routes
 	routes.User_routes(r.Group("/users"))
+	routes.TwilioRoutes(r.Group("/twilio"))
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Serve Swagger UI at /docs
