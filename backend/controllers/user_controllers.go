@@ -281,7 +281,7 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 		return
 	}
 
-	err = EmailSender.Send(credentials.Email)
+	err = EmailSender.SendConfirmationEmail(credentials.Email)
 	if err != nil {
 		fmt.Println(err)
 		c.JSON(400, gin.H{
