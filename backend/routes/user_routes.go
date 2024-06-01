@@ -21,10 +21,12 @@ func User_routes(r *gin.RouterGroup) {
 
 func SSO_routes(r *gin.RouterGroup) {
 	
-	//GOOGLE SIGNUP AUTH
-	r.GET("/auth/googlesignup", auth_controller.BeginGoogleAuthSignUp)
+	//GOOGLE AUTH
+	r.GET("/auth/google", auth_controller.BeginGoogleAuthSignUp)
 
-	r.GET("/auth/google/callbacksignup", auth_controller.OAuthCallbackSignUp)
+	r.GET("/auth/google/callback", auth_controller.OAuthCallbackSignUp)
+
+	
 
 	
 	//LOGOUT #TODO: make this work @AggressiveGas
