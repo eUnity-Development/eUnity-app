@@ -22,20 +22,21 @@ class PersonThatLikesYouTile extends StatelessWidget {
                       border: Border.all(color: Colors.black, width: 2),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 3,
-                          blurRadius: 7,
-                          offset: Offset(0, 3),
+                          color: Color.fromARGB(64, 0, 0, 0),
+                          spreadRadius: 0,
+                          blurRadius: 4 * DesignVariables.widthConversion,
+                          offset:
+                              Offset(0, 4 * DesignVariables.heightConversion),
                         ),
                       ]),
                   child: CircleAvatar(
                     backgroundColor: Colors.transparent,
                     backgroundImage: AssetImage(userData['imageURL']!),
-                    radius: 80,
+                    radius: 80 * DesignVariables.widthConversion,
                   ),
                 ),
                 SizedBox(
-                  width: 10,
+                  width: 10 * DesignVariables.widthConversion,
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -60,17 +61,19 @@ class PersonThatLikesYouTile extends StatelessWidget {
                           border: Border.all(
                               width: 1, color: DesignVariables.greyLines),
                           color: DesignVariables.primaryRed),
-                      height: 51,
-                      width: 207,
+                      height: 51 * DesignVariables.heightConversion,
+                      width: 207 * DesignVariables.widthConversion,
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SvgPicture.asset(
-                              "assets/NavBarUI/icon-filled-heart.svg",
-                              color: Colors.white,
+                            SizedBox(
+                              child: SvgPicture.asset(
+                                "assets/NavBarUI/icon-filled-heart.svg",
+                                color: Colors.white,
+                              ),
                             ),
                             SizedBox(
-                              width: 8,
+                              width: 8 * DesignVariables.widthConversion,
                             ),
                             Text(
                               "Match Score: ${userData['matchScore']}%",
@@ -82,7 +85,7 @@ class PersonThatLikesYouTile extends StatelessWidget {
                           ]),
                     ),
                     SizedBox(
-                      height: 5,
+                      height: 5 * DesignVariables.heightConversion,
                     ),
                     Container(
                         decoration: BoxDecoration(
@@ -90,8 +93,8 @@ class PersonThatLikesYouTile extends StatelessWidget {
                             border: Border.all(
                                 width: 1, color: DesignVariables.greyLines),
                             color: DesignVariables.offWhite),
-                        height: 51,
-                        width: 207,
+                        height: 51 * DesignVariables.heightConversion,
+                        width: 207 * DesignVariables.widthConversion,
                         child: Center(
                           child: Text(
                             "View Profile",

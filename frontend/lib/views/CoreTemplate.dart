@@ -41,8 +41,8 @@ class _CoreTemplateState extends State<CoreTemplate> {
         child: Column(
           children: [
             SizedBox(
-              height: 734,
-              width: 412,
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
               child: screens[selectedIndex],
             ),
           ],
