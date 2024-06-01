@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/classes/DesignVariables.dart';
 import 'package:frontend/classes/AuthHelper.dart';
+import 'package:frontend/classes/DesignVariables.dart';
 import 'package:frontend/views/CoreTemplate.dart';
+import 'package:frontend/views/EmailSignup.dart';
 import 'package:frontend/widgets/LoginSignup/login_signup_button.dart';
 import 'package:frontend/widgets/LoginSignup/login_signup_button_content.dart';
 
@@ -30,10 +31,18 @@ class _LoginSignupState extends State<LoginSignup> {
         (route) => false);
   }
 
+  void navigateToEmailSignup() {
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const EmailSignup()),
+        (route) => false);
+  }
+
   void testSignup() async {
     print("clicked signup");
-    var response = await AuthHelper.signUp("testemail@test.com", "Test123123");
-    print(response);
+    navigateToEmailSignup();
+    //var response = await AuthHelper.signUp("testemail@test.com", "Test123123");
+    //print(response);
   }
 
   void testLogin() async {
