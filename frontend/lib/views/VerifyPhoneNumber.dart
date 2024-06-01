@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:frontend/classes/DesignVariables.dart';
@@ -14,13 +16,40 @@ class VerifyPhoneNumber extends StatefulWidget {
 class _VerifyPhoneNumber extends State<VerifyPhoneNumber> {
   final TextEditingController _passwordController = TextEditingController();
 
+  bool isPressed = false;
+  int count = 0;
+  Timer? timer;
+  String phoneNumber = '+1(111)111-1111';
+
   @override
   void dispose() {
     _passwordController.dispose();
     super.dispose();
   }
 
+  void startCountdown() {
+    setState(() {
+      count = 5;
+    });
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) { 
+      setState(() {
+        if (count > 0) {
+          count--;
+        } else {
+          isPressed = false;
+          timer.cancel();
+        }
+      });
+    });
+  }
+
   void resend() async {
+    setState(() {
+      if (!isPressed) {
+        isPressed = true;
+        startCountdown();
+      }
+    });
     print("clicked resend");
   }
 
@@ -71,7 +100,7 @@ class _VerifyPhoneNumber extends State<VerifyPhoneNumber> {
                     context: context,
                     builder: (context){
                     return AlertDialog(
-                        title: Text("Verification Code"),
+                        title: const Text("Verification Code"),
                         content: Text('Code entered is $verificationCode'),
                     );
                     }
@@ -83,13 +112,13 @@ class _VerifyPhoneNumber extends State<VerifyPhoneNumber> {
             height: (38/932) * screenHeight,
           ),
 
-          const Padding (
-            padding: EdgeInsets.symmetric(horizontal: 21),
+          Padding (
+            padding: const EdgeInsets.symmetric(horizontal: 21),
               child: Text(
-                'We sent your phone number +1(111)111-1111 a 6 digit code. ' 
+                'We sent your phone number $phoneNumber a 6 digit code. ' 
                 'Please enter it here for verification purposes.',
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.black,
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -102,21 +131,20 @@ class _VerifyPhoneNumber extends State<VerifyPhoneNumber> {
           ),
 
           LoginSignupButton(
-            color: DesignVariables.primaryRed,  
+            color: isPressed ? const Color(0xFF7D7D7D) : DesignVariables.primaryRed,  
             onTap: resend, 
             borderColor: Colors.transparent, 
             width: (334.67/430) * screenWidth, 
             height: (52/932) * screenHeight, 
-            buttonContent: const Text(
-              'Re-send Verification Code',
-                style: TextStyle(
+            buttonContent: Text(
+              isPressed ? 'Retry in ($count)s...' : 'Re-send Verification Code',
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
                 ),
             )
-          )
-
+          ),
 
         ]
       )  
