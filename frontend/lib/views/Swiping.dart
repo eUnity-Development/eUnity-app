@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/models/models.dart';
 
 class Swiping extends StatefulWidget {
@@ -136,40 +135,4 @@ class UserCard extends StatelessWidget {
           )),
     );
   }
-}
-
-class customAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const customAppBar({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            child: SvgPicture.asset('assets/icons/concept-logo.svg'),
-          ),
-          Row(
-            children: [
-              Container(
-                child: SvgPicture.asset('assets/icons/bell.svg'),
-              ),
-              SizedBox(width: 20),
-              Container(
-                child: SvgPicture.asset('assets/icons/bell.svg'),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(56.0);
 }
