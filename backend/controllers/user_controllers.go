@@ -290,6 +290,12 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 		return
 	}
 
+	//Ignore this part, it is for testing purposes
+	// c.JSON(200, gin.H{
+	// 	"testing email": "email sent",
+	// })
+	// return
+
 	//we do not store the users password in the database
 	objectID := primitive.NewObjectID()
 	new_user := models.User{
