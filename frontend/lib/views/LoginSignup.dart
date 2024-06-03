@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/classes/AuthHelper.dart';
 import 'package:frontend/classes/DesignVariables.dart';
 import 'package:frontend/views/CoreTemplate.dart';
-import 'package:frontend/views/EmailSignup.dart';
+import 'package:frontend/views/PhoneLogin.dart';
 import 'package:frontend/widgets/LoginSignup/login_signup_button.dart';
 import 'package:frontend/widgets/LoginSignup/login_signup_button_content.dart';
 
@@ -31,28 +31,28 @@ class _LoginSignupState extends State<LoginSignup> {
         (route) => false);
   }
 
-  void navigateToEmailSignup() {
-    Navigator.pushAndRemoveUntil(
+  void navigateToPhoneLogin() {
+    Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => const EmailSignup()),
-        (route) => false);
+        MaterialPageRoute(builder: (_) => const PhoneLogin()),
+    );
   }
 
   void testSignup() async {
     print("clicked signup");
-    navigateToEmailSignup();
+    navigateToPhoneLogin();
     //var response = await AuthHelper.signUp("testemail@test.com", "Test123123");
     //print(response);
   }
 
   void testLogin() async {
     print("clicked login");
-    var response = await AuthHelper.login("testemail@test.com", "Test123123");
-    print(response);
-    bool loginCheck = await AuthHelper.isLoggedIn();
-    if (loginCheck) {
-      navigateToPrimaryScreens();
-    }
+    //var response = await AuthHelper.login("testemail@test.com", "Test123123");
+    //print(response);
+    //bool loginCheck = await AuthHelper.isLoggedIn();
+    //if (loginCheck) {
+      navigateToPhoneLogin();
+    //}
   }
 
   @override
@@ -112,7 +112,7 @@ class _LoginSignupState extends State<LoginSignup> {
           SizedBox(
             height: ((73/932) * screenHeight)
           ),
-
+          /*
           // Sign up
           LoginSignupButton(
             color: DesignVariables.primaryRed,
@@ -154,7 +154,7 @@ class _LoginSignupState extends State<LoginSignup> {
 
           SizedBox(
             height: spaceBetweenLogin
-          ),
+          ),*/
 
           // Phone login
           LoginSignupButton(
