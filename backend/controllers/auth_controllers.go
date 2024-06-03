@@ -1,7 +1,8 @@
 package controllers
 
 import (
-	//"fmt" // for debugging 
+	//"fmt" // for debugging
+	"fmt"
 	"net/http"
 	"os" // to access .env file
 	"time"
@@ -23,17 +24,31 @@ var GoogleClientSecret string
 var GoogleRedirectURI string
 
 func init() {
+
 	godotenv.Load() //loads the .env file
+	Google_key := os.Getenv("GOOGLE_KEY")
+	Google_secret := os.Getenv("GOOGLE_SECRET")
+	fmt.Println(Google_key)
+	fmt.Println(Google_secret)
+
 	goth.UseProviders(
-		google.New(os.Getenv("GOOGLE_KEY"), os.Getenv("GOOGLE_SECRET"), "http://localhost:3200/api/v1/users/auth/google/callback", "email", "profile"),
+		google.New(Google_key, Google_secret, "http://localhost:3200/api/v1/users/auth/google/callback", "email", "profile"),
 	)
 }
 
 func (ac *Auth_controllers) BeginGoogleAuthSignUp(c *gin.Context) {
+
+	//request quert handler object
 	q := c.Request.URL.Query()
+
+	//add this to the query
 	q.Add("provider", "google")
+
+	//encode the query
 	c.Request.URL.RawQuery = q.Encode()
-	gothic.BeginAuthHandler(c.Writer, c.Request) 
+
+	//begin the auth handler with gothic
+	gothic.BeginAuthHandler(c.Writer, c.Request)
 }
 
 func (ac *Auth_controllers) OAuthCallbackSignUp(c *gin.Context) { // #TODO clean this up - @AggressiveGas
@@ -46,17 +61,19 @@ func (ac *Auth_controllers) OAuthCallbackSignUp(c *gin.Context) { // #TODO clean
 		return
 	}
 
+	fmt.Println("right here")
+	fmt.Println(user)
+
 	//@TODO make the cookie here
 	cookie := generate_secure_cookie_third_party(user)
-	//fmt.Println(cookie)
-	//fmt.Println("Provider: ",cookie["provider"])
-	//fmt.Println("Third Party ID: ",cookie["third_party_id"])
-	//fmt.Println("Expires: " ,cookie["expires_at"])
+	fmt.Println(cookie)
+	fmt.Println("Provider: ", cookie["provider"])
+	fmt.Println("Third Party ID: ", cookie["third_party_id"])
+	fmt.Println("Expires: ", cookie["expires_at"])
 
 	c.SetCookie("thirdParty_provider", cookie["provider"].(string), 3600, "/", "localhost", false, true)
 	c.SetCookie("thirdParty_id", cookie["third_party_id"].(string), 3600, "/", "localhost", false, true)
 	c.SetCookie("thirdparty_expires", cookie["expires_at"].(string), 3600, "/", "localhost", false, true)
-
 
 	//fmt.Println(user.UserID)
 	//fmt.Println(user.Provider)
