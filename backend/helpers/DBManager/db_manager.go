@@ -10,8 +10,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// replaced the hardcoded database url with a variable, so we can load .env
-var Host string
+
+var Host string // replaced the hardcoded database url with a variable, so we can load .env
 var Client *mongo.Client
 var DB *mongo.Database
 

@@ -36,6 +36,7 @@ func main() {
 	//unprotected routes
 	routes.Pub_User_routes(r.Group("/users"))
 	routes.Pub_Media_routes(r.Group("/media"))
+	routes.Auth_routes(r.Group("/auth"))
 
 	//protected routes
 	routes.User_routes(r.Group("/users", AuthRequired()))

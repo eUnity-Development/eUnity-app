@@ -1,6 +1,36 @@
 info:
   contact: {}
 paths:
+  /auth/google:
+    get:
+      consumes:
+      - application/json
+      description: Begins the google auth process
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Google Auth Started
+          schema:
+            type: string
+      summary: Begin Google Auth
+      tags:
+      - Auth
+  /auth/google/callback:
+    get:
+      consumes:
+      - application/json
+      description: Callback for google auth
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Google Auth Callback
+          schema:
+            type: string
+      summary: Google OAuth Callback
+      tags:
+      - Auth
   /media/{user_id}/{image_id}:
     get:
       consumes:
