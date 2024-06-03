@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/classes/DesignVariables.dart';
-import 'package:frontend/views/CoreTemplate.dart';
+import 'package:frontend/views/VerifyPhoneNumber.dart';
 import 'package:frontend/widgets/LoginSignup/login_signup_button.dart';
 import 'package:frontend/widgets/TopBars/PushedScreenTopBar.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -15,7 +15,7 @@ class PhoneLogin extends StatefulWidget {
 class _PhoneLoginState extends State<PhoneLogin> {
   final TextEditingController _phoneController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String? _selectedCountryCode;
+  String? _enteredPhoneNumber;
 
   @override
   void dispose() {
@@ -153,7 +153,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
             keyboardType: TextInputType.text,
             onChanged: (phone) {
               setState(() {
-                _selectedCountryCode = phone.completeNumber;
+                _enteredPhoneNumber = phone.completeNumber;
               });
             },
             validator: (phone) {
@@ -210,16 +210,16 @@ class _PhoneLoginState extends State<PhoneLogin> {
   }
 
 void navigateToPrimaryScreens() {
-    Navigator.pushAndRemoveUntil(
+    Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => const CoreTemplate()),
-        (route) => false);
+        MaterialPageRoute(builder: (_) => VerifyPhoneNumber(phoneNumber: _enteredPhoneNumber,)),
+    );
   }
 
   void nextScreen() async {
     if (_formKey.currentState?.validate() == true) {
       // Navigate to the next screen
-      print(_selectedCountryCode);
+      print(_enteredPhoneNumber);
       navigateToPrimaryScreens();
     } else {
       // Show an error message

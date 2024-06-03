@@ -71,7 +71,7 @@ class _LoginSignupState extends State<LoginSignup> {
     final double btnWidth = (334.67/430) * screenWidth;
     final double btnHeight = (52/932) * screenHeight;
 
-    final double svgOffset = (20/430) * screenWidth; 
+    final double svgOffset = (20/430) * screenWidth;
     const double svgDimensions = 27;
     const double fontSize = 16.5;
     const Color fontColor = Color.fromRGBO(0, 0, 0, 0.5);
