@@ -37,8 +37,13 @@ func init() {
 	fmt.Println(Google_key)
 	fmt.Println(Google_secret)
 
+	scopes := []string{
+		"email",
+		"profile",
+	}
+
 	goth.UseProviders(
-		google.New(Google_key, Google_secret, "http://localhost:3200/api/v1/auth/google/callback", "email", "profile"),
+		google.New(Google_key, Google_secret, GoogleRedirectURI, scopes...),
 	)
 }
 
@@ -112,9 +117,9 @@ func (ac *Auth_controllers) GET_GoogleOAuthCallback(c *gin.Context) { // #TODO c
 	fmt.Println("Third Party ID: ", cookie["third_party_id"])
 	fmt.Println("Expires: ", cookie["expires_at"])
 
-	c.SetCookie("thirdParty_provider", cookie["provider"].(string), 3600, "/", "localhost", false, true)
-	c.SetCookie("thirdParty_id", cookie["third_party_id"].(string), 3600, "/", "localhost", false, true)
-	c.SetCookie("thirdparty_expires", cookie["expires_at"].(string), 3600, "/", "localhost", false, true)
+	c.SetCookie("thirdParty_provider", cookie["provider"].(string), 3600, "/", Cookie_Host, HTTPS_only, true)
+	c.SetCookie("thirdParty_id", cookie["third_party_id"].(string), 3600, "/", Cookie_Host, HTTPS_only, true)
+	c.SetCookie("thirdparty_expires", cookie["expires_at"].(string), 3600, "/", Cookie_Host, HTTPS_only, true)
 
 	//fmt.Println(user.UserID)
 	//fmt.Println(user.Provider)

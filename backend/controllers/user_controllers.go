@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"fmt"
+	"os"
 	"reflect"
 	"regexp"
 	"time"
@@ -13,12 +14,28 @@ import (
 	"eunity.com/backend-main/helpers/PasswordHasher"
 	"eunity.com/backend-main/models"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+//load env
+
 // create empty struct to attach methods touser
 type User_controllers struct {
+}
+
+// https only must be true in production
+var HTTPS_only bool
+
+// must be set to eunityusa.com in production
+var Cookie_Host string
+
+// multiple init functions are execute alphabetically based on file name
+func init() {
+	godotenv.Load()
+	HTTPS_only = os.Getenv("HTTPS_ONLY") == "true"
+	Cookie_Host = os.Getenv("COOKIE_ACCEPT_HOST")
 }
 
 // @Summary User test route
@@ -181,9 +198,9 @@ func (u *User_controllers) POST_logout(c *gin.Context) {
 	}
 
 	//remove cookies
-	c.SetCookie("session_id", "", -1, "/", "localhost", false, true)
-	c.SetCookie("user_id", "", -1, "/", "localhost", false, true)
-	c.SetCookie("expires_at", "", -1, "/", "localhost", false, true)
+	c.SetCookie("session_id", "", -1, "/", Cookie_Host, HTTPS_only, true)
+	c.SetCookie("user_id", "", -1, "/", Cookie_Host, HTTPS_only, true)
+	c.SetCookie("expires_at", "", -1, "/", Cookie_Host, HTTPS_only, true)
 
 	c.JSON(200, gin.H{
 		"response": "Logged out",

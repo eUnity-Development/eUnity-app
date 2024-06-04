@@ -20,9 +20,6 @@ func main() {
 	//init server
 	router := gin.Default()
 
-	//init DbManager
-	DBManager.Init()
-
 	//set default endpoint
 	docs.SwaggerInfo.BasePath = "/api/v1"
 	r := router.Group("/api/v1")

@@ -10,12 +10,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-
 var Host string // replaced the hardcoded database url with a variable, so we can load .env
 var Client *mongo.Client
 var DB *mongo.Database
 
-func Init() {
+func init() {
 	godotenv.Load()                  //loads the .env file
 	Host = os.Getenv("DATABASE_URL") //captures the database url from the .env file
 
