@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/classes/DesignVariables.dart';
-import 'package:frontend/widgets/NotificationWidgets/NotificationTile.dart';
+import 'package:eunity/classes/DesignVariables.dart';
+import 'package:eunity/widgets/NotificationWidgets/NotificationTile.dart';
 
 class NotificationGroup extends StatelessWidget {
   final List notificationList;

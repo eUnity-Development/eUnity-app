@@ -1,5 +1,5 @@
+import 'package:eunity/views/LoginSignup.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/views/LoginSignup.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});

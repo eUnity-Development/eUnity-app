@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:frontend/classes/routeHandler.dart';
+import 'package:eunity/classes/RouteHandler.dart';
 
 class AuthHelper {
   static String defaultHost = RouteHandler.defaultHost;
@@ -88,6 +88,30 @@ class AuthHelper {
       );
       return response;
 
+      //on anything but a 200 response this code will run
+    } on DioException catch (e) {
+      if (e.response != null) {
+        return e.response!;
+      } else {
+        return Response(
+          requestOptions: RequestOptions(path: url),
+          data: {'message': 'Unable to connect to server'},
+          statusCode: 500,
+          statusMessage: 'Unable to connect to server',
+        );
+      }
+    }
+  }
+
+  static Future<Response> googleSignIn() async {
+    String endPoint = '/auth/google';
+    var url = '$defaultHost$endPoint';
+    //this is the dio library making a post request
+    try {
+      final response = await RouteHandler.dio.get(
+        url,
+      );
+      return response;
       //on anything but a 200 response this code will run
     } on DioException catch (e) {
       if (e.response != null) {

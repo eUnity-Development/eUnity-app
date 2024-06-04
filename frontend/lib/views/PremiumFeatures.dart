@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/classes/DesignVariables.dart';
-import 'package:frontend/views/OtherPremiumFeatures.dart';
-import 'package:frontend/views/PeopleThatLikeYou.dart';
+import 'package:eunity/classes/DesignVariables.dart';
+import 'package:eunity/views/OtherPremiumFeatures.dart';
+import 'package:eunity/views/PeopleThatLikeYou.dart';
 
 class PremiumFeatures extends StatefulWidget {
   const PremiumFeatures({super.key});

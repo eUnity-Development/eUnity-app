@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/widgets/MatchPreferencesWidgets/MatchPreferenceSelection.dart';
-import 'package:frontend/widgets/MatchPreferencesWidgets/MatchPreferencesRangeSlider.dart';
-import 'package:frontend/widgets/MatchPreferencesWidgets/MatchPreferencesSlider.dart';
-import 'package:frontend/widgets/TopBars/PushedScreenTopBar.dart';
+import 'package:eunity/widgets/MatchPreferencesWidgets/MatchPreferenceSelection.dart';
+import 'package:eunity/widgets/MatchPreferencesWidgets/MatchPreferencesRangeSlider.dart';
+import 'package:eunity/widgets/MatchPreferencesWidgets/MatchPreferencesSlider.dart';
+import 'package:eunity/widgets/TopBars/PushedScreenTopBar.dart';
 
 class MatchPreferences extends StatefulWidget {
   const MatchPreferences({super.key});

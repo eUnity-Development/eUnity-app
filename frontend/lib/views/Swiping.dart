@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/models/models.dart';
+import 'package:eunity/models/models.dart';
 
 class Swiping extends StatefulWidget {
   const Swiping({super.key});

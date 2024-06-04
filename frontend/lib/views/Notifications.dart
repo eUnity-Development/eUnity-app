@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/widgets/NotificationWidgets/NotificationGroup.dart';
-import 'package:frontend/widgets/TopBars/PushedScreenWithIconTopBar.dart';
+import 'package:eunity/widgets/NotificationWidgets/NotificationGroup.dart';
+import 'package:eunity/widgets/TopBars/PushedScreenWithIconTopBar.dart';
 import 'dart:math';
 
 class Notifications extends StatefulWidget {
