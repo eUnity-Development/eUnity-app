@@ -45,7 +45,7 @@ class User extends Equatable {
         'https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
       ],
       jobTitle: 'Gamer',
-      bio: 'Test',
+      bio: "Bookworm by day, trailblazer by weekend. I'm equally at home lost in a gripping novel or conquering new peaks. When I'm not adventuring outdoors, you'll find me cozying up to a good movie or diving into the virtual worlds of gaming.",
       sexPref: 'Straight',
       height: '5ft 7in',
       distance: '3.8 miles away'
