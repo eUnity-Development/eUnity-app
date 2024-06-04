@@ -22,7 +22,12 @@ type Auth_controllers struct{}
 // required google env variables
 var GoogleClientID string
 var GoogleClientSecret string
-var GoogleRedirectURI string
+var GoogleRedirectURI string = "http://localhost:3200/api/v1/auth/google/callback"
+
+//this other url will redirect to the app under the schema eunity://open.my.app.com -> we can change this later
+//then we can call the correct callback url from withing the app. using 10.0.2.2
+
+//var GoogleRedirectURI string = "https://eunityusa.com/api/v1/redirect_google_auth_app"
 
 func init() {
 
