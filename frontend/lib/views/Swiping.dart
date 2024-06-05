@@ -129,32 +129,29 @@ class ReactButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: const Color.fromARGB(255, 236, 236, 236).withOpacity(.8),
-            ),
-            child: const Icon(Icons.clear_rounded, color: Colors.black),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: 50,
+          height: 50,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: const Color.fromARGB(255, 236, 236, 236).withOpacity(.8),
           ),
-          SizedBox(width: 30),
-          Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: const Color(0xFF5C5C).withOpacity(.8),
-            ),
-            child: const Icon(Icons.favorite, color: Colors.white),
+          child: const Icon(Icons.clear_rounded, color: Colors.black),
+        ),
+        SizedBox(width: 30),
+        Container(
+          width: 50,
+          height: 50,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: const Color(0xFF5C5C).withOpacity(.8),
           ),
-        ],
-      ),
+          child: const Icon(Icons.favorite, color: Colors.white),
+        ),
+      ],
     );
   }
 }
