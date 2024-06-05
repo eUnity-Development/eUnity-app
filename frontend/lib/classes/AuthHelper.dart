@@ -1,9 +1,12 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:eunity/classes/RouteHandler.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthHelper {
   static String defaultHost = RouteHandler.defaultHost;
+  static GoogleSignIn activeGoogleSignIn =
+      GoogleSignIn(scopes: ['email', 'openid', 'profile']);
 
   static Future<bool> isLoggedIn() async {
     var sessionCookie = await readCookie('session_id');
@@ -103,7 +106,15 @@ class AuthHelper {
     }
   }
 
-  static Future<Response> googleSignIn() async {
+  static Future<void> signInWithGoogle() async {
+    try {
+      await activeGoogleSignIn.signIn();
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
+  /*static Future<Response> googleSignIn() async {
     String endPoint = '/auth/google';
     var url = '$defaultHost$endPoint';
     //this is the dio library making a post request
@@ -125,5 +136,5 @@ class AuthHelper {
         );
       }
     }
-  }
+  }*/
 }

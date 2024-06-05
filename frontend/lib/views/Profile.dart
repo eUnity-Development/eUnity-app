@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/classes/DesignVariables.dart';
-import 'package:frontend/views/FeedbackScreen.dart';
+import 'package:eunity/classes/DesignVariables.dart';
+import 'package:eunity/views/FeedbackScreen.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
