@@ -131,8 +131,26 @@ func (m *Media_controllers) Delete_user_image(c *gin.Context) {
 		})
 		return
 	}
+
+	bson_user_id, err := primitive.ObjectIDFromHex(user_id)
+	if err != nil {
+		c.JSON(500, gin.H{
+			"response": "Internal Server Error",
+		})
+		return
+	}
+
 	//get image_id from params
 	image_id := c.Param("image_id")
+
+	//delete image from user profile
+	_, err = DBManager.DB.Collection("users").UpdateOne(context.Background(), bson.M{"_id": bson_user_id}, bson.M{"$pull": bson.M{"media_files": "http://localhost:3200/api/v1/media/" + user_id + "/" + image_id}})
+	if err != nil {
+		c.JSON(500, gin.H{
+			"response": "Internal Server Error",
+		})
+		return
+	}
 
 	//delete image
 	err = os.Remove("images/" + user_id + "/" + image_id + ".jpg")
