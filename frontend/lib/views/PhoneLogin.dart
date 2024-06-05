@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/classes/DesignVariables.dart';
-import 'package:frontend/views/VerifyPhoneNumber.dart';
-import 'package:frontend/widgets/LoginSignup/login_signup_button.dart';
-import 'package:frontend/widgets/TopBars/PushedScreenTopBar.dart';
+import 'package:eunity/classes/DesignVariables.dart';
+import 'package:eunity/views/VerifyPhoneNumber.dart';
+import 'package:eunity/widgets/LoginSignup/login_signup_button.dart';
+import 'package:eunity/widgets/TopBars/PushedScreenTopBar.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 class PhoneLogin extends StatefulWidget {
@@ -89,7 +89,8 @@ class _PhoneLoginState extends State<PhoneLogin> {
           ],
         ),
         Positioned(
-          bottom: (50 / 932) * screenHeight, // Distance from the bottom of the screen
+          bottom: (50 / 932) *
+              screenHeight, // Distance from the bottom of the screen
           left: (screenWidth - btnWidth) / 2, // Center the button horizontally
           child: LoginSignupButton(
             color: DesignVariables.primaryRed,
@@ -209,10 +210,13 @@ class _PhoneLoginState extends State<PhoneLogin> {
     );
   }
 
-void navigateToPrimaryScreens() {
+  void navigateToPrimaryScreens() {
     Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => VerifyPhoneNumber(phoneNumber: _enteredPhoneNumber,)),
+      context,
+      MaterialPageRoute(
+          builder: (_) => VerifyPhoneNumber(
+                phoneNumber: _enteredPhoneNumber,
+              )),
     );
   }
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/classes/DesignVariables.dart';
+import 'package:eunity/classes/DesignVariables.dart';
 
 class MatchPreferenceSelection extends StatefulWidget {
   final String label;

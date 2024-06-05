@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/models/models.dart';
+import 'package:eunity/models/models.dart';
 
 class Swiping extends StatefulWidget {
   const Swiping({Key? key});
@@ -65,51 +65,53 @@ class _SwipingState extends State<Swiping> with SingleTickerProviderStateMixin {
           animation: _animationController,
           builder: (context, child) {
             return SizedBox(
-              height: MediaQuery.of(context).size.height *1.5,
+              height: MediaQuery.of(context).size.height * 1.5,
               child: Stack(
                 children: [
                   Transform.translate(
-                  offset: Offset(0, _profilePositionAnimation.value),
-                  child: Transform.scale(
-                    scaleX: _widthScaleAnimation.value,
-                    scaleY: _heightScaleAnimation.value,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Draggable(
-                          feedback: UserCard(
-                            user: User.users[0],
-                            isArrowPressed: isArrowPressed,
-                            OnArrowPressed: _onArrowPressed
+                    offset: Offset(0, _profilePositionAnimation.value),
+                    child: Transform.scale(
+                      scaleX: _widthScaleAnimation.value,
+                      scaleY: _heightScaleAnimation.value,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Draggable(
+                            feedback: UserCard(
+                                user: User.users[0],
+                                isArrowPressed: isArrowPressed,
+                                OnArrowPressed: _onArrowPressed),
+                            childWhenDragging: UserCard(
+                                user: User.users[1],
+                                isArrowPressed: isArrowPressed,
+                                OnArrowPressed: _onArrowPressed),
+                            child: UserCard(
+                                user: User.users[0],
+                                isArrowPressed: isArrowPressed,
+                                OnArrowPressed: _onArrowPressed),
                           ),
-                          childWhenDragging: UserCard(
-                            user: User.users[1],
-                            isArrowPressed: isArrowPressed,
-                            OnArrowPressed: _onArrowPressed
-                          ),
-                          child: UserCard(
-                            user: User.users[0],
-                            isArrowPressed: isArrowPressed,
-                            OnArrowPressed: _onArrowPressed
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                if (isArrowPressed)
-                Positioned(
-                    top: (MediaQuery.of(context).size.height / 1.23 * _heightScaleAnimation.value) + 100,
-                    child: Column(
-                      children: [
-                          UserHeaderInfo(user: User.users[0], textColor: Colors.black),
+                  if (isArrowPressed)
+                    Positioned(
+                      top: (MediaQuery.of(context).size.height /
+                              1.23 *
+                              _heightScaleAnimation.value) +
+                          100,
+                      child: Column(
+                        children: [
+                          UserHeaderInfo(
+                              user: User.users[0], textColor: Colors.black),
                           SizedBox(
                             width: MediaQuery.of(context).size.width,
-                            child: UserBio(user: User.users[0], textColor: Colors.black),
+                            child: UserBio(
+                                user: User.users[0], textColor: Colors.black),
                           ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
                 ],
               ),
             );
@@ -122,7 +124,6 @@ class _SwipingState extends State<Swiping> with SingleTickerProviderStateMixin {
 }
 
 class ReactButtons extends StatelessWidget {
-
   const ReactButtons({
     super.key,
   });
@@ -207,54 +208,55 @@ class UserCard extends StatelessWidget {
                 ),
               ),
             ),
-            if(!isArrowPressed)
-            Positioned(
-              top: 20,
-              right: 20,
-              child: GestureDetector(
-                onTap: OnArrowPressed,
-                child: Container(
-                  width: 50,
-                  height: 50,
-                  child: const Icon(Icons.arrow_upward, color: Colors.white),
-                ),
-              ),
-            ),
             if (!isArrowPressed)
-                Positioned(
-                  bottom: 110,
-                  left: 20,
-                  child: UserNameAge(user: user, textColor: Colors.white),
-                ),
-            if (!isArrowPressed)
-                Positioned(
-                  bottom: 90,
-                  left: 20,
-                  child: UserHeaderInfo(user: user, textColor: Colors.white),
-                ),
-            if (isArrowPressed)
-            Positioned(
-              top: 20,
-              right: 20,
-              child: GestureDetector(
-                onTap: OnArrowPressed,
-                child: Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: const Color(0xFF5C5C).withOpacity(.8),
+              Positioned(
+                top: 20,
+                right: 20,
+                child: GestureDetector(
+                  onTap: OnArrowPressed,
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    child: const Icon(Icons.arrow_upward, color: Colors.white),
                   ),
-                  child: const Icon(Icons.arrow_downward, color: Colors.white),
                 ),
               ),
-            ),
+            if (!isArrowPressed)
+              Positioned(
+                bottom: 110,
+                left: 20,
+                child: UserNameAge(user: user, textColor: Colors.white),
+              ),
+            if (!isArrowPressed)
+              Positioned(
+                bottom: 90,
+                left: 20,
+                child: UserHeaderInfo(user: user, textColor: Colors.white),
+              ),
             if (isArrowPressed)
-                Positioned(
-                  bottom: 30,
-                  left: 20,
-                  child: UserNameAge(user: user, textColor: Colors.white),
+              Positioned(
+                top: 20,
+                right: 20,
+                child: GestureDetector(
+                  onTap: OnArrowPressed,
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: const Color(0xFF5C5C).withOpacity(.8),
+                    ),
+                    child:
+                        const Icon(Icons.arrow_downward, color: Colors.white),
+                  ),
                 ),
+              ),
+            if (isArrowPressed)
+              Positioned(
+                bottom: 30,
+                left: 20,
+                child: UserNameAge(user: user, textColor: Colors.white),
+              ),
           ],
         ),
       ),
@@ -288,7 +290,8 @@ class UserHeaderInfo extends StatelessWidget {
   final User user;
   final Color textColor;
 
-  const UserHeaderInfo({super.key, required this.user, required this.textColor});
+  const UserHeaderInfo(
+      {super.key, required this.user, required this.textColor});
 
   @override
   Widget build(BuildContext context) {

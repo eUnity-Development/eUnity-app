@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:frontend/views/MatchPreferences.dart';
-import 'package:frontend/views/Notifications.dart';
+import 'package:eunity/views/MatchPreferences.dart';
+import 'package:eunity/views/Notifications.dart';
 
 class HomeTopBar extends StatefulWidget implements PreferredSizeWidget {
   final int selectedIndex;

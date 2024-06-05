@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/classes/DesignVariables.dart';
+import 'package:eunity/classes/DesignVariables.dart';
 
 class MatchPreferencesSlider extends StatefulWidget {
   final double initialValue;

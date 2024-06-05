@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/widgets/MatchPreferencesWidgets/MatchPreferenceSelection.dart';
-import 'package:frontend/widgets/MatchPreferencesWidgets/MatchPreferencesRangeSlider.dart';
-import 'package:frontend/widgets/MatchPreferencesWidgets/MatchPreferencesSlider.dart';
-import 'package:frontend/widgets/TopBars/PushedScreenTopBar.dart';
+import 'package:eunity/widgets/MatchPreferencesWidgets/MatchPreferenceSelection.dart';
+import 'package:eunity/widgets/MatchPreferencesWidgets/MatchPreferencesRangeSlider.dart';
+import 'package:eunity/widgets/MatchPreferencesWidgets/MatchPreferencesSlider.dart';
+import 'package:eunity/widgets/TopBars/PushedScreenTopBar.dart';
 
 class MatchPreferences extends StatefulWidget {
   const MatchPreferences({super.key});
@@ -30,68 +30,70 @@ class _MatchPreferencesState extends State<MatchPreferences> {
 
     return Scaffold(
         appBar: PushedScreenTopBar(),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Match Preferences",
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 24),
-              ),
-              Text(
-                "There are many different kinds of people out there. Please, tell us, who are you interested in meeting?",
-                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
-              ),
-              largeSpacer,
-              Text(
-                "Gender",
-                style: headerStyle,
-              ),
-              spacerBox,
-              Text(
-                "Select the gender(s) of the people you are interested in meeting",
-                style: subStyle,
-              ),
-              spacerBox,
-              MatchPreferenceSelection(label: "Women"),
-              largeSpacer,
-              Text(
-                "Relationship Type",
-                style: headerStyle,
-              ),
-              spacerBox,
-              Text(
-                "Select your preferred type(s) of relationship",
-                style: subStyle,
-              ),
-              spacerBox,
-              MatchPreferenceSelection(label: "Long Term Relationships"),
-              largeSpacer,
-              Text(
-                "Age Range",
-                style: headerStyle,
-              ),
-              spacerBox,
-              Text(
-                "Select the range of ages you would like to match with",
-                style: subStyle,
-              ),
-              spacerBox,
-              MatchPreferencesRangeSlider(
-                  initialMinimum: 20, initialMaximum: 27),
-              largeSpacer,
-              Text(
-                "Maximum Distance",
-                style: headerStyle,
-              ),
-              spacerBox,
-              Text(
-                "Select the maximum distance you would like your matches to be away from you",
-                style: subStyle,
-              ),
-              MatchPreferencesSlider(initialValue: 1),
-            ],
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Match Preferences",
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 24),
+                ),
+                Text(
+                  "There are many different kinds of people out there. Please, tell us, who are you interested in meeting?",
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
+                ),
+                largeSpacer,
+                Text(
+                  "Gender",
+                  style: headerStyle,
+                ),
+                spacerBox,
+                Text(
+                  "Select the gender(s) of the people you are interested in meeting",
+                  style: subStyle,
+                ),
+                spacerBox,
+                MatchPreferenceSelection(label: "Women"),
+                largeSpacer,
+                Text(
+                  "Relationship Type",
+                  style: headerStyle,
+                ),
+                spacerBox,
+                Text(
+                  "Select your preferred type(s) of relationship",
+                  style: subStyle,
+                ),
+                spacerBox,
+                MatchPreferenceSelection(label: "Long Term Relationships"),
+                largeSpacer,
+                Text(
+                  "Age Range",
+                  style: headerStyle,
+                ),
+                spacerBox,
+                Text(
+                  "Select the range of ages you would like to match with",
+                  style: subStyle,
+                ),
+                spacerBox,
+                MatchPreferencesRangeSlider(
+                    initialMinimum: 20, initialMaximum: 27),
+                largeSpacer,
+                Text(
+                  "Maximum Distance",
+                  style: headerStyle,
+                ),
+                spacerBox,
+                Text(
+                  "Select the maximum distance you would like your matches to be away from you",
+                  style: subStyle,
+                ),
+                MatchPreferencesSlider(initialValue: 1),
+              ],
+            ),
           ),
         ));
   }
