@@ -27,7 +27,6 @@ class _ProfileState extends State<Profile> {
   }
 
   Future<void> updateData() async {
-    print("PRINTOUT");
     var response = await UserInfoHelper.getUserInfo();
     setState(() {
       if (response.data.containsKey('media_files')) {
@@ -36,11 +35,9 @@ class _ProfileState extends State<Profile> {
         imageArray = [];
       }
     });
-    print('THE IMAGE ARRAY');
-    print(imageArray);
   }
 
-  void testFeedback() async {
+  void navigateToFeedback() async {
     print("clicked feedback");
     Navigator.push(
       context,
@@ -53,7 +50,19 @@ class _ProfileState extends State<Profile> {
     Future<void> handleNewImage(File imagePath) async {
       if (imageArray.length >= selectedImageGrid + 1) {
       } else {
-        UserInfoHelper.uploadNewImage(imagePath);
+        await UserInfoHelper.uploadNewImage(imagePath);
+      }
+      setState(() {
+        updateData();
+      });
+      Navigator.pop(context);
+    }
+
+    Future<void> deleteImage() async {
+      if (imageArray.length >= selectedImageGrid + 1) {
+        await UserInfoHelper.deleteImage(imageArray[selectedImageGrid]);
+      } else {
+        print("No image to delete!");
       }
       setState(() {
         updateData();
@@ -64,6 +73,15 @@ class _ProfileState extends State<Profile> {
     Future<void> openCamera() async {
       final image = await ImagePicker().pickImage(
         source: ImageSource.camera,
+        imageQuality: 50,
+      );
+      if (image == null) return;
+      await handleNewImage(File(image.path));
+    }
+
+    Future<void> openGallery() async {
+      final image = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
         imageQuality: 50,
       );
       if (image == null) return;
@@ -108,8 +126,14 @@ class _ProfileState extends State<Profile> {
                       ),
                       Text("From Gallery")
                     ]),
-                    onPressed: () {
-                      print("clicked stuff");
+                    onPressed: () async {
+                      await openGallery();
+                    },
+                  ),
+                  SimpleDialogOption(
+                    child: Text("Test Delete"),
+                    onPressed: () async {
+                      await deleteImage();
                     },
                   ),
                   SimpleDialogOption(
@@ -138,7 +162,8 @@ class _ProfileState extends State<Profile> {
       if (imageArray.length < index + 1) {
         return NewImageSquare();
       } else {
-        return EditImageSquare(imageURL: imageArray[index]);
+        return EditImageSquare(
+            imageURL: UserInfoHelper.getPublicImageURL(imageArray[index]));
       }
     }
 
@@ -166,7 +191,7 @@ class _ProfileState extends State<Profile> {
                           fontWeight: FontWeight.w600),
                     ),
                   )),
-              onTap: testFeedback,
+              onTap: navigateToFeedback,
             ),
             const SizedBox(
               height: 15,

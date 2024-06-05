@@ -1,4 +1,3 @@
-import 'package:eunity/classes/UserInfoHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -12,15 +11,10 @@ class EditImageSquare extends StatefulWidget {
 }
 
 class _EditImageSquareState extends State<EditImageSquare> {
+  Image? userImage;
   @override
   void initState() {
     super.initState();
-    loadImage();
-  }
-
-  Future<void> loadImage() async {
-    var response = await UserInfoHelper.getImage(widget.imageURL);
-    print(response);
   }
 
   @override
@@ -32,6 +26,7 @@ class _EditImageSquareState extends State<EditImageSquare> {
         Align(
           alignment: Alignment.center,
           child: Container(
+            child: Image.network(widget.imageURL),
             height: 119,
             width: 116,
             decoration: BoxDecoration(
