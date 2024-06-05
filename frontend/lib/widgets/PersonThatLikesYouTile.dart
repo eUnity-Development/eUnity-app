@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:frontend/classes/DesignVariables.dart';
+import 'package:eunity/classes/DesignVariables.dart';
 
 class PersonThatLikesYouTile extends StatelessWidget {
   final Map<String, String> userData;

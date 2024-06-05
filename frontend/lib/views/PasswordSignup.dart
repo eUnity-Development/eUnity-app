@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/classes/AuthHelper.dart';
-import 'package:frontend/classes/DesignVariables.dart';
-import 'package:frontend/widgets/LoginSignup/login_signup_button.dart';
-import 'package:frontend/widgets/LoginSignup/login_signup_button_content.dart';
-import 'package:frontend/widgets/TopBars/PushedScreenTopBar.dart';
+import 'package:eunity/classes/AuthHelper.dart';
+import 'package:eunity/classes/DesignVariables.dart';
+import 'package:eunity/widgets/LoginSignup/login_signup_button.dart';
+import 'package:eunity/widgets/LoginSignup/login_signup_button_content.dart';
+import 'package:eunity/widgets/TopBars/PushedScreenTopBar.dart';
 
 class PasswordSignup extends StatefulWidget {
   final String email;
@@ -38,7 +38,8 @@ class _PasswordSignupState extends State<PasswordSignup> {
     void testSignup() async {
       //print("clicked signup");
       print("Email: ${widget.email}");
-      var response = await AuthHelper.signUp(widget.email, _passwordController.text);
+      var response =
+          await AuthHelper.signUp(widget.email, _passwordController.text);
       print(response);
     }
 

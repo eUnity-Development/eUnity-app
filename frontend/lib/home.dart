@@ -1,3 +1,4 @@
+import 'package:eunity/views/LoginSignup.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/classes/DesignVariables.dart';
 import 'package:frontend/views/LoginSignup.dart';

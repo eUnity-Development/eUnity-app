@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/classes/AuthHelper.dart';
-import 'package:frontend/classes/DesignVariables.dart';
-import 'package:frontend/views/CoreTemplate.dart';
-import 'package:frontend/views/PhoneLogin.dart';
-import 'package:frontend/widgets/LoginSignup/login_signup_button.dart';
-import 'package:frontend/widgets/LoginSignup/login_signup_button_content.dart';
+import 'package:eunity/classes/AuthHelper.dart';
+import 'package:eunity/classes/DesignVariables.dart';
+import 'package:eunity/views/CoreTemplate.dart';
+import 'package:eunity/views/PhoneLogin.dart';
+import 'package:eunity/widgets/LoginSignup/login_signup_button.dart';
+import 'package:eunity/widgets/LoginSignup/login_signup_button_content.dart';
 
 class LoginSignup extends StatefulWidget {
   const LoginSignup({super.key});
@@ -33,9 +33,16 @@ class _LoginSignupState extends State<LoginSignup> {
 
   void navigateToPhoneLogin() {
     Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const PhoneLogin()),
+      context,
+      MaterialPageRoute(builder: (_) => const PhoneLogin()),
     );
+  }
+
+  void handleGoogleSignIn() async {
+    //I actually need to open a google sign in page
+    print("clicked google");
+    var response = await AuthHelper.googleSignIn();
+    print(response);
   }
 
   void testSignup() async {
@@ -51,7 +58,7 @@ class _LoginSignupState extends State<LoginSignup> {
     //print(response);
     //bool loginCheck = await AuthHelper.isLoggedIn();
     //if (loginCheck) {
-      navigateToPhoneLogin();
+    navigateToPhoneLogin();
     //}
   }
 
@@ -68,10 +75,10 @@ class _LoginSignupState extends State<LoginSignup> {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
 
-    final double btnWidth = (334.67/430) * screenWidth;
-    final double btnHeight = (52/932) * screenHeight;
+    final double btnWidth = (334.67 / 430) * screenWidth;
+    final double btnHeight = (52 / 932) * screenHeight;
 
-    final double svgOffset = (20/430) * screenWidth;
+    final double svgOffset = (20 / 430) * screenWidth;
     const double svgDimensions = 27;
     const double fontSize = 16.5;
     const Color fontColor = Color.fromRGBO(0, 0, 0, 0.5);
@@ -79,23 +86,22 @@ class _LoginSignupState extends State<LoginSignup> {
     final Color loginBorder = DesignVariables.greyLines;
     const Color loginBackground = Colors.transparent;
 
-    final double spaceBetweenLogin = ((31/932) * screenHeight);
+    final double spaceBetweenLogin = ((31 / 932) * screenHeight);
 
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-
           Center(
             child: Image(
               image: const AssetImage('assets/e-unity-logo-and-name.png'),
-              width: ((330/430) * screenWidth),
-              height: ((118.75/932) * screenHeight),
+              width: ((330 / 430) * screenWidth),
+              height: ((118.75 / 932) * screenHeight),
             ),
           ),
 
           SizedBox(
-            height: ((45/932) * screenHeight),
+            height: ((45 / 932) * screenHeight),
           ),
 
           Center(
@@ -109,9 +115,7 @@ class _LoginSignupState extends State<LoginSignup> {
             ),
           ),
 
-          SizedBox(
-            height: ((73/932) * screenHeight)
-          ),
+          SizedBox(height: ((73 / 932) * screenHeight)),
           /*
           // Sign up
           LoginSignupButton(
@@ -161,55 +165,48 @@ class _LoginSignupState extends State<LoginSignup> {
             color: loginBackground,
             borderColor: loginBorder,
             buttonContent: LoginSignupButtonContent(
-              svgOffset: svgOffset, 
-              svgPath: 'assets/login/phone.svg', 
-              svgDimensions: svgDimensions, 
-              text: 'Log in with phone number', 
-              fontSize: fontSize, 
-              fontColor: fontColor
-            ),
+                svgOffset: svgOffset,
+                svgPath: 'assets/login/phone.svg',
+                svgDimensions: svgDimensions,
+                text: 'Log in with phone number',
+                fontSize: fontSize,
+                fontColor: fontColor),
             height: btnHeight,
             width: btnWidth,
             onTap: testLogin,
           ),
 
-          SizedBox(
-            height: spaceBetweenLogin
-          ),
+          SizedBox(height: spaceBetweenLogin),
 
           // Google login
           LoginSignupButton(
             color: loginBackground,
             borderColor: loginBorder,
             buttonContent: LoginSignupButtonContent(
-              svgOffset: svgOffset, 
-              svgPath: 'assets/login/google_icon.svg', 
-              svgDimensions: svgDimensions, 
-              text: 'Log in with Google',
-              fontSize: fontSize, 
-              fontColor: fontColor
-            ),
+                svgOffset: svgOffset,
+                svgPath: 'assets/login/google_icon.svg',
+                svgDimensions: svgDimensions,
+                text: 'Log in with Google',
+                fontSize: fontSize,
+                fontColor: fontColor),
             height: btnHeight,
             width: btnWidth,
-            onTap: testLogin,
+            onTap: handleGoogleSignIn,
           ),
 
-          SizedBox(
-            height: spaceBetweenLogin
-          ),
+          SizedBox(height: spaceBetweenLogin),
 
           // Facebook login
           LoginSignupButton(
             color: loginBackground,
             borderColor: loginBorder,
             buttonContent: LoginSignupButtonContent(
-              svgOffset: svgOffset, 
-              svgPath: 'assets/login/facebook_icon.svg', 
-              svgDimensions: svgDimensions, 
-              text: 'Log in with Facebook', 
-              fontSize: fontSize, 
-              fontColor: fontColor
-            ),
+                svgOffset: svgOffset,
+                svgPath: 'assets/login/facebook_icon.svg',
+                svgDimensions: svgDimensions,
+                text: 'Log in with Facebook',
+                fontSize: fontSize,
+                fontColor: fontColor),
             height: btnHeight,
             width: btnWidth,
             onTap: testLogin,

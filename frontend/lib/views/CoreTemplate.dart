@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:frontend/views/Swiping.dart';
-import 'package:frontend/views/PremiumFeatures.dart';
-import 'package:frontend/views/Messages.dart';
-import 'package:frontend/views/Profile.dart';
-import 'package:frontend/widgets/TopBars/HomeTopBar.dart';
-import 'package:frontend/classes/DesignVariables.dart';
+import 'package:eunity/views/Swiping.dart';
+import 'package:eunity/views/PremiumFeatures.dart';
+import 'package:eunity/views/Messages.dart';
+import 'package:eunity/views/Profile.dart';
+import 'package:eunity/widgets/TopBars/HomeTopBar.dart';
+import 'package:eunity/classes/DesignVariables.dart';
 
 class CoreTemplate extends StatefulWidget {
   const CoreTemplate({super.key});

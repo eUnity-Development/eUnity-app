@@ -20,9 +20,6 @@ func main() {
 	//init server
 	router := gin.Default()
 
-	//init DbManager
-	DBManager.Init()
-
 	//set default endpoint
 	docs.SwaggerInfo.BasePath = "/api/v1"
 	r := router.Group("/api/v1")
@@ -34,10 +31,12 @@ func main() {
 	//ROUTE GROUPS
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//unprotected routes
-	routes.User_routes(r.Group("/users"))
+	routes.Pub_User_routes(r.Group("/users"))
+	routes.Pub_Media_routes(r.Group("/media"))
+	routes.Auth_routes(r.Group("/auth"))
 
 	//protected routes
-	routes.Protected_user_routes(r.Group("/users", AuthRequired()))
+	routes.User_routes(r.Group("/users", AuthRequired()))
 	routes.Media_routes(r.Group("/media", AuthRequired()))
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

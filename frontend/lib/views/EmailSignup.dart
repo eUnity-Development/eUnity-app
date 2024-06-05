@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/classes/DesignVariables.dart';
-import 'package:frontend/views/PasswordSignup.dart';
-import 'package:frontend/widgets/LoginSignup/login_signup_button.dart';
-import 'package:frontend/widgets/TopBars/PushedScreenTopBar.dart';
+import 'package:eunity/classes/DesignVariables.dart';
+import 'package:eunity/views/PasswordSignup.dart';
+import 'package:eunity/widgets/LoginSignup/login_signup_button.dart';
+import 'package:eunity/widgets/TopBars/PushedScreenTopBar.dart';
 
 class EmailSignup extends StatefulWidget {
   const EmailSignup({super.key});
@@ -45,8 +45,10 @@ class _EmailSignupState extends State<EmailSignup> {
             ),
           ),
           Positioned(
-            bottom: (50 / 932) * screenHeight, // Distance from the bottom of the screen
-            left: (screenWidth - btnWidth) / 2, // Center the button horizontally
+            bottom: (50 / 932) *
+                screenHeight, // Distance from the bottom of the screen
+            left:
+                (screenWidth - btnWidth) / 2, // Center the button horizontally
             child: LoginSignupButton(
               color: DesignVariables.primaryRed,
               borderColor: Colors.transparent,
@@ -67,22 +69,23 @@ class _EmailSignupState extends State<EmailSignup> {
       ),
     );
   }
-  
+
   Padding EnterEmailHeader() {
     return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Enter Email',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  ),
-                ],
-              ),
-            );
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Enter Email',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Center EnterEmailTextField() {
@@ -140,7 +143,8 @@ class _EmailSignupState extends State<EmailSignup> {
   void navigateToPasswordSignup() {
     Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (_) => PasswordSignup(email: _emailController.text)),
+        MaterialPageRoute(
+            builder: (_) => PasswordSignup(email: _emailController.text)),
         (route) => false);
   }
 
