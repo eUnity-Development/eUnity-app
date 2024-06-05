@@ -49,6 +49,8 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     Future<void> handleNewImage(File imagePath) async {
       if (imageArray.length >= selectedImageGrid + 1) {
+        await UserInfoHelper.deleteImage(imageArray[selectedImageGrid]);
+        await UserInfoHelper.uploadNewImage(imagePath);
       } else {
         await UserInfoHelper.uploadNewImage(imagePath);
       }
