@@ -60,7 +60,7 @@ class _VerifyPhoneNumber extends State<VerifyPhoneNumber> {
     final double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-        appBar: const PushedScreenTopBar(),
+        appBar: const PushedScreenTopBar(hasArrow: true),
         body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
           SizedBox(
             height: (40 / 932) * screenHeight,

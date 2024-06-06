@@ -29,7 +29,7 @@ class _EmailSignupState extends State<EmailSignup> {
     final double btnHeight = (52 / 932) * screenHeight;
 
     return Scaffold(
-      appBar: PushedScreenTopBar(),
+      appBar: PushedScreenTopBar(hasArrow: true),
       body: Stack(
         children: [
           Padding(

@@ -44,7 +44,7 @@ class _PasswordSignupState extends State<PasswordSignup> {
     }
 
     return Scaffold(
-      appBar: const PushedScreenTopBar(),
+      appBar: const PushedScreenTopBar(hasArrow: true),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
