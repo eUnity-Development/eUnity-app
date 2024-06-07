@@ -65,7 +65,7 @@ class User extends Equatable {
     ),
     User(
       id: 3,
-      name: 'David',
+      name: 'Dennis',
       age: 28,
       imageUrls: const [
         'https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
@@ -78,7 +78,7 @@ class User extends Equatable {
     ),
     User(
       id: 4,
-      name: 'Anna',
+      name: 'Olivia',
       age: 24,
       imageUrls: const [
         'https://images.pexels.com/photos/678783/pexels-photo-678783.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'

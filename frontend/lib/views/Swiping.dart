@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:eunity/models/models.dart';
+import 'package:flutter/material.dart';
 
 class Swiping extends StatefulWidget {
   const Swiping({Key? key});
@@ -14,6 +14,7 @@ class _SwipingState extends State<Swiping> with SingleTickerProviderStateMixin {
   late Animation<double> _widthScaleAnimation;
   late Animation<double> _heightScaleAnimation;
   late Animation<double> _profilePositionAnimation;
+  int currentUserIndex = 0;
 
   @override
   void initState() {
@@ -56,6 +57,28 @@ class _SwipingState extends State<Swiping> with SingleTickerProviderStateMixin {
     });
   }
 
+  void _onHeartPressed() {
+    setState(() {
+      if (currentUserIndex < User.users.length - 1) {
+        currentUserIndex++;
+      } else {
+        // Optionally handle the case when there are no more users
+        currentUserIndex = 0;
+      }
+    });
+  }
+
+  void _onPassPressed() {
+    setState(() {
+      if (currentUserIndex < User.users.length - 1) {
+        currentUserIndex++;
+      } else {
+        // Optionally handle the case when there are no more users
+        currentUserIndex = 0;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,17 +101,29 @@ class _SwipingState extends State<Swiping> with SingleTickerProviderStateMixin {
                         children: [
                           Draggable(
                             feedback: UserCard(
-                                user: User.users[0],
+                                user: User.users[currentUserIndex],
                                 isArrowPressed: isArrowPressed,
                                 OnArrowPressed: _onArrowPressed),
-                            childWhenDragging: UserCard(
-                                user: User.users[1],
-                                isArrowPressed: isArrowPressed,
-                                OnArrowPressed: _onArrowPressed),
+                            childWhenDragging: currentUserIndex + 1 < User.users.length
+                                ? UserCard(
+                                    user: User.users[currentUserIndex + 1],
+                                    isArrowPressed: isArrowPressed,
+                                    OnArrowPressed: _onArrowPressed)
+                                : const SizedBox.shrink(),
                             child: UserCard(
-                                user: User.users[0],
+                                user: User.users[currentUserIndex],
                                 isArrowPressed: isArrowPressed,
                                 OnArrowPressed: _onArrowPressed),
+                            onDragEnd: (drag){
+                                if(drag.velocity.pixelsPerSecond.dx < -500){
+                                  print("Swipe left");
+                                  _onPassPressed();
+                                }
+                                if(drag.velocity.pixelsPerSecond.dx > 500){
+                                  print("Swipe right");
+                                  _onHeartPressed();
+                                }
+                              }
                           ),
                         ],
                       ),
@@ -97,17 +132,19 @@ class _SwipingState extends State<Swiping> with SingleTickerProviderStateMixin {
                   if (isArrowPressed)
                     Positioned(
                       top: (MediaQuery.of(context).size.height /
-                              1.23 *
+                              1.195*
                               _heightScaleAnimation.value) +
                           100,
                       child: Column(
                         children: [
                           UserHeaderInfo(
-                              user: User.users[0], textColor: Colors.black),
+                              user: User.users[currentUserIndex],
+                              textColor: Colors.black),
                           SizedBox(
                             width: MediaQuery.of(context).size.width,
                             child: UserBio(
-                                user: User.users[0], textColor: Colors.black),
+                                user: User.users[currentUserIndex],
+                                textColor: Colors.black),
                           ),
                         ],
                       ),
@@ -118,14 +155,23 @@ class _SwipingState extends State<Swiping> with SingleTickerProviderStateMixin {
           },
         ),
       ),
-      floatingActionButton: ReactButtons(),
+      floatingActionButton: ReactButtons(
+        onHeartPressed: _onHeartPressed,
+        onPassPressed: _onPassPressed,
+      ),
     );
   }
 }
 
 class ReactButtons extends StatelessWidget {
+  final VoidCallback onHeartPressed;
+  final VoidCallback onPassPressed;
+
   const ReactButtons({
     super.key,
+    required this.onHeartPressed,
+    required this.onPassPressed,
+
   });
 
   @override
@@ -133,24 +179,30 @@ class ReactButtons extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: const Color.fromARGB(255, 236, 236, 236).withOpacity(.8),
+        GestureDetector(
+          onTap: onPassPressed,
+          child: Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: const Color.fromARGB(255, 236, 236, 236).withOpacity(.8),
+            ),
+            child: const Icon(Icons.clear_rounded, color: Colors.black),
           ),
-          child: const Icon(Icons.clear_rounded, color: Colors.black),
         ),
         SizedBox(width: 30),
-        Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: const Color(0xFF5C5C).withOpacity(.8),
+        GestureDetector(
+          onTap: onHeartPressed,
+          child: Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: const Color(0xFF5C5C).withOpacity(.8),
+            ),
+            child: const Icon(Icons.favorite, color: Colors.white),
           ),
-          child: const Icon(Icons.favorite, color: Colors.white),
         ),
       ],
     );
@@ -174,7 +226,7 @@ class UserCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 10),
       child: SizedBox(
-        height: MediaQuery.of(context).size.height / 1.23,
+        height: MediaQuery.of(context).size.height / 1.195,
         width: MediaQuery.of(context).size.width,
         child: Stack(
           children: [
@@ -197,7 +249,7 @@ class UserCard extends StatelessWidget {
             ),
             Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5.0),
+                borderRadius: BorderRadius.circular(15.0),
                 gradient: const LinearGradient(
                   colors: [
                     Color.fromARGB(200, 0, 0, 0),

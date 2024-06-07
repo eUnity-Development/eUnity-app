@@ -43,7 +43,7 @@ class _CoreTemplateState extends State<CoreTemplate> {
         backgroundColor: const Color.fromARGB(255, 232, 232, 232),
         color: Colors.white,
         buttonBackgroundColor: Colors.white,
-        height: 75,
+        height: 55,
         index: selectedIndex,
         items: <Widget>[
           SvgPicture.asset(

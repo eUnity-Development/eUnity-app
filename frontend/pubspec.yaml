@@ -48,6 +48,7 @@ dependencies:
   google_sign_in: ^6.2.1
   dotted_border: ^2.1.0
   image_picker: ^1.0.8
+  flutter_swipe_detector: ^2.0.0
 
 dev_dependencies:
   flutter_test:
