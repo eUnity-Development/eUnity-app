@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:eunity/classes/AuthHelper.dart';
 import 'package:eunity/classes/DesignVariables.dart';
@@ -5,6 +6,7 @@ import 'package:eunity/views/CoreTemplate.dart';
 import 'package:eunity/views/PhoneLogin.dart';
 import 'package:eunity/widgets/LoginSignup/login_signup_button.dart';
 import 'package:eunity/widgets/LoginSignup/login_signup_button_content.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginSignup extends StatefulWidget {
   const LoginSignup({super.key});
@@ -22,9 +24,33 @@ class _LoginSignupState extends State<LoginSignup> {
         navigateToPrimaryScreens();
       }
     });
+
+    //when we detect user change we trigger this function
+    AuthHelper.googleSignIn.onCurrentUserChanged
+        .listen((GoogleSignInAccount? account) async {
+      GoogleSignInAuthentication? auth = await account?.authentication;
+      // print(account);
+      // print("Google Sign In");
+      // print(auth);
+      // print(auth?.idToken);
+      if (auth != null) {
+        String googleKey = auth.idToken!;
+        Response res = await AuthHelper.verifyGoogleIDToken(googleKey);
+        if (res.statusCode == 200) {
+          navigateToPrimaryScreens();
+        }
+      }
+
+
+    });
+
+
+    //try to login silently on app load
+    AuthHelper.googleSignIn.signInSilently();
   }
 
   void navigateToPrimaryScreens() {
+    print("Navigating to primary screens");
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (_) => const CoreTemplate()),
@@ -38,12 +64,8 @@ class _LoginSignupState extends State<LoginSignup> {
     );
   }
 
-  void handleGoogleSignIn() async {
-    //I actually need to open a google sign in page
-    print("clicked google");
+  void handleGoogleSignInClick() async {
     await AuthHelper.signInWithGoogle();
-    //var response = await AuthHelper.googleSignIn();
-    //print(response);
   }
 
   void testSignup() async {
@@ -202,7 +224,7 @@ class _LoginSignupState extends State<LoginSignup> {
                 fontColor: fontColor),
             height: btnHeight,
             width: btnWidth,
-            onTap: handleGoogleSignIn,
+            onTap: handleGoogleSignInClick,
           ),
 
           SizedBox(height: spaceBetweenLogin),

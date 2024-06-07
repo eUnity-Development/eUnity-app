@@ -250,7 +250,6 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 
 	//check if the user already exists
 	user := DBManager.DB.Collection("users").FindOne(context.Background(), bson.M{"email": credentials.Email})
-	fmt.Println(user)
 	if user.Err() == nil {
 		// check if password is correct
 		var result models.User
@@ -288,7 +287,8 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 		ID:                    &objectID,
 		Email:                 credentials.Email,
 		PasswordHash:          password_hash,
-		Verified:              false,
+		Verified_email:        false,
+		Verified_phone_number: false,
 		MediaFiles:            []string{},
 		ThirdPartyConnections: make(map[string]string),
 	}
@@ -404,9 +404,9 @@ func (u *User_controllers) POST_login(c *gin.Context) {
 	cookie := generate_secure_cookie(result)
 
 	//set cookie
-	c.SetCookie("session_id", cookie["session_id"].(string), 3600, "/", "/", false, true)
-	c.SetCookie("user_id", cookie["user_id"].(string), 3600, "/", "/", false, true)
-	c.SetCookie("expires_at", cookie["expires_at"].(string), 3600, "/", "/", false, true)
+	c.SetCookie("session_id", cookie["session_id"].(string), 3600, "/", Cookie_Host, HTTPS_only, true)
+	c.SetCookie("user_id", cookie["user_id"].(string), 3600, "/", Cookie_Host, HTTPS_only, true)
+	c.SetCookie("expires_at", cookie["expires_at"].(string), 3600, "/", Cookie_Host, HTTPS_only, true)
 
 	//turn cookie into bson to store in database
 	session_bson := bson.M{

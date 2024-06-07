@@ -34,8 +34,6 @@ func init() {
 	godotenv.Load() //loads the .env file
 	Google_key := os.Getenv("GOOGLE_KEY")
 	Google_secret := os.Getenv("GOOGLE_SECRET")
-	fmt.Println(Google_key)
-	fmt.Println(Google_secret)
 
 	scopes := []string{
 		"email",
@@ -82,15 +80,12 @@ func (ac *Web_Auth_controllers) GET_GoogleOAuthCallback(c *gin.Context) { // #TO
 	c.Request.URL.RawQuery = q.Encode()
 	//view entire query data
 
-	fmt.Println(c.Request.URL.Query())
-
 	user, err := gothic.CompleteUserAuth(c.Writer, c.Request)
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 
-	fmt.Println("right here")
 	// print the user as pretty json and save to file
 	jsonObject, err := json.MarshalIndent(user, "", "    ")
 	if err != nil {
@@ -108,7 +103,6 @@ func (ac *Web_Auth_controllers) GET_GoogleOAuthCallback(c *gin.Context) { // #TO
 	}
 
 	//print the user
-	fmt.Println(string(jsonObject))
 
 	//@TODO make the cookie here
 	cookie := generate_secure_cookie_third_party(user)

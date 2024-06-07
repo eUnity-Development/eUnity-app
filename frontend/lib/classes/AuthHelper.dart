@@ -5,8 +5,11 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthHelper {
   static String defaultHost = RouteHandler.defaultHost;
-  static GoogleSignIn activeGoogleSignIn =
-      GoogleSignIn(scopes: ['email', 'openid', 'profile']);
+  static GoogleSignIn googleSignIn = GoogleSignIn(
+    scopes: ['email', 'openid', 'profile'],
+    serverClientId:"473125180287-80hn1kcn8k3juut9p7ocvi6j77v9lnct.apps.googleusercontent.com"
+  );
+
 
   static Future<bool> isLoggedIn() async {
     var sessionCookie = await readCookie('session_id');
@@ -108,26 +111,27 @@ class AuthHelper {
 
   static Future<void> signInWithGoogle() async {
     try {
-      await activeGoogleSignIn.signIn();
+      await googleSignIn.signIn();
     } on Exception catch (e) {
       print(e);
     }
   }
 
-  /*static Future<Response> googleSignIn() async {
-    String endPoint = '/auth/google';
+  static Future<Response> verifyGoogleIDToken(String googleKey) async {
+    String endPoint = '/auth/google?idToken=$googleKey';
     var url = '$defaultHost$endPoint';
-    //this is the dio library making a post request
+
     try {
-      final response = await RouteHandler.dio.get(
+      final response = await RouteHandler.dio.post(
         url,
       );
       return response;
-      //on anything but a 200 response this code will run
     } on DioException catch (e) {
       if (e.response != null) {
+        print(e.response!.data);
         return e.response!;
       } else {
+        print('Unable to connect to server');
         return Response(
           requestOptions: RequestOptions(path: url),
           data: {'message': 'Unable to connect to server'},
@@ -136,5 +140,5 @@ class AuthHelper {
         );
       }
     }
-  }*/
+  }
 }
