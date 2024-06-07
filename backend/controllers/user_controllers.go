@@ -290,27 +290,7 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 		Verified_email:        false,
 		Verified_phone_number: false,
 		MediaFiles:            []string{},
-		ThirdPartyConnections: make(map[string]string),
-	}
-
-	third_party_provider, err := c.Cookie("thirdParty_provider")
-	if err == nil { // if there is a provider check for a third party id
-		third_party_expire, err := c.Cookie("thirdparty_expires")
-		if err == nil {
-			if cookie_expirey_check(third_party_expire) { //if the cookie has expired then we remove the cookies
-				fmt.Println("Third party cookie has expired")
-				c.SetCookie("thirdParty_provider", "", -1, "/", "localhost", false, true) //remove the cookies
-				c.SetCookie("thirdParty_id", "", -1, "/", "localhost", false, true)
-				c.SetCookie("thirdparty_expires", "", -1, "/", "localhost", false, true)
-			} else {
-				third_party_id, err := c.Cookie("thirdParty_id")
-				if err != nil { //if there is none print a message
-					fmt.Println("No third party id found")
-				} else { // if there is one then we push the two to the map
-					new_user.ThirdPartyConnections = map[string]string{"provider": third_party_provider, "third_party_id": third_party_id}
-				}
-			}
-		}
+		Providers:             make(map[string]models.Provider),
 	}
 
 	_, err = DBManager.DB.Collection("users").InsertOne(context.Background(), new_user)

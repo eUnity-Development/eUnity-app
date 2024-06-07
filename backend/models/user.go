@@ -20,7 +20,7 @@ type User struct {
 	DateOfBirth           *DateOfBirth        `bson:"dob" json:"dob,omitempty"`
 	FirstName             string              `bson:"first_name" json:"first_name,omitempty"`
 	LastName              string              `bson:"last_name" json:"last_name,omitempty"`
-	ThirdPartyConnections map[string]string   `bson:"third_party_connections" json:"third_party_connections,omitempty"`
+	Providers             map[string]Provider `bson:"providers" json:"providers,omitempty"`
 	MediaFiles            []string            `bson:"media_files" json:"media_files,omitempty"`
 }
 
@@ -44,8 +44,13 @@ func FromGooglePayload(payload *idtoken.Payload) *User {
 		FirstName:      payload.Claims["given_name"].(string),
 		LastName:       payload.Claims["family_name"].(string),
 		Verified_email: payload.Claims["email_verified"].(bool),
-		ThirdPartyConnections: map[string]string{
-			"google": payload.Claims["sub"].(string),
+		Providers: map[string]Provider{
+			"google": {
+				Name:           payload.Claims["name"].(string),
+				Email:          payload.Claims["email"].(string),
+				Email_verified: payload.Claims["email_verified"].(bool),
+				Sub:            payload.Claims["sub"].(string),
+			},
 		},
 	}
 

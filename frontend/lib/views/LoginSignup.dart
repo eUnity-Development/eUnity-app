@@ -29,12 +29,9 @@ class _LoginSignupState extends State<LoginSignup> {
     AuthHelper.googleSignIn.onCurrentUserChanged
         .listen((GoogleSignInAccount? account) async {
       GoogleSignInAuthentication? auth = await account?.authentication;
-      // print(account);
-      // print("Google Sign In");
-      // print(auth);
-      // print(auth?.idToken);
       if (auth != null) {
         String googleKey = auth.idToken!;
+        if(AuthHelper.loggedIn) return;
         Response res = await AuthHelper.verifyGoogleIDToken(googleKey);
         if (res.statusCode == 200) {
           navigateToPrimaryScreens();
