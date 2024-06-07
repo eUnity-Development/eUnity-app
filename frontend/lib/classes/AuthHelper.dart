@@ -126,6 +126,28 @@ class AuthHelper {
     }
   }
 
+  static Future<void> signOut() async {
+      //we want to sign out of google and our server and clear the session cookie
+      googleSignIn.disconnect();
+      String endPoint = '/users/logout';
+      var url = '$defaultHost$endPoint';
+      try {
+        await RouteHandler.dio.post(
+          url,
+        );
+        return;
+      } on DioException catch (e) {
+        if (e.response != null) {
+          print(e.response!.data);
+          return;
+        } else {
+          print('Unable to connect to server');
+          return;
+        }
+      }
+  }
+
+
   static Future<Response> verifyGoogleIDToken(String googleKey) async {
     String endPoint = '/auth/google?idToken=$googleKey';
     var url = '$defaultHost$endPoint';
