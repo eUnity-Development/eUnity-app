@@ -26,6 +26,12 @@ type Media_controllers struct {
 // @Router /media/user_image [post]
 func (m *Media_controllers) Add_user_image(c *gin.Context) {
 
+	file, _ := c.FormFile("image")
+
+	//get file extension from Header
+	content_type := file.Header.Get("Content-Type")
+	extention := content_type[len(content_type)-3:]
+
 	//get user_id from cookies
 	user_id, err := c.Cookie("user_id")
 	if err != nil {
@@ -69,7 +75,7 @@ func (m *Media_controllers) Add_user_image(c *gin.Context) {
 			"response": "User has reached maximum number of images",
 		})
 	}
-	link := "http://localhost:3200/api/v1/media/" + user_id + "/" + image_id
+	link := "http://localhost:3200/api/v1/media/" + user_id + "/" + image_id + "." + extention
 	//add image to user profile
 	_, err = DBManager.DB.Collection("users").UpdateOne(context.Background(), bson.M{"_id": bson_user_id}, bson.M{"$push": bson.M{"media_files": link}})
 	if err != nil {
@@ -77,8 +83,8 @@ func (m *Media_controllers) Add_user_image(c *gin.Context) {
 			"response": "Internal Server Error",
 		})
 	}
-	file, _ := c.FormFile("image")
-	c.SaveUploadedFile(file, "images/"+user_id+"/"+image_id+".jpg")
+
+	c.SaveUploadedFile(file, "images/"+user_id+"/"+image_id+"."+extention)
 
 	//return param as json
 	c.JSON(200, gin.H{
