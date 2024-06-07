@@ -44,6 +44,11 @@ dependencies:
   intl: ^0.18.1
   flutter_otp_text_field: ^1.1.0+2
   intl_phone_field: ^3.2.0
+  curved_navigation_bar: ^1.0.4
+  google_sign_in: ^6.2.1
+  dotted_border: ^2.1.0
+  image_picker: ^1.0.8
+  flutter_swipe_detector: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +78,7 @@ flutter:
     - assets/NavBarUI/
     - assets/FakePeople/
     - assets/login/
+    - assets/MiscIcons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -41,8 +41,9 @@ class _LoginSignupState extends State<LoginSignup> {
   void handleGoogleSignIn() async {
     //I actually need to open a google sign in page
     print("clicked google");
-    var response = await AuthHelper.googleSignIn();
-    print(response);
+    await AuthHelper.signInWithGoogle();
+    //var response = await AuthHelper.googleSignIn();
+    //print(response);
   }
 
   void testSignup() async {
@@ -60,6 +61,16 @@ class _LoginSignupState extends State<LoginSignup> {
     //if (loginCheck) {
     navigateToPhoneLogin();
     //}
+  }
+
+  void forceLogin() async {
+    print('forced login');
+    await AuthHelper.signUp("testemail@test.com", "Test123123");
+    await AuthHelper.login("testemail@test.com", "Test123123");
+    bool loginCheck = await AuthHelper.isLoggedIn();
+    if (loginCheck) {
+      navigateToPrimaryScreens();
+    }
   }
 
   @override
@@ -209,7 +220,7 @@ class _LoginSignupState extends State<LoginSignup> {
                 fontColor: fontColor),
             height: btnHeight,
             width: btnWidth,
-            onTap: testLogin,
+            onTap: forceLogin,
           ),
         ],
       ),
