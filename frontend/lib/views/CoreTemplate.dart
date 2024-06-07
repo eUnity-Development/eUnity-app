@@ -1,11 +1,12 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:eunity/classes/DesignVariables.dart';
+import 'package:eunity/views/Messages.dart';
+import 'package:eunity/views/PremiumFeatures.dart';
+import 'package:eunity/views/Profile.dart';
+import 'package:eunity/views/Swiping.dart';
+import 'package:eunity/widgets/TopBars/HomeTopBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:frontend/views/Swiping.dart';
-import 'package:frontend/views/PremiumFeatures.dart';
-import 'package:frontend/views/Messages.dart';
-import 'package:frontend/views/Profile.dart';
-import 'package:frontend/widgets/HomeTopBar.dart';
-import 'package:frontend/classes/DesignVariables.dart';
 
 class CoreTemplate extends StatefulWidget {
   const CoreTemplate({super.key});
@@ -16,8 +17,7 @@ class CoreTemplate extends StatefulWidget {
 
 class _CoreTemplateState extends State<CoreTemplate> {
   int selectedIndex = 0;
-  bool colorRed = true;
-  Color unselectedColor = Color.fromARGB(255, 56, 56, 56);
+  Color unselectedColor = DesignVariables.greyLines;
   Color selectedColor = DesignVariables.primaryRed;
 
   final screens = [
@@ -27,7 +27,7 @@ class _CoreTemplateState extends State<CoreTemplate> {
     const Profile(),
   ];
 
-  void onItemTapped(int index) async {
+  void onItemTapped(int index) {
     setState(() {
       selectedIndex = index;
     });
@@ -36,96 +36,50 @@ class _CoreTemplateState extends State<CoreTemplate> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 232, 232, 232),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 734,
-              width: 412,
-              child: screens[selectedIndex],
-            ),
-          ],
-        ),
-      ),
+      backgroundColor: const Color.fromARGB(255, 232, 232, 232),
+      body: screens[selectedIndex],
       appBar: HomeTopBar(selectedIndex: selectedIndex),
-      bottomNavigationBar: SizedBox(
-        height: 80,
-        child: BottomNavigationBar(
-            backgroundColor: Color.fromARGB(255, 245, 245, 245),
-            type: BottomNavigationBarType.fixed,
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            selectedItemColor: const Color(0xffFFE89A),
-            unselectedItemColor: const Color(0xff89875A),
-            items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: SvgPicture.asset('assets/NavBarUI/icon-heart.svg',
-                      color: unselectedColor),
-                ),
-                activeIcon: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: SvgPicture.asset('assets/NavBarUI/icon-heart.svg',
-                      color: selectedColor),
-                ),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: SvgPicture.asset(
-                    'assets/NavBarUI/icon-sparkles.svg',
-                    color: unselectedColor,
-                  ),
-                ),
-                activeIcon: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: SvgPicture.asset('assets/NavBarUI/icon-sparkles.svg',
-                      color: selectedColor),
-                ),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: SvgPicture.asset(
-                      'assets/NavBarUI/icon-chat-bubbles.svg',
-                      color: unselectedColor),
-                ),
-                activeIcon: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: SvgPicture.asset(
-                      'assets/NavBarUI/icon-chat-bubbles.svg',
-                      color: selectedColor),
-                ),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: SvgPicture.asset('assets/NavBarUI/icon-shadow.svg',
-                      color: unselectedColor),
-                ),
-                activeIcon: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: SvgPicture.asset('assets/NavBarUI/icon-shadow.svg',
-                      color: selectedColor),
-                ),
-                label: '',
-              ),
-            ],
-            onTap: onItemTapped,
-            currentIndex: selectedIndex),
+      bottomNavigationBar: CurvedNavigationBar(
+        backgroundColor: const Color.fromARGB(255, 232, 232, 232),
+        color: Colors.white,
+        buttonBackgroundColor: Colors.white,
+        height: 55,
+        index: selectedIndex,
+        items: <Widget>[
+          SvgPicture.asset(
+            selectedIndex == 0
+              ? 'assets/NavBarUI/icon-filled-heart.svg'
+              : 'assets/NavBarUI/icon-heart.svg',
+            color: selectedIndex == 0 ? selectedColor : unselectedColor,
+            width: 30,
+            height: 30,
+          ),
+          SvgPicture.asset(
+            selectedIndex == 1
+              ? 'assets/NavBarUI/icon-filled-sparkles.svg'
+              : 'assets/NavBarUI/icon-sparkles.svg',
+            color: selectedIndex == 1 ? selectedColor : unselectedColor,
+            width: 30,
+            height: 30,
+          ),
+          SvgPicture.asset(
+            selectedIndex == 2
+              ? 'assets/NavBarUI/icon-filled-chat-bubbles.svg'
+              : 'assets/NavBarUI/icon-chat-bubbles.svg',
+            color: selectedIndex == 2 ? selectedColor : unselectedColor,
+            width: 30,
+            height: 30,
+          ),
+          SvgPicture.asset(
+            selectedIndex == 3
+              ? 'assets/NavBarUI/icon-filled-shadow.svg'
+              : 'assets/NavBarUI/icon-shadow.svg',
+            color: selectedIndex == 3 ? selectedColor : unselectedColor,
+            width: 30,
+            height: 30,
+          ),
+        ],
+        onTap: onItemTapped,
       ),
     );
   }

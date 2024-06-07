@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/widgets/PersonThatLikesYouTile.dart';
+import 'package:eunity/widgets/PersonThatLikesYouTile.dart';
 
 class PeopleThatLikeYou extends StatefulWidget {
   const PeopleThatLikeYou({super.key});
