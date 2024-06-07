@@ -92,13 +92,16 @@ class _ProfileState extends State<Profile> {
       await handleNewImage(File(image.path));
     }
 
-
-    void handleSignOut() async {
-      await AuthHelper.signOut();
+    void navigateBackToLogin() {
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (_) => const LoginSignup()),
           (route) => false);
+    }
+
+    void handleSignOut() async {
+      await AuthHelper.signOut();
+      navigateBackToLogin();
     }
 
     void openCameraDialog(BuildContext context) {
@@ -218,7 +221,8 @@ class _ProfileState extends State<Profile> {
                 });
               },
             ),
-            ElevatedButton(onPressed: handleSignOut, child: const Text("Sign Out")),
+            ElevatedButton(
+                onPressed: handleSignOut, child: const Text("Sign Out")),
           ],
         ),
       ),
