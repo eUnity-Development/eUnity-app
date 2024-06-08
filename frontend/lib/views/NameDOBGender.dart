@@ -1,6 +1,7 @@
 import 'package:eunity/classes/DesignVariables.dart';
 import 'package:eunity/widgets/TopBars/PushedScreenTopBar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class NameDOBGender extends StatefulWidget {
   const NameDOBGender({super.key});
@@ -83,8 +84,9 @@ class _NameDOBGender extends State<NameDOBGender> {
                     horizontal: 15 * DesignVariables.widthConversion
                   ),
                   labelText: 'First Name',
-                  labelStyle: const TextStyle(
+                  labelStyle: TextStyle(
                     fontSize: 14,
+                    color: Colors.black.withOpacity(0.5),
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -93,7 +95,15 @@ class _NameDOBGender extends State<NameDOBGender> {
                     ),
                   ),
 
-                    focusedBorder: OutlineInputBorder(
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(
+                      color: DesignVariables.greyLines,
+                      width: 1,
+                    ),
+                  ),
+
+                  focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide(
                       color: DesignVariables.greyLines,
@@ -154,13 +164,14 @@ class _NameDOBGender extends State<NameDOBGender> {
                         child: Stack(
                           children: [
                             TextField(
-                              
+                              style: const TextStyle(fontSize: 14),
                               maxLength: 1, 
                               controller: _monthOneController,
                               decoration: InputDecoration(
-                                contentPadding: EdgeInsets.only(bottom: 0),
+                                contentPadding: const EdgeInsets.only(bottom: 2),
                                 hintText: 'M',
                                 hintStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
+                                
                                 border: InputBorder.none,
                               ),
                               textAlignVertical: TextAlignVertical.center,
@@ -169,7 +180,7 @@ class _NameDOBGender extends State<NameDOBGender> {
                             Positioned(
                               left: 0,
                               right: 0,
-                              bottom: 0,
+                              bottom: 2,
                               child: Divider(
                                 color: Colors.black.withOpacity(0.5)
                               ),
@@ -186,13 +197,14 @@ class _NameDOBGender extends State<NameDOBGender> {
                         child: Stack(
                           children: [
                             TextField(
-                              
+                              style: const TextStyle(fontSize: 14),
                               maxLength: 1, 
-                              controller: _monthTwoController,
+                              controller: _monthOneController,
                               decoration: InputDecoration(
-                                contentPadding: EdgeInsets.only(bottom: 0),
+                                contentPadding: const EdgeInsets.only(bottom: 2),
                                 hintText: 'M',
                                 hintStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
+                                
                                 border: InputBorder.none,
                               ),
                               textAlignVertical: TextAlignVertical.center,
@@ -201,7 +213,7 @@ class _NameDOBGender extends State<NameDOBGender> {
                             Positioned(
                               left: 0,
                               right: 0,
-                              bottom: 0,
+                              bottom: 2,
                               child: Divider(
                                 color: Colors.black.withOpacity(0.5)
                               ),
