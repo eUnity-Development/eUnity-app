@@ -21,6 +21,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   List imageArray = [];
   int selectedImageGrid = 0;
+  bool signingOut = false;
 
   @override
   void initState() {
@@ -216,7 +217,21 @@ class _ProfileState extends State<Profile> {
               },
             ),
             ElevatedButton(
-                onPressed: handleSignOut, child: const Text("Sign Out")),
+                onPressed: () => {
+                  handleSignOut(),
+                  setState(() {
+                    signingOut = true;
+                  })
+                }, 
+                child: const Text("Sign Out")
+                
+                ),
+            Visibility(
+              visible: signingOut,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(DesignVariables.primaryRed),
+              ),
+            ),
           ],
         ),
       ),

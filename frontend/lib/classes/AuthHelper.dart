@@ -136,7 +136,7 @@ class AuthHelper {
 
   static Future<void> signOut() async {
       //we want to sign out of google and our server and clear the session cookie
-      googleSignIn.disconnect();
+      await googleSignIn.disconnect();
       String endPoint = '/users/logout';
       var url = '$defaultHost$endPoint';
       try {
