@@ -1,8 +1,6 @@
 import 'package:eunity/classes/DesignVariables.dart';
 import 'package:eunity/widgets/TopBars/PushedScreenTopBar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class NameDOBGender extends StatefulWidget {
   const NameDOBGender({super.key});
@@ -13,7 +11,28 @@ class NameDOBGender extends StatefulWidget {
 
 class _NameDOBGender extends State<NameDOBGender> {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _monthController = TextEditingController();
+  final TextEditingController _monthOneController = TextEditingController();
+  final TextEditingController _monthTwoController = TextEditingController();
+
+  final FocusNode _focusNode = FocusNode();
+  bool _isFocused = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(() {
+      setState(() {
+        _isFocused = _focusNode.hasFocus;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
   
   @override
   Widget build(BuildContext context) {
@@ -67,7 +86,14 @@ class _NameDOBGender extends State<NameDOBGender> {
                   labelStyle: const TextStyle(
                     fontSize: 14,
                   ),
-                  enabledBorder: OutlineInputBorder(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(
+                      width: 1,
+                    ),
+                  ),
+
+                    focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide(
                       color: DesignVariables.greyLines,
@@ -118,36 +144,60 @@ class _NameDOBGender extends State<NameDOBGender> {
                   ),
                   child: Row(
                     children: [
-                      Expanded(
-                      
-                      child: Center(child: TextField( 
-                        controller: _monthController,
-                        
-                        decoration: const InputDecoration(
-                          hintText: 'M',
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.only(bottom: 13),
-                        ),
+                      Container(
+                        width: 14,
+                        color: Colors.blue,
+                        child: TextField( 
+                          controller: _monthOneController,
+                          //focusNode: _focusNode,
+                          decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.only(bottom: 3),
+                            hintText: 'M',
+                          
+                          border: UnderlineInputBorder(
+                            borderSide: BorderSide(width: 1, color: Colors.red),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(width: 1, color: Colors.red),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(width: 1, color: Colors.red),
+                          ),
+                          ),
 
-                        textAlignVertical: TextAlignVertical.center,
-                        textAlign: TextAlign.center,
-                      ))),
-                      
-                      Expanded(
-                      child: TextField( 
-                        controller: _monthController,
-                  
-                        decoration: const InputDecoration(
-                          hintText: 'M',
-                          contentPadding: EdgeInsets.only(bottom: 13),
-                          border: InputBorder.none,
-                        ),
+                          textAlignVertical: TextAlignVertical.center,
+                          textAlign: TextAlign.center,
+                        )
 
-                        textAlignVertical: TextAlignVertical.center,
-                        textAlign: TextAlign.center,
-                      )
-                      )
-                      
+                      ),
+
+                      const SizedBox(width: 14),
+
+                      Container(
+                        width: 14,
+                        color: Colors.blue,
+                        child: TextField( 
+                          controller: _monthTwoController,
+                          //focusNode: _focusNode,
+                          decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.only(bottom: 3),
+                            hintText: 'M',
+                          
+                          border: UnderlineInputBorder(
+                            borderSide: BorderSide(width: 1, color: Colors.red),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(width: 1, color: Colors.red),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(width: 1, color: Colors.red),
+                          ),
+                          ),
+
+                          textAlignVertical: TextAlignVertical.center,
+                          textAlign: TextAlign.center,
+                        )
+                      ),
                     ],
                   )
                 )
