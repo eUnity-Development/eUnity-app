@@ -50,13 +50,6 @@ class _LoginSignupState extends State<LoginSignup> {
     AuthHelper.googleSignIn.signInSilently();
   }
 
-  void navigateToPrimaryScreens() {
-    print("Navigating to primary screens");
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => const CoreTemplate()),
-        (route) => false);
-  }
 
   void navigateToPhoneLogin() {
     Navigator.push(
@@ -72,8 +65,6 @@ class _LoginSignupState extends State<LoginSignup> {
   void testSignup() async {
     print("clicked signup");
     navigateToPhoneLogin();
-    //var response = await AuthHelper.signUp("testemail@test.com", "Test123123");
-    //print(response);
   }
 
   void testLogin() async {
@@ -92,7 +83,7 @@ class _LoginSignupState extends State<LoginSignup> {
     await AuthHelper.login("testemail@test.com", "Test123123");
     bool loginCheck = await AuthHelper.isLoggedIn();
     if (loginCheck) {
-      navigateToPrimaryScreens();
+      AuthHelper.setLoggedIn(true);
     }
   }
 
