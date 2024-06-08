@@ -92,16 +92,10 @@ class _ProfileState extends State<Profile> {
       await handleNewImage(File(image.path));
     }
 
-    void navigateBackToLogin() {
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (_) => const LoginSignup()),
-          (route) => false);
-    }
 
     void handleSignOut() async {
       await AuthHelper.signOut();
-      navigateBackToLogin();
+      AuthHelper.setLoggedIn(false);
     }
 
     void openCameraDialog(BuildContext context) {

@@ -1,3 +1,4 @@
+import 'package:eunity/classes/AuthHelper.dart';
 import 'package:eunity/classes/DesignVariables.dart';
 import 'package:eunity/views/CoreTemplate.dart';
 import 'package:eunity/views/LoginSignup.dart';
@@ -14,6 +15,15 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    AuthHelper.init();
+    AuthHelper.setLoggedIn = setLoggedIn;
+  }
+
+  void setLoggedIn(bool value) {
+    setState(() {
+      AuthHelper.loggedIn = value;
+      AuthHelper.prefs!.setBool('loggedIn', value);
+    });
   }
 
   @override
@@ -21,7 +31,7 @@ class _HomeState extends State<Home> {
     DesignVariables.setConversions(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: LoginSignup(),
+      body: AuthHelper.loggedIn ?  const CoreTemplate() :  const LoginSignup(),
     );
   }
 }

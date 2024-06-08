@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:eunity/classes/RouteHandler.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthHelper {
   static String defaultHost = RouteHandler.defaultHost;
@@ -9,18 +10,25 @@ class AuthHelper {
   //we should cache this value so that on app startup we go straight to main screens
   //and after isLoggedIn() is called, if it's false we log the user out
   static bool loggedIn = false;
+  static Function setLoggedIn = (bool value) {};
+  static SharedPreferences? prefs;
+
   static GoogleSignIn googleSignIn = GoogleSignIn(
     scopes: ['email', 'openid', 'profile'],
     serverClientId:"473125180287-80hn1kcn8k3juut9p7ocvi6j77v9lnct.apps.googleusercontent.com"
   );
 
 
+  static Future<void> init() async{
+    prefs = await SharedPreferences.getInstance();
+    loggedIn = prefs!.getBool('loggedIn') ?? false;
+    setLoggedIn(loggedIn);
+  }
+
   static Future<bool> isLoggedIn() async {
     var sessionCookie = await readCookie('session_id');
-    print('COOKIES!');
-    print(sessionCookie);
     if (sessionCookie == null) {
-      loggedIn = false;
+      setLoggedIn(false);
       return false;
     }
 
@@ -33,18 +41,18 @@ class AuthHelper {
         options: Options(contentType: Headers.jsonContentType),
       );
       if (response.statusCode == 200) {
-        loggedIn = true;
+        setLoggedIn(true);
         return true;
       } else {
-        loggedIn = false;
+        setLoggedIn(false);
         return false;
       }
     } on DioException catch (e) {
       if (e.response != null) {
-        loggedIn = false;
+        setLoggedIn(false);
         return false;
       } else {
-        loggedIn = false;
+        setLoggedIn(false);
         return false;
       }
     }
