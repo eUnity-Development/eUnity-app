@@ -138,65 +138,77 @@ class _NameDOBGender extends State<NameDOBGender> {
                 Container(
                   height: 48 * DesignVariables.heightConversion,
                   width: 95.53 * DesignVariables.widthConversion,
+                  
                   decoration: BoxDecoration(
                       border: Border.all(color: DesignVariables.greyLines, width: 1),
                       borderRadius: const BorderRadius.all(Radius.circular(10))
                   ),
+
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    
                     children: [
                       Container(
-                        width: 14,
-                        color: Colors.blue,
-                        child: TextField( 
-                          controller: _monthOneController,
-                          //focusNode: _focusNode,
-                          decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.only(bottom: 3),
-                            hintText: 'M',
-                          
-                          border: UnderlineInputBorder(
-                            borderSide: BorderSide(width: 1, color: Colors.red),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(width: 1, color: Colors.red),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(width: 1, color: Colors.red),
-                          ),
-                          ),
+                        width: 15,
+                        child: Stack(
+                          children: [
+                            TextField(
+                              
+                              maxLength: 1, 
+                              controller: _monthOneController,
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.only(bottom: 0),
+                                hintText: 'M',
+                                hintStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
+                                border: InputBorder.none,
+                              ),
+                              textAlignVertical: TextAlignVertical.center,
+                              textAlign: TextAlign.center,
+                            ),
+                            Positioned(
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              child: Divider(
+                                color: Colors.black.withOpacity(0.5)
+                              ),
+                            ),
 
-                          textAlignVertical: TextAlignVertical.center,
-                          textAlign: TextAlign.center,
-                        )
+                          ],)
 
                       ),
 
-                      const SizedBox(width: 14),
+                      const SizedBox(width: 10),
 
                       Container(
-                        width: 14,
-                        color: Colors.blue,
-                        child: TextField( 
-                          controller: _monthTwoController,
-                          //focusNode: _focusNode,
-                          decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.only(bottom: 3),
-                            hintText: 'M',
-                          
-                          border: UnderlineInputBorder(
-                            borderSide: BorderSide(width: 1, color: Colors.red),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(width: 1, color: Colors.red),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(width: 1, color: Colors.red),
-                          ),
-                          ),
+                        width: 15,
+                        child: Stack(
+                          children: [
+                            TextField(
+                              
+                              maxLength: 1, 
+                              controller: _monthTwoController,
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.only(bottom: 0),
+                                hintText: 'M',
+                                hintStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
+                                border: InputBorder.none,
+                              ),
+                              textAlignVertical: TextAlignVertical.center,
+                              textAlign: TextAlign.center,
+                            ),
+                            Positioned(
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              child: Divider(
+                                color: Colors.black.withOpacity(0.5)
+                              ),
+                            ),
 
-                          textAlignVertical: TextAlignVertical.center,
-                          textAlign: TextAlign.center,
-                        )
+                          ],)
+
                       ),
                     ],
                   )
