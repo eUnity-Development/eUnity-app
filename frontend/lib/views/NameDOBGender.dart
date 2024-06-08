@@ -12,38 +12,28 @@ class NameDOBGender extends StatefulWidget {
 
 class _NameDOBGender extends State<NameDOBGender> {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _monthOneController = TextEditingController();
-  final TextEditingController _monthTwoController = TextEditingController();
-
-  final FocusNode _focusNode = FocusNode();
-  bool _isFocused = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _focusNode.addListener(() {
-      setState(() {
-        _isFocused = _focusNode.hasFocus;
-      });
-    });
-  }
+  final TextEditingController _monthController1 = TextEditingController();
+  final TextEditingController _monthController2 = TextEditingController();
 
   @override
   void dispose() {
-    _focusNode.dispose();
+    _monthController1.dispose();
+    _monthController2.dispose();
     super.dispose();
   }
 
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Navbar
       appBar: const PushedScreenTopBar(hasArrow: false),
       body: Padding(     
         padding: EdgeInsets.symmetric(horizontal: 18.0 * DesignVariables.widthConversion), 
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+
+            // Name header
             const Text(
               "Name",
               style: TextStyle(
@@ -56,6 +46,7 @@ class _NameDOBGender extends State<NameDOBGender> {
               height: 7 * DesignVariables.heightConversion,
             ),
 
+            // Name description
             const Text(
               "The name you enter here will appear on your profile.",
               style: TextStyle(
@@ -68,6 +59,7 @@ class _NameDOBGender extends State<NameDOBGender> {
               height: 30 * DesignVariables.heightConversion,
             ),
 
+            // Name textfield
             Center(
               child: SizedBox(
               height: 48 * DesignVariables.heightConversion,
@@ -118,6 +110,7 @@ class _NameDOBGender extends State<NameDOBGender> {
               height: 29 * DesignVariables.heightConversion,
             ),
 
+            // Birthday header
             const Text(
               "Birthday",
               style: TextStyle(
@@ -130,6 +123,7 @@ class _NameDOBGender extends State<NameDOBGender> {
               height: 7 * DesignVariables.heightConversion,
             ),
 
+            // Birthday description
             const Text(
               "We will need your date of birth to confirm your age.",
               style: TextStyle(
@@ -142,97 +136,108 @@ class _NameDOBGender extends State<NameDOBGender> {
               height: 30 * DesignVariables.heightConversion,
             ),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  height: 48 * DesignVariables.heightConversion,
-                  width: 95.53 * DesignVariables.widthConversion,
-                  
-                  decoration: BoxDecoration(
-                      border: Border.all(color: DesignVariables.greyLines, width: 1),
-                      borderRadius: const BorderRadius.all(Radius.circular(10))
-                  ),
+            // Month section
+            DOBSection(
+              width: 95.53 * DesignVariables.widthConversion, 
+              height: 48 * DesignVariables.heightConversion, 
+              inputs: [
+                InidividualTextField(controller: _monthController1, hintText: 'M'),
+                const SizedBox(width: 10),
+                InidividualTextField(controller: _monthController2, hintText: 'M')
+              ]
+            )
+      ]
+      )
 
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    
-                    children: [
-                      Container(
-                        width: 15,
-                        child: Stack(
-                          children: [
-                            TextField(
-                              style: const TextStyle(fontSize: 14),
-                              maxLength: 1, 
-                              controller: _monthOneController,
-                              decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.only(bottom: 2),
-                                hintText: 'M',
-                                hintStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
-                                
-                                border: InputBorder.none,
-                              ),
-                              textAlignVertical: TextAlignVertical.center,
-                              textAlign: TextAlign.center,
-                            ),
-                            Positioned(
-                              left: 0,
-                              right: 0,
-                              bottom: 2,
-                              child: Divider(
-                                color: Colors.black.withOpacity(0.5)
-                              ),
-                            ),
+    )
+    );
+  }
+}
 
-                          ],)
+class DOBSection extends StatelessWidget {
+  final double width;
+  final double height;
+  final List<Widget> inputs;
 
-                      ),
+  const DOBSection({
+    super.key,
+    required this.width,
+    required this.height,
+    required this.inputs
+  });
 
-                      const SizedBox(width: 10),
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          height: height,
+          width: width,
+          
+          decoration: BoxDecoration(
+              border: Border.all(color: DesignVariables.greyLines, width: 1),
+              borderRadius: const BorderRadius.all(Radius.circular(10))
+          ),
 
-                      Container(
-                        width: 15,
-                        child: Stack(
-                          children: [
-                            TextField(
-                              style: const TextStyle(fontSize: 14),
-                              maxLength: 1, 
-                              controller: _monthOneController,
-                              decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.only(bottom: 2),
-                                hintText: 'M',
-                                hintStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
-                                
-                                border: InputBorder.none,
-                              ),
-                              textAlignVertical: TextAlignVertical.center,
-                              textAlign: TextAlign.center,
-                            ),
-                            Positioned(
-                              left: 0,
-                              right: 0,
-                              bottom: 2,
-                              child: Divider(
-                                color: Colors.black.withOpacity(0.5)
-                              ),
-                            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            
+            children: inputs,
+          )
+        )
 
-                          ],)
+      ],
+    );
+  }
+}
 
-                      ),
-                    ],
-                  )
-                )
-    
-              ],
+class InidividualTextField extends StatelessWidget {
+  final TextEditingController controller;
+  final String hintText;
+
+  const InidividualTextField({
+    super.key,
+    required this.controller,
+    required this.hintText
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 15,
+      child: Stack(
+        children: [
+          TextField(
+            style: const TextStyle(fontSize: 14),
+            maxLength: 1, 
+            controller: controller,
+            
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(bottom: 2),
+              hintText: hintText,
+              hintStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
+              border: InputBorder.none,
             ),
 
-            
-          ]
-      ))
+            textAlignVertical: TextAlignVertical.center,
+            textAlign: TextAlign.center,
+
+          ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 2,
+            child: Divider(
+              color: Colors.black.withOpacity(0.5)
+            ),
+          ),
+
+        ],
+      )
 
     );
   }
+
 }
