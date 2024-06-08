@@ -19,6 +19,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   List imageArray = [];
   int selectedImageGrid = 0;
+  int draggingImageGrid = -1;
 
   @override
   void initState() {
@@ -161,12 +162,59 @@ class _ProfileState extends State<Profile> {
     }
 
     Widget gridOption(int index) {
-      if (imageArray.length < index + 1) {
-        return NewImageSquare();
-      } else {
-        return EditImageSquare(
-            imageURL: UserInfoHelper.getPublicImageURL(imageArray[index]));
+      Widget gridCore() {
+        return GestureDetector(
+          child: ((imageArray.length < index + 1)
+              ? NewImageSquare()
+              : EditImageSquare(
+                  imageURL:
+                      UserInfoHelper.getPublicImageURL(imageArray[index]))),
+          onTap: () {
+            setState(() {
+              selectedImageGrid = index;
+              openCameraDialog(context);
+            });
+          },
+        );
       }
+
+      return LongPressDraggable(
+        child: (draggingImageGrid == index)
+            ? SizedBox(
+                height: 140 * DesignVariables.heightConversion,
+                width: 140 * DesignVariables.widthConversion,
+              )
+            : gridCore(),
+        feedback: gridCore(),
+        onDragStarted: () {
+          setState(() {
+            draggingImageGrid = index;
+          });
+        },
+        onDraggableCanceled: (velocity, offset) {
+          print(offset.dx);
+          print(offset.dy);
+          setState(() {
+            draggingImageGrid = -1;
+          });
+        },
+      );
+    }
+
+    Widget imageGrids() {
+      return Column(
+        children: [
+          Row(
+            children: [gridOption(0), gridOption(1), gridOption(2)],
+          ),
+          Row(
+            children: [gridOption(3), gridOption(4), gridOption(5)],
+          ),
+          Row(
+            children: [gridOption(6), gridOption(7), gridOption(8)],
+          ),
+        ],
+      );
     }
 
     return Scaffold(
@@ -198,15 +246,7 @@ class _ProfileState extends State<Profile> {
             const SizedBox(
               height: 15,
             ),
-            GestureDetector(
-              child: gridOption(0),
-              onTap: () {
-                setState(() {
-                  selectedImageGrid = 0;
-                  openCameraDialog(context);
-                });
-              },
-            ),
+            imageGrids()
           ],
         ),
       ),
