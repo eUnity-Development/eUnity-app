@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:eunity/classes/AuthHelper.dart';
 import 'package:eunity/classes/UserInfoHelper.dart';
+import 'package:eunity/views/LoginSignup.dart';
 import 'package:eunity/widgets/ProfileWidgets/EditImageSquare.dart';
 import 'package:eunity/widgets/ProfileWidgets/NewImageSquare.dart';
 import 'package:flutter/material.dart';
@@ -89,6 +91,18 @@ class _ProfileState extends State<Profile> {
       );
       if (image == null) return;
       await handleNewImage(File(image.path));
+    }
+
+    void navigateBackToLogin() {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => const LoginSignup()),
+          (route) => false);
+    }
+
+    void handleSignOut() async {
+      await AuthHelper.signOut();
+      navigateBackToLogin();
     }
 
     void openCameraDialog(BuildContext context) {
@@ -246,7 +260,9 @@ class _ProfileState extends State<Profile> {
             const SizedBox(
               height: 15,
             ),
-            imageGrids()
+            imageGrids(),
+            ElevatedButton(
+                onPressed: handleSignOut, child: const Text("Sign Out")),
           ],
         ),
       ),

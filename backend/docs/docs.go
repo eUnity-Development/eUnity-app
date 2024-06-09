@@ -16,8 +16,8 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/auth/google": {
-            "get": {
-                "description": "Begins the google auth process",
+            "post": {
+                "description": "Accepts jwt idToken from flutter and sets session cookies",
                 "consumes": [
                     "application/json"
                 ],
@@ -27,33 +27,19 @@ const docTemplate = `{
                 "tags": [
                     "Auth"
                 ],
-                "summary": "Begin Google Auth",
+                "summary": "Google Auth",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "idToken",
+                        "name": "idToken",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Google Auth Started",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/auth/google/callback": {
-            "get": {
-                "description": "Callback for google auth",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "Google OAuth Callback",
-                "responses": {
-                    "200": {
-                        "description": "Google Auth Callback",
                         "schema": {
                             "type": "string"
                         }
@@ -363,6 +349,52 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/webAuth/google": {
+            "get": {
+                "description": "Begins the google auth process",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Web Auth"
+                ],
+                "summary": "Begin Google Auth",
+                "responses": {
+                    "200": {
+                        "description": "Google Auth Started",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/webAuth/google/callback": {
+            "get": {
+                "description": "Callback for google auth",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Web Auth"
+                ],
+                "summary": "Google OAuth Callback",
+                "responses": {
+                    "200": {
+                        "description": "Google Auth Callback",
                         "schema": {
                             "type": "string"
                         }

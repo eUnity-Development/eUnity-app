@@ -1,5 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:eunity/classes/DesignVariables.dart';
+import 'package:eunity/views/LoginSignup.dart';
 import 'package:eunity/views/Messages.dart';
 import 'package:eunity/views/PremiumFeatures.dart';
 import 'package:eunity/views/Profile.dart';

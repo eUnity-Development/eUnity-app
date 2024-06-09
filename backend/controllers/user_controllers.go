@@ -250,7 +250,6 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 
 	//check if the user already exists
 	user := DBManager.DB.Collection("users").FindOne(context.Background(), bson.M{"email": credentials.Email})
-	fmt.Println(user)
 	if user.Err() == nil {
 		// check if password is correct
 		var result models.User
@@ -288,29 +287,10 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 		ID:                    &objectID,
 		Email:                 credentials.Email,
 		PasswordHash:          password_hash,
-		Verified:              false,
+		Verified_email:        false,
+		Verified_phone_number: false,
 		MediaFiles:            []string{},
-		ThirdPartyConnections: make(map[string]string),
-	}
-
-	third_party_provider, err := c.Cookie("thirdParty_provider")
-	if err == nil { // if there is a provider check for a third party id
-		third_party_expire, err := c.Cookie("thirdparty_expires")
-		if err == nil {
-			if cookie_expirey_check(third_party_expire) { //if the cookie has expired then we remove the cookies
-				fmt.Println("Third party cookie has expired")
-				c.SetCookie("thirdParty_provider", "", -1, "/", "localhost", false, true) //remove the cookies
-				c.SetCookie("thirdParty_id", "", -1, "/", "localhost", false, true)
-				c.SetCookie("thirdparty_expires", "", -1, "/", "localhost", false, true)
-			} else {
-				third_party_id, err := c.Cookie("thirdParty_id")
-				if err != nil { //if there is none print a message
-					fmt.Println("No third party id found")
-				} else { // if there is one then we push the two to the map
-					new_user.ThirdPartyConnections = map[string]string{"provider": third_party_provider, "third_party_id": third_party_id}
-				}
-			}
-		}
+		Providers:             make(map[string]models.Provider),
 	}
 
 	_, err = DBManager.DB.Collection("users").InsertOne(context.Background(), new_user)
@@ -404,9 +384,9 @@ func (u *User_controllers) POST_login(c *gin.Context) {
 	cookie := generate_secure_cookie(result)
 
 	//set cookie
-	c.SetCookie("session_id", cookie["session_id"].(string), 3600, "/", "/", false, true)
-	c.SetCookie("user_id", cookie["user_id"].(string), 3600, "/", "/", false, true)
-	c.SetCookie("expires_at", cookie["expires_at"].(string), 3600, "/", "/", false, true)
+	c.SetCookie("session_id", cookie["session_id"].(string), 3600, "/", Cookie_Host, HTTPS_only, true)
+	c.SetCookie("user_id", cookie["user_id"].(string), 3600, "/", Cookie_Host, HTTPS_only, true)
+	c.SetCookie("expires_at", cookie["expires_at"].(string), 3600, "/", Cookie_Host, HTTPS_only, true)
 
 	//turn cookie into bson to store in database
 	session_bson := bson.M{
