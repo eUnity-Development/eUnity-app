@@ -12,8 +12,17 @@ class NameDOBGender extends StatefulWidget {
 
 class _NameDOBGender extends State<NameDOBGender> {
   final TextEditingController _nameController = TextEditingController();
+
   final TextEditingController _monthController1 = TextEditingController();
   final TextEditingController _monthController2 = TextEditingController();
+
+  final TextEditingController _dayController1 = TextEditingController();
+  final TextEditingController _dayController2 = TextEditingController();
+
+  final TextEditingController _yearController1 = TextEditingController();
+  final TextEditingController _yearController2 = TextEditingController();
+  final TextEditingController _yearController3 = TextEditingController();
+  final TextEditingController _yearController4 = TextEditingController();
 
   @override
   void dispose() {
@@ -136,8 +145,9 @@ class _NameDOBGender extends State<NameDOBGender> {
               height: 30 * DesignVariables.heightConversion,
             ),
 
-            // Month section
-            DOBSection(
+            Row(children: [
+              // Month section
+              DOBSection(
               width: 95.53 * DesignVariables.widthConversion, 
               height: 48 * DesignVariables.heightConversion, 
               inputs: [
@@ -145,7 +155,72 @@ class _NameDOBGender extends State<NameDOBGender> {
                 const SizedBox(width: 10),
                 InidividualTextField(controller: _monthController2, hintText: 'M')
               ]
+            ),
+
+            SizedBox(
+              width: 12 * DesignVariables.widthConversion,
+            ),
+
+            Text(
+              "/",
+              style: TextStyle(
+                color: Colors.black.withOpacity(0.5), 
+                fontSize: 24,
+              ),
+              
+            ),
+
+            SizedBox(
+              width: 12 * DesignVariables.widthConversion,
+            ),
+
+            // Day section
+            DOBSection(
+              width: 95.53 * DesignVariables.widthConversion, 
+              height: 48 * DesignVariables.heightConversion, 
+              inputs: [
+                InidividualTextField(controller: _dayController1, hintText: 'D'),
+                const SizedBox(width: 10),
+                InidividualTextField(controller: _dayController2, hintText: 'D')
+              ]
+            ),
+
+            SizedBox(
+              width: 12 * DesignVariables.widthConversion,
+            ),
+
+            Text(
+              "/",
+              style: TextStyle(
+                color: Colors.black.withOpacity(0.5), 
+                fontSize: 24,
+              ),
+              
+            ),
+
+            SizedBox(
+              width: 12 * DesignVariables.widthConversion,
+            ),
+
+            // Year section
+            DOBSection(
+              width: 127.92 * DesignVariables.widthConversion, 
+              height: 48 * DesignVariables.heightConversion, 
+              inputs: [
+                InidividualTextField(controller: _yearController1, hintText: 'Y'),
+                const SizedBox(width: 10),
+                InidividualTextField(controller: _yearController2, hintText: 'Y'),
+                const SizedBox(width: 10),
+                InidividualTextField(controller: _yearController3, hintText: 'Y'),
+                const SizedBox(width: 10),
+                InidividualTextField(controller: _yearController4, hintText: 'Y'),
+              ]
+            ),     
+            ],
+              
             )
+            // Month section
+            
       ]
       )
 
