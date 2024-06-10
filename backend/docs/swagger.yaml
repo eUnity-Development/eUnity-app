@@ -1,6 +1,163 @@
 info:
   contact: {}
 paths:
+  /auth/google:
+    post:
+      consumes:
+      - application/json
+      description: Accepts jwt idToken from flutter and sets session cookies
+      parameters:
+      - description: idToken
+        in: query
+        name: idToken
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Google Auth Started
+          schema:
+            type: string
+      summary: Google Auth
+      tags:
+      - Auth
+  /media/{user_id}/{image_id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: string
+      - description: Image ID
+        in: path
+        name: image_id
+        required: true
+        type: string
+      produces:
+      - image/jpeg
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Gets image -> unprotected route
+      tags:
+      - Public Media
+  /media/user_image:
+    post:
+      consumes:
+      - image/jpeg
+      parameters:
+      - description: Image
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Adds user image
+      tags:
+      - Media
+  /media/user_image/{image_id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Image ID
+        in: path
+        name: image_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Deletes user image
+      tags:
+      - Media
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Image ID
+        in: path
+        name: image_id
+        required: true
+        type: string
+      produces:
+      - image/jpeg
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Gets user image
+      tags:
+      - Media
+  /twilio/send-sms:
+    post:
+      consumes:
+      - application/json
+      description: Send an SMS message
+      parameters:
+      - description: Recipient phone number
+        in: query
+        name: to
+        required: true
+        type: string
+      - description: Message body
+        in: query
+        name: body
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: SMS sent successfully!
+          schema:
+            type: string
+      summary: Send SMS
+      tags:
+      - Twilio
+  /twilio/verify-phone:
+    post:
+      consumes:
+      - application/json
+      description: Verify a phone number
+      parameters:
+      - description: Recipient phone number
+        in: query
+        name: to
+        required: true
+        type: string
+      - description: Verification code
+        in: query
+        name: code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Phone number verified successfully!
+          schema:
+            type: string
+      summary: Verify Phone Number
+      tags:
+      - Twilio
   /users/login:
     post:
       consumes:
@@ -30,7 +187,7 @@ paths:
             type: string
       summary: User login route
       tags:
-      - user
+      - Public User
   /users/logout:
     post:
       consumes:
@@ -49,7 +206,7 @@ paths:
             type: string
       summary: User logout route
       tags:
-      - user
+      - User
   /users/me:
     get:
       consumes:
@@ -64,7 +221,7 @@ paths:
             type: string
       summary: User test route
       tags:
-      - user
+      - User
     patch:
       consumes:
       - application/json
@@ -90,7 +247,7 @@ paths:
             type: string
       summary: User update route
       tags:
-      - user
+      - User
   /users/signup:
     post:
       consumes:
@@ -120,5 +277,35 @@ paths:
             type: string
       summary: User signup route
       tags:
-      - user
+      - Public User
+  /webAuth/google:
+    get:
+      consumes:
+      - application/json
+      description: Begins the google auth process
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Google Auth Started
+          schema:
+            type: string
+      summary: Begin Google Auth
+      tags:
+      - Web Auth
+  /webAuth/google/callback:
+    get:
+      consumes:
+      - application/json
+      description: Callback for google auth
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Google Auth Callback
+          schema:
+            type: string
+      summary: Google OAuth Callback
+      tags:
+      - Web Auth
 swagger: "2.0"

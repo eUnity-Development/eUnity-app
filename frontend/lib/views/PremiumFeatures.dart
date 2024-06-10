@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/classes/DesignVariables.dart';
-import 'package:frontend/views/OtherPremiumFeatures.dart';
-import 'package:frontend/views/PeopleThatLikeYou.dart';
+import 'package:eunity/classes/DesignVariables.dart';
+import 'package:eunity/views/OtherPremiumFeatures.dart';
+import 'package:eunity/views/PeopleThatLikeYou.dart';
 
 class PremiumFeatures extends StatefulWidget {
   const PremiumFeatures({super.key});
 
   @override
-  State<PremiumFeatures> createState() => _CreatePostState();
+  State<PremiumFeatures> createState() => _PremiumFeaturesState();
 }
 
-class _CreatePostState extends State<PremiumFeatures> {
+class _PremiumFeaturesState extends State<PremiumFeatures> {
   int selectedIndex = 0;
 
   final screens = [
