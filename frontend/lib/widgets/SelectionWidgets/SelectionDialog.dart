@@ -51,6 +51,11 @@ class _SelectionDialogState extends State<SelectionDialog> {
     return Container(
         height: 400,
         width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+            color: Colors.white,
+            border: Border.all(color: DesignVariables.greyLines, width: 2)),
         child: Padding(
           padding: EdgeInsets.only(top: 10, left: 10, right: 10),
           child: Column(
@@ -59,8 +64,9 @@ class _SelectionDialogState extends State<SelectionDialog> {
                 alignment: Alignment.topRight,
                 child: GestureDetector(
                   child: SvgPicture.asset(
-                    "assets/MiscIcons/icon-x.svg",
-                    height: 30,
+                    "assets/MiscIcons/icon-heavy-x.svg",
+                    height: 38,
+                    width: 38,
                   ),
                   onTap: () {
                     Navigator.pop(context);
@@ -73,10 +79,15 @@ class _SelectionDialogState extends State<SelectionDialog> {
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 (widget.assetPath == 'None')
                     ? SizedBox()
-                    : SvgPicture.asset(
-                        widget.assetPath,
-                        height: 31,
-                        width: 31,
+                    : Row(
+                        children: [
+                          SvgPicture.asset(
+                            widget.assetPath,
+                            height: 31,
+                            width: 31,
+                          ),
+                          SizedBox(width: 5)
+                        ],
                       ),
                 Text(
                   widget.question,
@@ -86,7 +97,8 @@ class _SelectionDialogState extends State<SelectionDialog> {
               SizedBox(
                 height: 20,
               ),
-              Expanded(
+              SizedBox(
+                height: 200,
                 child: ListView.builder(
                   itemBuilder: (BuildContext context, int index) {
                     if (index > (widget.options.length) - 1) {

@@ -22,9 +22,10 @@ class SelectionButton extends StatefulWidget {
 }
 
 class _SelectionButtonState extends State<SelectionButton> {
-  void showDialog(BuildContext context) {
+  void showSelectDialog(BuildContext context) {
     showModalBottomSheet(
         context: context,
+        backgroundColor: Colors.white,
         builder: (BuildContext context) {
           return SelectionDialog(
             options: widget.options,
@@ -40,6 +41,14 @@ class _SelectionButtonState extends State<SelectionButton> {
 
   @override
   Widget build(BuildContext context) {
+    String varToText(var input) {
+      String newInput = input.toString();
+      if (newInput.startsWith('[') && newInput.endsWith(']')) {
+        newInput = newInput.substring(1, newInput.length - 1);
+      }
+      return newInput;
+    }
+
     String cachePointer = widget.cacheKey;
     return GestureDetector(
       child: Padding(
@@ -52,21 +61,27 @@ class _SelectionButtonState extends State<SelectionButton> {
             color: Colors.white,
             border: Border.all(color: DesignVariables.greyLines, width: 1),
           ),
-          child: Center(
-            child: Text(
-              (UserInfoHelper.userInfoCache[cachePointer].runtimeType != String)
-                  ? UserInfoHelper.userInfoCache[cachePointer].toString()
-                  : UserInfoHelper.userInfoCache[cachePointer],
-              style: TextStyle(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Center(
+              child: Text(
+                (UserInfoHelper.userInfoCache[cachePointer].runtimeType !=
+                        String)
+                    ? varToText(UserInfoHelper.userInfoCache[cachePointer])
+                    : UserInfoHelper.userInfoCache[cachePointer],
+                style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 16,
-                  color: Color.fromARGB(128, 0, 0, 0)),
+                  color: Color.fromARGB(128, 0, 0, 0),
+                ),
+                maxLines: 1,
+              ),
             ),
           ),
         ),
       ),
       onTap: () {
-        showDialog(context);
+        showSelectDialog(context);
       },
     );
   }

@@ -58,7 +58,10 @@ class _MatchPreferencesState extends State<MatchPreferences> {
                 SelectionButton(
                     cacheKey: "genderPreference",
                     assetPath: "None",
-                    options: ["Women", "Men"],
+                    options: [
+                      "Men",
+                      "Women",
+                    ],
                     multiSelect: true,
                     question: "Select Preferred Gender(s)"),
                 largeSpacer,
