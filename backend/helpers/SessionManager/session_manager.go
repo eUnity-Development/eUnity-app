@@ -83,6 +83,7 @@ func Get_Session(session_id string) (models.Session, error) {
 }
 
 func Create_Session(user_id string, c *gin.Context) (models.Session, error) {
+	cookie_max_age := 365 * 24 * 60 * 60 //1 year
 	session := models.Session{
 		Session_id: uuid.New().String(),
 		Created_at: time.Now().Unix(),
@@ -104,7 +105,7 @@ func Create_Session(user_id string, c *gin.Context) (models.Session, error) {
 			return session, err
 		}
 
-		c.SetCookie("session_id", session.Session_id, 3600, "/", Cookie_Host, HTTPS_only, true)
+		c.SetCookie("session_id", session.Session_id, cookie_max_age, "/", Cookie_Host, HTTPS_only, true)
 		return session, nil
 
 	default:
@@ -113,7 +114,7 @@ func Create_Session(user_id string, c *gin.Context) (models.Session, error) {
 		if err != nil {
 			return session, err
 		}
-		c.SetCookie("session_id", session.Session_id, 3600, "/", Cookie_Host, HTTPS_only, true)
+		c.SetCookie("session_id", session.Session_id, cookie_max_age, "/", Cookie_Host, HTTPS_only, true)
 		return session, nil
 	}
 
@@ -141,6 +142,9 @@ func Delete_Session(session_id string) error {
 func AuthRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
+		//must change this to domain name in production
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+
 		//check cookies
 		session_id, err := c.Cookie("session_id")
 		if err != nil {
@@ -153,13 +157,12 @@ func AuthRequired() gin.HandlerFunc {
 
 		switch ValKey {
 		case true:
-			fmt.Println("I am right here")
 
 			//check if session_id exists in valkey
 			session, err := rdb.Get(ctx, session_id).Result()
 			if err != nil {
 				c.JSON(401, gin.H{
-					"response": "Session not fond in Valkey",
+					"response": "Session not found in Valkey",
 				})
 				c.Abort()
 				return
@@ -212,7 +215,7 @@ func AuthRequired() gin.HandlerFunc {
 
 		default:
 			//check if session_id exists in session_ids collection
-			session := DBManager.DB.Collection("session_ids").FindOne(context.Background(), bson.M{session_id: bson.M{"$exists": true}})
+			session := DBManager.DB.Collection("session_ids").FindOne(context.Background(), bson.M{"session_id": session_id})
 			if session.Err() != nil {
 				c.JSON(401, gin.H{
 					"response": "Unauthorized",

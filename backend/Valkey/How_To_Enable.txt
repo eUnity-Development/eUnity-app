@@ -28,3 +28,21 @@ How to run Valkey(open source Redis fork)
     VALKEY_ENABLED=true
 
 
+
+
+
+
+Why Valkey:
+    Valkey is a key value database that stores values in memory, it is ideal for us to keep session-data in valkey because
+    we are constantly fetching session data on each protected endpoint, and memory is much faster.
+
+    I have re-written the session logic using Session Manager, the only cookie we keep in the front-end now is the session ID.
+    We also rotate the session_id every six hours, but we don't really expire the cookies we just set a new one.
+    All session data is now kept in the backend which is why we only set session-id in the front-end for security purposes.
+
+    We use gin context to set the session variables on each protected route as such:
+    user_id := c.Keys["user_id"].(string)
+
+    Using valkey is completely optional for now. Using docker compose is quite easy though. Once most devs have docker installed we
+    can add mongo into the docker compose, and remove the need to install docker manually.
+
