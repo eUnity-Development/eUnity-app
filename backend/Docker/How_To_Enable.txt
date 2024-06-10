@@ -16,7 +16,7 @@ How to run Valkey(open source Redis fork)
 
 --Then run either of the following two commands, they do the same thing:
 
-    If you're in backend dir:
+    If you're in root dir:
         docker compose -f Docker/docker-compose.yml  up --build -d
 
     If you're in Docker dir:
