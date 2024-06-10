@@ -1,10 +1,14 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:eunity/classes/AuthHelper.dart';
+import 'package:eunity/classes/DesignVariables.dart';
+import 'package:eunity/views/LoginSignup.dart';
+import 'package:eunity/views/Messages.dart';
+import 'package:eunity/views/PremiumFeatures.dart';
+import 'package:eunity/views/Profile.dart';
+import 'package:eunity/views/Swiping.dart';
+import 'package:eunity/widgets/TopBars/HomeTopBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:frontend/views/ScreenOne.dart';
-import 'package:frontend/views/ScreenTwo.dart';
-import 'package:frontend/views/ScreenThree.dart';
-import 'package:frontend/views/ScreenFour.dart';
-import 'package:frontend/views/ScreenFive.dart';
 
 class CoreTemplate extends StatefulWidget {
   const CoreTemplate({super.key});
@@ -15,15 +19,28 @@ class CoreTemplate extends StatefulWidget {
 
 class _CoreTemplateState extends State<CoreTemplate> {
   int selectedIndex = 0;
+  Color unselectedColor = DesignVariables.greyLines;
+  Color selectedColor = DesignVariables.primaryRed;
+
+  @override
+ void initState() {
+    super.initState();
+    AuthHelper.isLoggedIn().then((value) {
+      if (value) {
+        AuthHelper.setLoggedIn(true);
+      }
+    });
+ }
+  
+
   final screens = [
-    const ScreenOne(),
-    const ScreenTwo(),
-    const ScreenThree(),
-    const ScreenFour(),
-    const ScreenFive(),
+    const Swiping(),
+    const PremiumFeatures(),
+    const Messages(),
+    const Profile(),
   ];
 
-  void onItemTapped(int index) async {
+  void onItemTapped(int index) {
     setState(() {
       selectedIndex = index;
     });
@@ -31,126 +48,51 @@ class _CoreTemplateState extends State<CoreTemplate> {
 
   @override
   Widget build(BuildContext context) {
-    Color unselectedColor = Color.fromARGB(255, 56, 56, 56);
-    Color selectedColor = Color.fromARGB(255, 247, 112, 112);
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 232, 232, 232),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 75,
-              width: 75,
-              child: Image.asset("assets/e-unity-logo.png"),
-            ),
-            Container(
-              height: 1.0, // Set the desired height of the line
-              color: const Color(0x5f000000),
-              margin: const EdgeInsets.symmetric(vertical: 0),
-            ),
-            SizedBox(
-              height: 734,
-              width: 412,
-              child: screens[selectedIndex],
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: SizedBox(
-        height: 80,
-        child: BottomNavigationBar(
-            backgroundColor: Color.fromARGB(255, 232, 232, 232),
-            type: BottomNavigationBarType.fixed,
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            selectedItemColor: const Color(0xffFFE89A),
-            unselectedItemColor: const Color(0xff89875A),
-            items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: SvgPicture.asset('assets/NavBarUI/icon-heart.svg',
-                      color: unselectedColor),
-                ),
-                activeIcon: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: SvgPicture.asset('assets/NavBarUI/icon-heart.svg',
-                      color: selectedColor),
-                ),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: SvgPicture.asset(
-                    'assets/NavBarUI/icon-magnifying-glass.svg',
-                    color: unselectedColor,
-                  ),
-                ),
-                activeIcon: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: SvgPicture.asset(
-                      'assets/NavBarUI/icon-magnifying-glass.svg',
-                      color: selectedColor),
-                ),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: SvgPicture.asset('assets/NavBarUI/icon-sparkles.svg',
-                      color: unselectedColor),
-                ),
-                activeIcon: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: SvgPicture.asset('assets/NavBarUI/icon-sparkles.svg',
-                      color: selectedColor),
-                ),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: SvgPicture.asset(
-                      'assets/NavBarUI/icon-chat-bubbles.svg',
-                      color: unselectedColor),
-                ),
-                activeIcon: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: SvgPicture.asset(
-                      'assets/NavBarUI/icon-chat-bubbles.svg',
-                      color: selectedColor),
-                ),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: SvgPicture.asset(
-                    'assets/NavBarUI/icon-shadow.svg',
-                    color: unselectedColor,
-                  ),
-                ),
-                activeIcon: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: SvgPicture.asset('assets/NavBarUI/icon-shadow.svg',
-                      color: selectedColor),
-                ),
-                label: '',
-              ),
-            ],
-            onTap: onItemTapped,
-            currentIndex: selectedIndex),
+      backgroundColor: const Color.fromARGB(255, 232, 232, 232),
+      body: screens[selectedIndex],
+      appBar: HomeTopBar(selectedIndex: selectedIndex),
+      bottomNavigationBar: CurvedNavigationBar(
+        backgroundColor: const Color.fromARGB(255, 232, 232, 232),
+        color: Colors.white,
+        buttonBackgroundColor: Colors.white,
+        height: 55,
+        index: selectedIndex,
+        items: <Widget>[
+          SvgPicture.asset(
+            selectedIndex == 0
+              ? 'assets/NavBarUI/icon-filled-heart.svg'
+              : 'assets/NavBarUI/icon-heart.svg',
+            color: selectedIndex == 0 ? selectedColor : unselectedColor,
+            width: 30,
+            height: 30,
+          ),
+          SvgPicture.asset(
+            selectedIndex == 1
+              ? 'assets/NavBarUI/icon-filled-sparkles.svg'
+              : 'assets/NavBarUI/icon-sparkles.svg',
+            color: selectedIndex == 1 ? selectedColor : unselectedColor,
+            width: 30,
+            height: 30,
+          ),
+          SvgPicture.asset(
+            selectedIndex == 2
+              ? 'assets/NavBarUI/icon-filled-chat-bubbles.svg'
+              : 'assets/NavBarUI/icon-chat-bubbles.svg',
+            color: selectedIndex == 2 ? selectedColor : unselectedColor,
+            width: 30,
+            height: 30,
+          ),
+          SvgPicture.asset(
+            selectedIndex == 3
+              ? 'assets/NavBarUI/icon-filled-shadow.svg'
+              : 'assets/NavBarUI/icon-shadow.svg',
+            color: selectedIndex == 3 ? selectedColor : unselectedColor,
+            width: 30,
+            height: 30,
+          ),
+        ],
+        onTap: onItemTapped,
       ),
     );
   }
