@@ -3,6 +3,7 @@ package controllers
 import (
 	"context"
 	"os"
+	"path/filepath"
 
 	"eunity.com/backend-main/helpers/DBManager"
 	"eunity.com/backend-main/models"
@@ -29,15 +30,13 @@ func (m *Media_controllers) Add_user_image(c *gin.Context) {
 	file, _ := c.FormFile("image")
 
 	//get file extension from Header
-	content_type := file.Header.Get("Content-Type")
-	extention := "." + content_type[len(content_type)-3:]
-
+	extension := filepath.Ext(file.Filename)
 	//get user_id from cookies
 	user_id := c.Keys["user_id"].(string)
 
 	//we generate an id for the image
 	//we will use the user_id as the folder name
-	image_id := uuid.New().String() + extention
+	image_id := uuid.New().String() + extension
 
 	//check how many images the user has in the database
 	//if the user has more than 9 images, return error
