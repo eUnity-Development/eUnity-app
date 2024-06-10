@@ -11,7 +11,7 @@ import (
 )
 
 // bimg required vips as en enviroment dependency so it can only run on linux or a docker container
-// it is a fast library for image conversion
+// it is a fast library for image processing
 var bimgEnabled bool
 
 func init() {
@@ -35,7 +35,7 @@ func SaveToWebp(fileHeader *multipart.FileHeader, image_id string, user_id strin
 		}
 		return nil
 	case false:
-		err := slowSaveToWebp(fileHeader, image_id, user_id)
+		err := DefaultSaveToWebp(fileHeader, image_id, user_id)
 		if err != nil {
 			return err
 		}
@@ -79,6 +79,25 @@ func saveToWebp(fileHeader *multipart.FileHeader, image_id string, user_id strin
 	return nil
 }
 
-func slowSaveToWebp(fileHeader *multipart.FileHeader, image_id string, user_id string) error {
+// saves file as webp does not reduce size at all and only tested with png jpg, and webp
+func DefaultSaveToWebp(fileHeader *multipart.FileHeader, image_id string, user_id string) error {
+	file, err := fileHeader.Open()
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	//multipart.File to buffer
+	buffer := bytes.NewBuffer(nil)
+	if _, err := io.Copy(buffer, file); err != nil {
+		return err
+	}
+
+	//buffer to file
+	err = os.WriteFile("images/"+user_id+"/"+image_id+".webp", buffer.Bytes(), 0666)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
