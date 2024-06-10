@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  valkey:
+    build: .
+    ports:
+      - "6379:6379"
+      

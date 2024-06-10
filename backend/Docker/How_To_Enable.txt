@@ -1,0 +1,49 @@
+How to run Valkey(open source Redis fork)
+
+--Download and install docker-desktop
+    Windows:
+        https://docs.docker.com/desktop/install/windows-install/
+    Mac:
+        https://docs.docker.com/desktop/install/mac-install/
+    Linux: 
+        https://docs.docker.com/desktop/install/linux-install/
+
+--Ensure you have Docker compose. It comes with docker desktop unless you install all parts seperately.
+    https://docs.docker.com/compose/install/
+
+
+
+
+--Then run either of the following two commands, they do the same thing:
+
+    If you're in backend dir:
+        docker compose -f Docker/docker-compose.yml  up --build -d
+
+    If you're in Docker dir:
+        docker compose up --build -d
+
+
+--Add the following to .env
+
+    VALKEY_ENABLED=true
+
+
+
+
+
+
+Why Valkey:
+    Valkey is a key value database that stores data in memory, it is ideal for us to use with sessions because
+    we are constantly fetching session data on each protected endpoint, and memory is much faster.
+
+    I have re-written the session logic into Session Manager, the only cookie we keep in the front-end now is the session-id.
+    We also rotate the session_id every six hours, but we don't really expire the cookies we just set a new one.
+    All session data is now kept in the backend which is why we only set session-id in the front-end for security purposes.
+
+    We use gin context to set the session variables on each protected route as such:
+    user_id := c.Keys["user_id"].(string)
+
+    Using valkey is completely optional, Session Manager will default to using if Valkey is not running for now. 
+    Using docker compose seems quite easy.
+    Later on we can add mongo into the docker compose, and remove the need to install mongo manually.
+
