@@ -28,4 +28,6 @@ func User_routes(r *gin.RouterGroup) {
 	//LOGOUT
 	r.POST("/logout", User_controllers.POST_logout)
 
+	r.GET("/Testing_Context", User_controllers.Testing_Context)
+
 }

@@ -158,6 +158,21 @@ paths:
       summary: Verify Phone Number
       tags:
       - Twilio
+  /users/Testing_Context:
+    get:
+      consumes:
+      - application/json
+      description: returns a string from user routes
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: User test route
+      tags:
+      - User
   /users/login:
     post:
       consumes:

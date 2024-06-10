@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"os" // to access .env file
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv" // to load .env file
@@ -102,37 +101,7 @@ func (ac *Web_Auth_controllers) GET_GoogleOAuthCallback(c *gin.Context) { // #TO
 
 	}
 
-	//print the user
+	//we need to implement the rest for web auth here we would create the user etc, etc
+	c.JSON(200, "have not yet implemented the rest of the web auth process")
 
-	//@TODO make the cookie here
-	cookie := generate_secure_cookie_third_party(user)
-	fmt.Println(cookie)
-	fmt.Println("Provider: ", cookie["provider"])
-	fmt.Println("Third Party ID: ", cookie["third_party_id"])
-	fmt.Println("Expires: ", cookie["expires_at"])
-
-	c.SetCookie("thirdParty_provider", cookie["provider"].(string), 3600, "/", Cookie_Host, HTTPS_only, true)
-	c.SetCookie("thirdParty_id", cookie["third_party_id"].(string), 3600, "/", Cookie_Host, HTTPS_only, true)
-	c.SetCookie("thirdparty_expires", cookie["expires_at"].(string), 3600, "/", Cookie_Host, HTTPS_only, true)
-
-	//fmt.Println(user.UserID)
-	//fmt.Println(user.Provider)
-
-}
-
-// generating a secure cookie for third party signup
-// - this can be reused for other third party signups
-func generate_secure_cookie_third_party(gothUser goth.User) gin.H {
-	now := time.Now()
-	expires := now.Add(time.Minute * 30) // expires in 30 minutes
-
-	expires_string := expires.Format(time.RFC1123)
-
-	cookie := gin.H{
-		"provider":       gothUser.Provider,
-		"third_party_id": gothUser.UserID,
-		"expires_at":     expires_string,
-	}
-
-	return cookie
 }

@@ -1,0 +1,25 @@
+How to run Valkey(open source Redis for because redis is now evil)
+
+--Download and install docker-desktop
+    Windows:
+        https://docs.docker.com/desktop/install/windows-install/
+    Mac:
+        https://docs.docker.com/desktop/install/mac-install/
+    Linux: 
+        https://docs.docker.com/desktop/install/linux-install/
+
+--Ensure you have Docker compose. It comes with docker desktop unless you install all parts seperately.
+    https://docs.docker.com/compose/install/
+
+
+
+
+--Then run the following commannd
+
+    From backend dir:
+        docker compose -f Valkey/docker-compose.yml  up --build -d
+
+    From Valkey dir:
+        docker compose up --build -d
+
+

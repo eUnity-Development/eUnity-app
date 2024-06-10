@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"eunity.com/backend-main/helpers/DBManager"
+	"eunity.com/backend-main/helpers/SessionManager"
 	"eunity.com/backend-main/models"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
@@ -96,7 +97,7 @@ func (ac *Auth_controllers) POST_GoogleAuth(c *gin.Context) {
 
 		}
 
-		err = setCookies(result, c)
+		_, err = SessionManager.Create_Session(result.ID.Hex(), c)
 		if err != nil {
 			c.JSON(400, gin.H{
 				"response": "Unable to login",
@@ -121,7 +122,7 @@ func (ac *Auth_controllers) POST_GoogleAuth(c *gin.Context) {
 		return
 	}
 
-	err = setCookies(*new_user, c)
+	_, err = SessionManager.Create_Session(new_user.ID.Hex(), c)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"response": "Unable to login",
@@ -143,30 +144,4 @@ func verifyToken(token string) (*idtoken.Payload, error) {
 	}
 
 	return payload, nil
-}
-
-func setCookies(user models.User, c *gin.Context) error {
-	cookie := generate_secure_cookie(user)
-
-	//set cookie
-	c.SetCookie("session_id", cookie["session_id"].(string), 3600, "/", Cookie_Host, HTTPS_only, true)
-	c.SetCookie("user_id", cookie["user_id"].(string), 3600, "/", Cookie_Host, HTTPS_only, true)
-	c.SetCookie("expires_at", cookie["expires_at"].(string), 3600, "/", Cookie_Host, HTTPS_only, true)
-
-	//turn cookie into bson to store in database
-	session_bson := bson.M{
-		"session_id": cookie["session_id"].(string),
-		"user_id":    cookie["user_id"].(string),
-		"expires_at": cookie["expires_at"].(string),
-	}
-
-	//add session to session_ids collection
-	_, err := DBManager.DB.Collection("session_ids").InsertOne(context.Background(), bson.M{cookie["session_id"].(string): session_bson})
-
-	if err != nil {
-		return err
-	}
-
-	return nil
-
 }
