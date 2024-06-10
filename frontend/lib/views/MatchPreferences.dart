@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:eunity/widgets/MatchPreferencesWidgets/MatchPreferenceSelection.dart';
+import 'package:eunity/widgets/SelectionWidgets/SelectionButton.dart';
 import 'package:eunity/widgets/MatchPreferencesWidgets/MatchPreferencesRangeSlider.dart';
 import 'package:eunity/widgets/MatchPreferencesWidgets/MatchPreferencesSlider.dart';
 import 'package:eunity/widgets/TopBars/PushedScreenTopBar.dart';
@@ -55,7 +55,12 @@ class _MatchPreferencesState extends State<MatchPreferences> {
                   style: subStyle,
                 ),
                 spacerBox,
-                MatchPreferenceSelection(label: "Women"),
+                SelectionButton(
+                    cacheKey: "genderPreference",
+                    assetPath: "None",
+                    options: ["Women", "Men"],
+                    multiSelect: true,
+                    question: "Select Preferred Gender(s)"),
                 largeSpacer,
                 Text(
                   "Relationship Type",
@@ -67,7 +72,15 @@ class _MatchPreferencesState extends State<MatchPreferences> {
                   style: subStyle,
                 ),
                 spacerBox,
-                MatchPreferenceSelection(label: "Long Term Relationships"),
+                SelectionButton(
+                    cacheKey: "relationshipType",
+                    options: [
+                      "Long Term Relationships",
+                      "Short Term Relationships"
+                    ],
+                    multiSelect: false,
+                    question: "Preferred Relationship",
+                    assetPath: "assets/MiscIcons/icon-outline-star.svg"),
                 largeSpacer,
                 Text(
                   "Age Range",

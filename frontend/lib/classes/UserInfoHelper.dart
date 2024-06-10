@@ -4,6 +4,16 @@ import 'package:dio/dio.dart';
 
 class UserInfoHelper {
   static String defaultHost = RouteHandler.defaultHost;
+  static Map<dynamic, dynamic> userInfoCache = {};
+
+  static void loadDefaultCache() {
+    userInfoCache['genderPreference'] = ['Women'];
+    userInfoCache['relationshipType'] = 'Long Term Relationships';
+  }
+
+  static void updateCacheVariable(String variable, var newValue) {
+    userInfoCache[variable] = newValue;
+  }
 
   static Future<Response> getUserInfo() async {
     String endPoint = '/users/me';

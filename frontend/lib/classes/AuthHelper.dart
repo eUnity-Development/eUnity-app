@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:eunity/classes/RouteHandler.dart';
+import 'package:eunity/classes/UserInfoHelper.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthHelper {
@@ -10,13 +11,13 @@ class AuthHelper {
   //and after isLoggedIn() is called, if it's false we log the user out
   static bool loggedIn = false;
   static GoogleSignIn googleSignIn = GoogleSignIn(
-    scopes: ['email', 'openid', 'profile'],
-    serverClientId:"473125180287-80hn1kcn8k3juut9p7ocvi6j77v9lnct.apps.googleusercontent.com"
-  );
-
+      scopes: ['email', 'openid', 'profile'],
+      serverClientId:
+          "473125180287-80hn1kcn8k3juut9p7ocvi6j77v9lnct.apps.googleusercontent.com");
 
   static Future<bool> isLoggedIn() async {
     var sessionCookie = await readCookie('session_id');
+    UserInfoHelper.loadDefaultCache();
     print('COOKIES!');
     print(sessionCookie);
     if (sessionCookie == null) {
@@ -127,26 +128,25 @@ class AuthHelper {
   }
 
   static Future<void> signOut() async {
-      //we want to sign out of google and our server and clear the session cookie
-      googleSignIn.disconnect();
-      String endPoint = '/users/logout';
-      var url = '$defaultHost$endPoint';
-      try {
-        await RouteHandler.dio.post(
-          url,
-        );
+    //we want to sign out of google and our server and clear the session cookie
+    googleSignIn.disconnect();
+    String endPoint = '/users/logout';
+    var url = '$defaultHost$endPoint';
+    try {
+      await RouteHandler.dio.post(
+        url,
+      );
+      return;
+    } on DioException catch (e) {
+      if (e.response != null) {
+        print(e.response!.data);
         return;
-      } on DioException catch (e) {
-        if (e.response != null) {
-          print(e.response!.data);
-          return;
-        } else {
-          print('Unable to connect to server');
-          return;
-        }
+      } else {
+        print('Unable to connect to server');
+        return;
       }
+    }
   }
-
 
   static Future<Response> verifyGoogleIDToken(String googleKey) async {
     String endPoint = '/auth/google?idToken=$googleKey';
