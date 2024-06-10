@@ -261,7 +261,7 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 			return
 		}
 		passwordHash := result.PasswordHash
-		if PasswordHasher.CheckPassword(credentials.Password, passwordHash) {
+		if PasswordHasher.Check_Password(credentials.Password, passwordHash) {
 			c.JSON(400, gin.H{
 				"response": "Account with this email, already exists",
 			})
@@ -274,7 +274,7 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 	}
 
 	//hash the password
-	password_hash, err := PasswordHasher.HashPassword(credentials.Password)
+	password_hash, err := PasswordHasher.Hash_Password(credentials.Password)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"response": "Unable to create account 3",
@@ -353,7 +353,7 @@ func (u *User_controllers) POST_login(c *gin.Context) {
 	}
 
 	passwordHash := result.PasswordHash
-	if !PasswordHasher.CheckPassword(credentials.Password, passwordHash) {
+	if !PasswordHasher.Check_Password(credentials.Password, passwordHash) {
 		c.JSON(400, gin.H{
 			"response": "Incorrect password",
 		})
