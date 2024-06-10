@@ -67,7 +67,7 @@ func Get_Session(session_id string) (models.Session, error) {
 		return sessionData, nil
 	default:
 		//get session id from mongo db
-		session := DBManager.DB.Collection("session_ids").FindOne(context.Background(), bson.M{session_id: bson.M{"$exists": true}})
+		session := DBManager.DB.Collection("session_ids").FindOne(context.Background(), bson.M{"session_id": session_id})
 		if session.Err() != nil {
 			return models.Session{}, session.Err()
 		}
@@ -159,31 +159,20 @@ func AuthRequired() gin.HandlerFunc {
 		case true:
 
 			//check if session_id exists in valkey
-			session, err := rdb.Get(ctx, session_id).Result()
+			session, err := Get_Session(session_id)
 			if err != nil {
 				c.JSON(401, gin.H{
-					"response": "Session not found in Valkey",
-				})
-				c.Abort()
-				return
-			}
-			var sessionData models.Session
-			err = json.Unmarshal([]byte(session), &sessionData)
-			if err != nil {
-				c.JSON(401, gin.H{
-					"response": "Failed to unmarshal session data from Valkey",
+					"response": "Unauthorized",
 				})
 				c.Abort()
 				return
 			}
 
-			expires_at := time.Unix(sessionData.Expires_at, 0)
-
-			fmt.Println("I am right here")
+			expires_at := time.Unix(session.Expires_at, 0)
 
 			if time.Now().After(expires_at) {
-				old_session_id := sessionData.Session_id
-				sessionData, err = Create_Session(sessionData.User_id, c)
+				old_session_id := session.Session_id
+				session, err = Create_Session(session.User_id, c)
 				if err != nil {
 					c.JSON(500, gin.H{
 						"response": "Error creating session",
@@ -205,18 +194,18 @@ func AuthRequired() gin.HandlerFunc {
 			}
 
 			//set all session data in c keys for easy access
-			c.Set("session_id", sessionData.Session_id)
-			c.Set("created_at", sessionData.Created_at)
-			c.Set("expires_at", sessionData.Expires_at)
-			c.Set("user_id", sessionData.User_id)
-			c.Set("permissions", sessionData.Permissions)
+			c.Set("session_id", session.Session_id)
+			c.Set("created_at", session.Created_at)
+			c.Set("expires_at", session.Expires_at)
+			c.Set("user_id", session.User_id)
+			c.Set("permissions", session.Permissions)
 
 			return
 
 		default:
 			//check if session_id exists in session_ids collection
-			session := DBManager.DB.Collection("session_ids").FindOne(context.Background(), bson.M{"session_id": session_id})
-			if session.Err() != nil {
+			session, err := Get_Session(session_id)
+			if err != nil {
 				c.JSON(401, gin.H{
 					"response": "Unauthorized",
 				})
@@ -224,21 +213,12 @@ func AuthRequired() gin.HandlerFunc {
 				return
 			}
 
-			//get session data
-			var sessionData models.Session
-			err = session.Decode(&sessionData)
-			if err != nil {
-				c.JSON(401, gin.H{
-					"response": "Unauthorized",
-				})
-			}
-
 			//check if session is expired
-			expires_at := time.Unix(sessionData.Expires_at, 0)
+			expires_at := time.Unix(session.Expires_at, 0)
 
 			if time.Now().After(expires_at) {
-				old_session_id := sessionData.Session_id
-				sessionData, err = Create_Session(sessionData.User_id, c)
+				old_session_id := session.Session_id
+				session, err = Create_Session(session.User_id, c)
 				if err != nil {
 					c.JSON(500, gin.H{
 						"response": "Error creating session",
@@ -259,11 +239,11 @@ func AuthRequired() gin.HandlerFunc {
 			}
 
 			//set all session data in c keys for easy access
-			c.Set("session_id", sessionData.Session_id)
-			c.Set("created_at", sessionData.Created_at)
-			c.Set("expires_at", sessionData.Expires_at)
-			c.Set("user_id", sessionData.User_id)
-			c.Set("permissions", sessionData.Permissions)
+			c.Set("session_id", session.Session_id)
+			c.Set("created_at", session.Created_at)
+			c.Set("expires_at", session.Expires_at)
+			c.Set("user_id", session.User_id)
+			c.Set("permissions", session.Permissions)
 			c.Next()
 		}
 		c.Next()
