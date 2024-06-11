@@ -1,18 +1,16 @@
 package main
 
 import (
-	"context"
-	"fmt"
 	"net/http"
-	"time"
 
 	docs "eunity.com/backend-main/docs"
 	"eunity.com/backend-main/helpers/DBManager"
+	"eunity.com/backend-main/helpers/SessionManager"
+	"eunity.com/backend-main/helpers/TwilioManager"
 	"eunity.com/backend-main/routes"
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"go.mongodb.org/mongo-driver/bson"
 )
 
 func main() {
@@ -33,11 +31,15 @@ func main() {
 	//unprotected routes
 	routes.Pub_User_routes(r.Group("/users"))
 	routes.Pub_Media_routes(r.Group("/media"))
+
+	//change goth auth route names to web auth
+	routes.Web_Auth_routes(r.Group("/webAuth"))
 	routes.Auth_routes(r.Group("/auth"))
 
 	//protected routes
-	routes.User_routes(r.Group("/users", AuthRequired()))
-	routes.Media_routes(r.Group("/media", AuthRequired()))
+	routes.User_routes(r.Group("/users", SessionManager.AuthRequired()))
+	routes.Media_routes(r.Group("/media", SessionManager.AuthRequired()))
+	routes.Twilio_routes(r.Group("/twilio"))
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Serve Swagger UI at /docs
@@ -48,50 +50,6 @@ func main() {
 		swaggerfiles.Handler,
 	))
 	router.Run(":3200")
-
 	defer DBManager.Disconnect()
-
-}
-
-func AuthRequired() gin.HandlerFunc {
-	fmt.Print("AuthRequired")
-	return func(c *gin.Context) {
-		//check cookies
-		session_id, err := c.Cookie("session_id")
-		if err != nil {
-			c.JSON(401, gin.H{
-				"response": "Unauthorized",
-			})
-			c.Abort()
-			return
-		}
-
-		expiry, err := c.Cookie("expires_at")
-		if err != nil {
-			c.JSON(401, gin.H{
-				"response": "Unauthorized",
-			})
-			c.Abort()
-			return
-		}
-		//check if expired
-		if expiry < time.Now().String() {
-			c.JSON(401, gin.H{
-				"response": "Unauthorized",
-			})
-			c.Abort()
-			return
-		}
-
-		//check if session_id exists in session_ids collection
-		session := DBManager.DB.Collection("session_ids").FindOne(context.Background(), bson.M{session_id: bson.M{"$exists": true}})
-		if session.Err() != nil {
-			c.JSON(401, gin.H{
-				"response": "Unauthorized",
-			})
-			c.Abort()
-			return
-		}
-		c.Next()
-	}
+	defer TwilioManager.Disconnect()
 }

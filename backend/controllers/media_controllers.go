@@ -2,12 +2,13 @@ package controllers
 
 import (
 	"context"
-	"fmt"
 	"os"
+	"path/filepath"
 
 	"eunity.com/backend-main/helpers/DBManager"
 	"eunity.com/backend-main/models"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -26,18 +27,16 @@ type Media_controllers struct {
 // @Router /media/user_image [post]
 func (m *Media_controllers) Add_user_image(c *gin.Context) {
 
+	file, _ := c.FormFile("image")
+
+	//get file extension from Header
+	extension := filepath.Ext(file.Filename)
 	//get user_id from cookies
-	user_id, err := c.Cookie("user_id")
-	if err != nil {
-		c.JSON(401, gin.H{
-			"response": "Unauthorized",
-		})
-		return
-	}
+	user_id := c.Keys["user_id"].(string)
 
 	//we generate an id for the image
 	//we will use the user_id as the folder name
-	image_id := generate_secure_token(10)
+	image_id := uuid.New().String() + extension
 
 	//check how many images the user has in the database
 	//if the user has more than 9 images, return error
@@ -77,8 +76,8 @@ func (m *Media_controllers) Add_user_image(c *gin.Context) {
 			"response": "Internal Server Error",
 		})
 	}
-	file, _ := c.FormFile("image")
-	c.SaveUploadedFile(file, "images/"+user_id+"/"+image_id+".jpg")
+
+	c.SaveUploadedFile(file, "images/"+user_id+"/"+image_id)
 
 	//return param as json
 	c.JSON(200, gin.H{
@@ -96,21 +95,14 @@ func (m *Media_controllers) Add_user_image(c *gin.Context) {
 // @Success 200 {string} Image
 // @Router /media/user_image/{image_id} [get]
 func (m *Media_controllers) Get_user_image(c *gin.Context) {
-	fmt.Println("Get_user_image")
 	//get user_id from cookies
-	user_id, err := c.Cookie("user_id")
-	if err != nil {
-		c.JSON(401, gin.H{
-			"response": "Unauthorized",
-		})
-		return
-	}
+	user_id := c.Keys["user_id"].(string)
 
 	//get image_id from params
 	image_id := c.Param("image_id")
 
 	//return image
-	c.File("images/" + user_id + "/" + image_id + ".jpg")
+	c.File("images/" + user_id + "/" + image_id)
 }
 
 // @Summary Deletes user image
@@ -124,13 +116,7 @@ func (m *Media_controllers) Get_user_image(c *gin.Context) {
 // @Router /media/user_image/{image_id} [delete]
 func (m *Media_controllers) Delete_user_image(c *gin.Context) {
 	//get user_id from cookies
-	user_id, err := c.Cookie("user_id")
-	if err != nil {
-		c.JSON(401, gin.H{
-			"response": "Unauthorized",
-		})
-		return
-	}
+	user_id := c.Keys["user_id"].(string)
 
 	bson_user_id, err := primitive.ObjectIDFromHex(user_id)
 	if err != nil {
@@ -153,7 +139,7 @@ func (m *Media_controllers) Delete_user_image(c *gin.Context) {
 	}
 
 	//delete image
-	err = os.Remove("images/" + user_id + "/" + image_id + ".jpg")
+	err = os.Remove("images/" + user_id + "/" + image_id)
 	if err != nil {
 		c.JSON(500, gin.H{
 			"response": "Internal Server Error",
@@ -185,5 +171,5 @@ func (m *Media_controllers) Get_Image(c *gin.Context) {
 	image_id := c.Param("image_id")
 
 	//return image
-	c.File("images/" + user_id + "/" + image_id + ".jpg")
+	c.File("images/" + user_id + "/" + image_id)
 }

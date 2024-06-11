@@ -1,9 +1,9 @@
 import 'dart:async';
 
+import 'package:eunity/classes/AuthHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:eunity/classes/DesignVariables.dart';
-import 'package:eunity/views/CoreTemplate.dart';
 import 'package:eunity/widgets/LoginSignup/login_signup_button.dart';
 import 'package:eunity/widgets/TopBars/PushedScreenTopBar.dart';
 
@@ -44,15 +44,8 @@ class _VerifyPhoneNumber extends State<VerifyPhoneNumber> {
         startCountdown();
       }
     });
-    print("clicked resend");
   }
 
-  void navigateToPrimaryScreens() {
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => const CoreTemplate()),
-        (route) => false);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +93,7 @@ class _VerifyPhoneNumber extends State<VerifyPhoneNumber> {
                       content: Text('Code entered is $verificationCode'),
                     );
                   });
-              navigateToPrimaryScreens();
+              AuthHelper.setLoggedIn(true);
             },
           ),
           SizedBox(

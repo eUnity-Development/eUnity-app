@@ -2,10 +2,16 @@ info:
   contact: {}
 paths:
   /auth/google:
-    get:
+    post:
       consumes:
       - application/json
-      description: Begins the google auth process
+      description: Accepts jwt idToken from flutter and sets session cookies
+      parameters:
+      - description: idToken
+        in: query
+        name: idToken
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -13,22 +19,7 @@ paths:
           description: Google Auth Started
           schema:
             type: string
-      summary: Begin Google Auth
-      tags:
-      - Auth
-  /auth/google/callback:
-    get:
-      consumes:
-      - application/json
-      description: Callback for google auth
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Google Auth Callback
-          schema:
-            type: string
-      summary: Google OAuth Callback
+      summary: Google Auth
       tags:
       - Auth
   /media/{user_id}/{image_id}:
@@ -115,6 +106,73 @@ paths:
       summary: Gets user image
       tags:
       - Media
+  /twilio/send-sms:
+    post:
+      consumes:
+      - application/json
+      description: Send an SMS message
+      parameters:
+      - description: Recipient phone number
+        in: query
+        name: to
+        required: true
+        type: string
+      - description: Message body
+        in: query
+        name: body
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: SMS sent successfully!
+          schema:
+            type: string
+      summary: Send SMS
+      tags:
+      - Twilio
+  /twilio/verify-phone:
+    post:
+      consumes:
+      - application/json
+      description: Verify a phone number
+      parameters:
+      - description: Recipient phone number
+        in: query
+        name: to
+        required: true
+        type: string
+      - description: Verification code
+        in: query
+        name: code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Phone number verified successfully!
+          schema:
+            type: string
+      summary: Verify Phone Number
+      tags:
+      - Twilio
+  /users/Testing_Context:
+    get:
+      consumes:
+      - application/json
+      description: returns a string from user routes
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: User test route
+      tags:
+      - User
   /users/login:
     post:
       consumes:
@@ -235,4 +293,34 @@ paths:
       summary: User signup route
       tags:
       - Public User
+  /webAuth/google:
+    get:
+      consumes:
+      - application/json
+      description: Begins the google auth process
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Google Auth Started
+          schema:
+            type: string
+      summary: Begin Google Auth
+      tags:
+      - Web Auth
+  /webAuth/google/callback:
+    get:
+      consumes:
+      - application/json
+      description: Callback for google auth
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Google Auth Callback
+          schema:
+            type: string
+      summary: Google OAuth Callback
+      tags:
+      - Web Auth
 swagger: "2.0"
