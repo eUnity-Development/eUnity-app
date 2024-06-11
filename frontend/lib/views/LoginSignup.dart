@@ -2,20 +2,16 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:eunity/classes/AuthHelper.dart';
 import 'package:eunity/classes/DesignVariables.dart';
-import 'package:eunity/views/CoreTemplate.dart';
 import 'package:eunity/views/PhoneLogin.dart';
 import 'package:eunity/widgets/LoginSignup/login_signup_button.dart';
 import 'package:eunity/widgets/LoginSignup/login_signup_button_content.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginSignup extends StatefulWidget {
-  const LoginSignup({
-    super.key
-  });
+  const LoginSignup({super.key});
 
   @override
-  State<LoginSignup> createState( ) => _LoginSignupState(
-  );
+  State<LoginSignup> createState() => _LoginSignupState();
 }
 
 class _LoginSignupState extends State<LoginSignup> {
@@ -35,21 +31,17 @@ class _LoginSignupState extends State<LoginSignup> {
       GoogleSignInAuthentication? auth = await account?.authentication;
       if (auth != null) {
         String googleKey = auth.idToken!;
-        if(AuthHelper.loggedIn) return;
+        if (AuthHelper.loggedIn) return;
         Response res = await AuthHelper.verifyGoogleIDToken(googleKey);
         if (res.statusCode == 200) {
           AuthHelper.setLoggedIn(true);
         }
       }
-
-
     });
-
 
     //try to login silently on app load
     AuthHelper.googleSignIn.signInSilently();
   }
-
 
   void navigateToPhoneLogin() {
     Navigator.push(
@@ -112,8 +104,6 @@ class _LoginSignupState extends State<LoginSignup> {
     const Color loginBackground = Colors.transparent;
 
     final double spaceBetweenLogin = ((31 / 932) * screenHeight);
-
-
 
     return Scaffold(
       body: Column(

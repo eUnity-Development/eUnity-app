@@ -4,6 +4,7 @@ import 'package:eunity/views/LoginSignup.dart';
 import 'package:flutter/material.dart';
 import 'package:eunity/classes/DesignVariables.dart';
 import 'package:eunity/views/FeedbackScreen.dart';
+import 'package:eunity/classes/UserInfoHelper.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
