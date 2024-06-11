@@ -9,10 +9,13 @@ import 'package:eunity/widgets/LoginSignup/login_signup_button_content.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginSignup extends StatefulWidget {
-  const LoginSignup({super.key});
+  const LoginSignup({
+    super.key
+  });
 
   @override
-  State<LoginSignup> createState() => _LoginSignupState();
+  State<LoginSignup> createState( ) => _LoginSignupState(
+  );
 }
 
 class _LoginSignupState extends State<LoginSignup> {
@@ -21,7 +24,8 @@ class _LoginSignupState extends State<LoginSignup> {
     super.initState();
     AuthHelper.isLoggedIn().then((value) {
       if (value) {
-        navigateToPrimaryScreens();
+        print("logging in right here");
+        AuthHelper.setLoggedIn(true);
       }
     });
 
@@ -34,7 +38,7 @@ class _LoginSignupState extends State<LoginSignup> {
         if(AuthHelper.loggedIn) return;
         Response res = await AuthHelper.verifyGoogleIDToken(googleKey);
         if (res.statusCode == 200) {
-          navigateToPrimaryScreens();
+          AuthHelper.setLoggedIn(true);
         }
       }
 
@@ -46,13 +50,6 @@ class _LoginSignupState extends State<LoginSignup> {
     AuthHelper.googleSignIn.signInSilently();
   }
 
-  void navigateToPrimaryScreens() {
-    print("Navigating to primary screens");
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => const CoreTemplate()),
-        (route) => false);
-  }
 
   void navigateToPhoneLogin() {
     Navigator.push(
@@ -68,8 +65,6 @@ class _LoginSignupState extends State<LoginSignup> {
   void testSignup() async {
     print("clicked signup");
     navigateToPhoneLogin();
-    //var response = await AuthHelper.signUp("testemail@test.com", "Test123123");
-    //print(response);
   }
 
   void testLogin() async {
@@ -88,7 +83,7 @@ class _LoginSignupState extends State<LoginSignup> {
     await AuthHelper.login("testemail@test.com", "Test123123");
     bool loginCheck = await AuthHelper.isLoggedIn();
     if (loginCheck) {
-      navigateToPrimaryScreens();
+      AuthHelper.setLoggedIn(true);
     }
   }
 
@@ -117,6 +112,8 @@ class _LoginSignupState extends State<LoginSignup> {
     const Color loginBackground = Colors.transparent;
 
     final double spaceBetweenLogin = ((31 / 932) * screenHeight);
+
+
 
     return Scaffold(
       body: Column(

@@ -106,6 +106,73 @@ paths:
       summary: Gets user image
       tags:
       - Media
+  /twilio/send-sms:
+    post:
+      consumes:
+      - application/json
+      description: Send an SMS message
+      parameters:
+      - description: Recipient phone number
+        in: query
+        name: to
+        required: true
+        type: string
+      - description: Message body
+        in: query
+        name: body
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: SMS sent successfully!
+          schema:
+            type: string
+      summary: Send SMS
+      tags:
+      - Twilio
+  /twilio/verify-phone:
+    post:
+      consumes:
+      - application/json
+      description: Verify a phone number
+      parameters:
+      - description: Recipient phone number
+        in: query
+        name: to
+        required: true
+        type: string
+      - description: Verification code
+        in: query
+        name: code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Phone number verified successfully!
+          schema:
+            type: string
+      summary: Verify Phone Number
+      tags:
+      - Twilio
+  /users/Testing_Context:
+    get:
+      consumes:
+      - application/json
+      description: returns a string from user routes
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: User test route
+      tags:
+      - User
   /users/login:
     post:
       consumes:

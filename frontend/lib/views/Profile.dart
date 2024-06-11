@@ -13,6 +13,27 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  List imageArray = [];
+  int selectedImageGrid = 0;
+  bool signingOut = false;
+
+  @override
+  void initState() {
+    super.initState();
+    updateData();
+  }
+
+  Future<void> updateData() async {
+    var response = await UserInfoHelper.getUserInfo();
+    setState(() {
+      if (response.data.containsKey('media_files')) {
+        imageArray = response.data['media_files'];
+      } else {
+        imageArray = [];
+      }
+    });
+  }
+
   void navigateToFeedback() async {
     print("clicked feedback");
     Navigator.push(
@@ -96,7 +117,20 @@ class _ProfileState extends State<Profile> {
               height: 15,
             ),
             ElevatedButton(
-                onPressed: handleSignOut, child: const Text("Sign Out")),
+                onPressed: () => {
+                      handleSignOut(),
+                      setState(() {
+                        signingOut = true;
+                      })
+                    },
+                child: const Text("Sign Out")),
+            Visibility(
+              visible: signingOut,
+              child: CircularProgressIndicator(
+                valueColor:
+                    AlwaysStoppedAnimation<Color>(DesignVariables.primaryRed),
+              ),
+            ),
           ],
         ),
       ),
