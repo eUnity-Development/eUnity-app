@@ -3,6 +3,8 @@ import 'package:eunity/widgets/TopBars/PushedScreenTopBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import '../widgets/LoginSignup/login_signup_button.dart';
+
 class NameDOBGender extends StatefulWidget {
   const NameDOBGender({super.key});
 
@@ -23,6 +25,10 @@ class _NameDOBGender extends State<NameDOBGender> {
   final TextEditingController _yearController2 = TextEditingController();
   final TextEditingController _yearController3 = TextEditingController();
   final TextEditingController _yearController4 = TextEditingController();
+
+  void onClick() {
+    print('CLICKED!');
+  }
 
   @override
   void dispose() {
@@ -71,49 +77,50 @@ class _NameDOBGender extends State<NameDOBGender> {
             // Name textfield
             Center(
               child: SizedBox(
-              height: 48 * DesignVariables.heightConversion,
-              width: 393 * DesignVariables.widthConversion,
-              child: TextField( 
-                controller: _nameController,
-                style: const TextStyle(
-                  fontSize: 14,
-                ),
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: 19 * DesignVariables.heightConversion,
-                    horizontal: 15 * DesignVariables.widthConversion
-                  ),
-                  labelText: 'First Name',
-                  labelStyle: TextStyle(
+                height: 48 * DesignVariables.heightConversion,
+                width: 393 * DesignVariables.widthConversion,
+                child: TextField( 
+                  controller: _nameController,
+                  style: const TextStyle(
                     fontSize: 14,
-                    color: Colors.black.withOpacity(0.5),
                   ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(
-                      width: 1,
+                 textAlignVertical: TextAlignVertical.center,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(
+                      vertical: 19 * DesignVariables.heightConversion,
+                      horizontal: 15 * DesignVariables.widthConversion
                     ),
-                  ),
+                    labelText: 'First Name',
+                    labelStyle: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black.withOpacity(0.5),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(
+                        width: 1,
+                      ),
+                    ),
 
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                      color: DesignVariables.greyLines,
-                      width: 1,
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(
+                        color: DesignVariables.greyLines,
+                        width: 1,
+                      ),
                     ),
-                  ),
 
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                      color: DesignVariables.greyLines,
-                      width: 1,
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(
+                        color: DesignVariables.greyLines,
+                        width: 1,
+                      ),
                     ),
-                  ),
+                  )
                 )
               )
-            )),
+            ),
 
             SizedBox(
               height: 29 * DesignVariables.heightConversion,
@@ -215,16 +222,97 @@ class _NameDOBGender extends State<NameDOBGender> {
                 const SizedBox(width: 10),
                 InidividualTextField(controller: _yearController4, hintText: 'Y'),
               ]
-            ),     
-            ],
-              
-            )
-            // Month section
-            
-      ]
-      )
+            ), 
+          ],
+          
+          
+        ),
+        
+          SizedBox(
+            height: 29 * DesignVariables.heightConversion,
+          ), 
 
-    )
+          // Gender header
+          const Text(
+            "Gender",
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+
+          SizedBox(
+            height: 7 * DesignVariables.heightConversion,
+          ),
+
+          // Gender description
+          const Text(
+            "Pick a gender you identify the most with.",
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+
+          SizedBox(
+            height: 30 * DesignVariables.heightConversion,
+          ),
+
+          // Gender selection: man
+          LoginSignupButton(
+            color: Colors.transparent,
+            onTap: onClick,
+            borderColor: DesignVariables.greyLines,
+            height: 48 * DesignVariables.heightConversion,
+            width: 393 * DesignVariables.widthConversion,
+            buttonContent: Text(
+              'Man',
+              style: TextStyle(
+                color: Colors.black.withOpacity(0.5),
+              ),
+            ),
+          ),
+
+          SizedBox(
+            height: 13 * DesignVariables.heightConversion,
+          ),
+
+          // Gender selection: woman
+          LoginSignupButton(
+            color: Colors.transparent,
+            onTap: onClick,
+            borderColor: DesignVariables.greyLines,
+            height: 48 * DesignVariables.heightConversion,
+            width: 393 * DesignVariables.widthConversion,
+            buttonContent: Text(
+              'Woman',
+              style: TextStyle(
+                color: Colors.black.withOpacity(0.5),
+              ),
+            ),
+          ),
+
+          SizedBox(
+            height: 13 * DesignVariables.heightConversion,
+          ),
+
+          // Gender selection: more options
+          LoginSignupButton(
+            color: Colors.transparent,
+            onTap: onClick,
+            borderColor: DesignVariables.greyLines,
+            height: 48 * DesignVariables.heightConversion,
+            width: 393 * DesignVariables.widthConversion,
+            buttonContent: Text(
+              'More Options',
+              style: TextStyle(
+                color: Colors.black.withOpacity(0.5),
+              ),
+            ),
+          ),
+        ],
+          
+      ))
     );
   }
 }
@@ -310,7 +398,7 @@ class InidividualTextField extends StatelessWidget {
           ),
 
         ],
-      )
+      ),
 
     );
   }
