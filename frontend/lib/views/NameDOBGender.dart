@@ -1,4 +1,5 @@
 import 'package:eunity/classes/DesignVariables.dart';
+import 'package:eunity/widgets/LoginSignup/login_signup_button_content.dart';
 import 'package:eunity/widgets/TopBars/PushedScreenTopBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -40,6 +41,8 @@ class _NameDOBGender extends State<NameDOBGender> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+      
       // Navbar
       appBar: const PushedScreenTopBar(hasArrow: false),
       body: Padding(     
@@ -269,6 +272,8 @@ class _NameDOBGender extends State<NameDOBGender> {
               'Man',
               style: TextStyle(
                 color: Colors.black.withOpacity(0.5),
+                fontWeight: FontWeight.w500,
+                fontSize: 14
               ),
             ),
           ),
@@ -288,6 +293,8 @@ class _NameDOBGender extends State<NameDOBGender> {
               'Woman',
               style: TextStyle(
                 color: Colors.black.withOpacity(0.5),
+                fontWeight: FontWeight.w500,
+                fontSize: 14
               ),
             ),
           ),
@@ -303,12 +310,16 @@ class _NameDOBGender extends State<NameDOBGender> {
             borderColor: DesignVariables.greyLines,
             height: 48 * DesignVariables.heightConversion,
             width: 393 * DesignVariables.widthConversion,
-            buttonContent: Text(
-              'More Options',
-              style: TextStyle(
-                color: Colors.black.withOpacity(0.5),
-              ),
-            ),
+            buttonContent: LoginSignupButtonContent(
+              svgOffset: 15 * DesignVariables.widthConversion, 
+              svgPath: 'assets/icons/chevron-right.svg', 
+              svgDimensions: 20, 
+              text: 'More Options', 
+              fontSize: 14, 
+              fontColor: Colors.black.withOpacity(0.5),
+              isRight: true,
+              fontWeight: FontWeight.w500,            
+            )
           ),
         ],
           
