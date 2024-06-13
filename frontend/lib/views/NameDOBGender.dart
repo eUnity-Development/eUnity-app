@@ -435,7 +435,7 @@ class DOBSection extends StatelessWidget {
   }
 }
 
-class IndividualTextField extends StatelessWidget {
+class IndividualTextField extends StatefulWidget {
   final TextEditingController controller;
   final String hintText;
   final FocusNode focusNode;
@@ -450,6 +450,32 @@ class IndividualTextField extends StatelessWidget {
   });
 
   @override
+  _IndividualTextFieldState createState() => _IndividualTextFieldState();
+}
+
+class _IndividualTextFieldState extends State<IndividualTextField> {
+  late String _currentHintText;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentHintText = widget.hintText;
+    widget.focusNode.addListener(_updateHintText);
+  }
+
+  @override
+  void dispose() {
+    widget.focusNode.removeListener(_updateHintText);
+    super.dispose();
+  }
+
+  void _updateHintText() {
+    setState(() {
+      _currentHintText = widget.focusNode.hasFocus ? '' : widget.hintText;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       width: 15,
@@ -458,13 +484,12 @@ class IndividualTextField extends StatelessWidget {
           TextField(
             textInputAction: TextInputAction.next,
             style: const TextStyle(fontSize: 14),
-            maxLength: 1, 
-            controller: controller,
-            focusNode: focusNode,
-            
+            maxLength: 1,
+            controller: widget.controller,
+            focusNode: widget.focusNode,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(bottom: 2),
-              hintText: hintText,
+              hintText: _currentHintText,
               hintStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
               border: InputBorder.none,
             ),
@@ -474,26 +499,22 @@ class IndividualTextField extends StatelessWidget {
 
             onChanged: (value) {
               if (value.isNotEmpty) {
-                nextFocusNode?.requestFocus();
+                widget.nextFocusNode?.requestFocus();
               } else if (value.isEmpty) {
-                focusNode.previousFocus();
+                widget.focusNode.previousFocus();
               }
             },
 
           ),
+
           Positioned(
             left: 0,
             right: 0,
             bottom: 2,
-            child: Divider(
-              color: Colors.black.withOpacity(0.5)
-            ),
+            child: Divider(color: Colors.black.withOpacity(0.5)),
           ),
-
         ],
       ),
-
     );
   }
-
 }
