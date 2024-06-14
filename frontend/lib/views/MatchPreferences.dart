@@ -29,7 +29,7 @@ class _MatchPreferencesState extends State<MatchPreferences> {
     );
 
     return Scaffold(
-        appBar: PushedScreenTopBar(hasArrow: true),
+        appBar: PushedScreenTopBar(),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),

@@ -104,7 +104,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         border: Border.all(width: 1, color: DesignVariables.greyLines));
 
     return Scaffold(
-      appBar: PushedScreenTopBar(hasArrow: true),
+      appBar: PushedScreenTopBar(),
       body: SingleChildScrollView(
         child: Align(
           alignment: Alignment.topCenter,

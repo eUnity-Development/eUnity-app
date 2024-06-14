@@ -32,7 +32,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
     final double btnHeight = (52 / 932) * screenHeight;
 
     return Scaffold(
-      appBar: PushedScreenTopBar(hasArrow: true),
+      appBar: PushedScreenTopBar(),
       body: MainStack(screenHeight, screenWidth, btnWidth, btnHeight),
     );
   }
