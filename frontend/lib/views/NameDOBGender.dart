@@ -1,9 +1,8 @@
 import 'package:eunity/classes/DesignVariables.dart';
 import 'package:eunity/widgets/LoginSignup/login_signup_button_content.dart';
+import 'package:eunity/widgets/NameDOBGender/birthday_section.dart';
 import 'package:eunity/widgets/TopBars/PushedScreenTopBar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 import '../widgets/LoginSignup/login_signup_button.dart';
 
@@ -89,9 +88,7 @@ class _NameDOBGender extends State<NameDOBGender> {
               ),
             ),
 
-            SizedBox(
-              height: 7 * DesignVariables.heightConversion,
-            ),
+            const BoxGap(width: 0, height: 7),
 
             // Name description
             const Text(
@@ -102,9 +99,7 @@ class _NameDOBGender extends State<NameDOBGender> {
               ),
             ),
 
-            SizedBox(
-              height: 30 * DesignVariables.heightConversion,
-            ),
+            const BoxGap(width: 0, height: 30),
 
             // Name textfield
             Center(
@@ -154,9 +149,7 @@ class _NameDOBGender extends State<NameDOBGender> {
               )
             ),
 
-            SizedBox(
-              height: 29 * DesignVariables.heightConversion,
-            ),
+            const BoxGap(width: 0, height: 29),
 
             // Birthday header
             const Text(
@@ -167,9 +160,7 @@ class _NameDOBGender extends State<NameDOBGender> {
               ),
             ),
 
-            SizedBox(
-              height: 7 * DesignVariables.heightConversion,
-            ),
+            const BoxGap(width: 0, height: 7),
 
             // Birthday description
             const Text(
@@ -180,9 +171,7 @@ class _NameDOBGender extends State<NameDOBGender> {
               ),
             ),
 
-            SizedBox(
-              height: 30 * DesignVariables.heightConversion,
-            ),
+            const BoxGap(width: 0, height: 30),
 
             Row(children: [
               // Month section
@@ -206,9 +195,7 @@ class _NameDOBGender extends State<NameDOBGender> {
               ]
             ),
 
-            SizedBox(
-              width: 12 * DesignVariables.widthConversion,
-            ),
+            const BoxGap(width: 12, height: 0),
 
             Text(
               "/",
@@ -219,9 +206,7 @@ class _NameDOBGender extends State<NameDOBGender> {
               
             ),
 
-            SizedBox(
-              width: 12 * DesignVariables.widthConversion,
-            ),
+            const BoxGap(width: 12, height: 0),
 
             // Day section
             DOBSection(
@@ -244,9 +229,7 @@ class _NameDOBGender extends State<NameDOBGender> {
               ]
             ),
 
-            SizedBox(
-              width: 12 * DesignVariables.widthConversion,
-            ),
+            const BoxGap(width: 12, height: 0),
 
             Text(
               "/",
@@ -257,9 +240,7 @@ class _NameDOBGender extends State<NameDOBGender> {
               
             ),
 
-            SizedBox(
-              width: 12 * DesignVariables.widthConversion,
-            ),
+            const BoxGap(width: 12, height: 0),
 
             // Year section
             DOBSection(
@@ -272,36 +253,33 @@ class _NameDOBGender extends State<NameDOBGender> {
                   focusNode: _yearFocus1,
                   nextFocusNode: _yearFocus2,
                 ),
-                const SizedBox(width: 10),
+                const BoxGap(width: 10, height: 0),
                 IndividualTextField(
                   controller: _yearController2, 
                   hintText: 'Y',
                   focusNode: _yearFocus2,
                   nextFocusNode: _yearFocus3,
                 ),
-                const SizedBox(width: 10),
+                const BoxGap(width: 10, height: 0),
                 IndividualTextField(
                   controller: _yearController3, 
                   hintText: 'Y',
                   focusNode: _yearFocus3,
                   nextFocusNode: _yearFocus4,
                 ),
-                const SizedBox(width: 10),
+                const BoxGap(width: 10, height: 0),
                 IndividualTextField(
                   controller: _yearController4, 
                   hintText: 'Y',
                   focusNode: _yearFocus4,
                 ),
-              ]
-            ), 
-          ],
-          
-          
-        ),
+                ]
+              ), 
+            ],
         
-          SizedBox(
-            height: 29 * DesignVariables.heightConversion,
-          ), 
+          ),
+        
+          const BoxGap(width: 0, height: 29),
 
           // Gender header
           const Text(
@@ -312,9 +290,7 @@ class _NameDOBGender extends State<NameDOBGender> {
             ),
           ),
 
-          SizedBox(
-            height: 7 * DesignVariables.heightConversion,
-          ),
+          const BoxGap(width: 0, height: 7),
 
           // Gender description
           const Text(
@@ -325,9 +301,7 @@ class _NameDOBGender extends State<NameDOBGender> {
             ),
           ),
 
-          SizedBox(
-            height: 30 * DesignVariables.heightConversion,
-          ),
+          const BoxGap(width: 0, height: 30),
 
           // Gender selection: man
           LoginSignupButton(
@@ -346,9 +320,7 @@ class _NameDOBGender extends State<NameDOBGender> {
             ),
           ),
 
-          SizedBox(
-            height: 13 * DesignVariables.heightConversion,
-          ),
+          const BoxGap(width: 0, height: 13),
 
           // Gender selection: woman
           LoginSignupButton(
@@ -367,9 +339,7 @@ class _NameDOBGender extends State<NameDOBGender> {
             ),
           ),
 
-          SizedBox(
-            height: 13 * DesignVariables.heightConversion,
-          ),
+          const BoxGap(width: 0, height: 13),
 
           // Gender selection: more options
           LoginSignupButton(
@@ -392,129 +362,6 @@ class _NameDOBGender extends State<NameDOBGender> {
         ],
           
       ))
-    );
-  }
-}
-
-class DOBSection extends StatelessWidget {
-  final double width;
-  final double height;
-  final List<Widget> inputs;
-
-  const DOBSection({
-    super.key,
-    required this.width,
-    required this.height,
-    required this.inputs
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          height: height,
-          width: width,
-          
-          decoration: BoxDecoration(
-              border: Border.all(color: DesignVariables.greyLines, width: 1),
-              borderRadius: const BorderRadius.all(Radius.circular(10))
-          ),
-
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            
-            children: inputs,
-          )
-        )
-
-      ],
-    );
-  }
-}
-
-class IndividualTextField extends StatefulWidget {
-  final TextEditingController controller;
-  final String hintText;
-  final FocusNode focusNode;
-  final FocusNode? nextFocusNode;
-
-  const IndividualTextField({
-    super.key,
-    required this.controller,
-    required this.hintText,
-    required this.focusNode,
-    this.nextFocusNode,
-  });
-
-  @override
-  _IndividualTextFieldState createState() => _IndividualTextFieldState();
-}
-
-class _IndividualTextFieldState extends State<IndividualTextField> {
-  late String _currentHintText;
-
-  @override
-  void initState() {
-    super.initState();
-    _currentHintText = widget.hintText;
-    widget.focusNode.addListener(_updateHintText);
-  }
-
-  @override
-  void dispose() {
-    widget.focusNode.removeListener(_updateHintText);
-    super.dispose();
-  }
-
-  void _updateHintText() {
-    setState(() {
-      _currentHintText = widget.focusNode.hasFocus ? '' : widget.hintText;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 15,
-      child: Stack(
-        children: [
-          TextField(
-            textInputAction: TextInputAction.next,
-            style: const TextStyle(fontSize: 14),
-            maxLength: 1,
-            controller: widget.controller,
-            focusNode: widget.focusNode,
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.only(bottom: 2),
-              hintText: _currentHintText,
-              hintStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
-              border: InputBorder.none,
-            ),
-
-            textAlignVertical: TextAlignVertical.center,
-            textAlign: TextAlign.center,
-
-            onChanged: (value) {
-              if (value.isNotEmpty) {
-                widget.nextFocusNode?.requestFocus();
-              } else if (value.isEmpty) {
-                widget.focusNode.previousFocus();
-              }
-            },
-
-          ),
-
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 2,
-            child: Divider(color: Colors.black.withOpacity(0.5)),
-          ),
-        ],
-      ),
     );
   }
 }
