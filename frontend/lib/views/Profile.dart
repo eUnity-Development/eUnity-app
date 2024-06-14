@@ -1,13 +1,10 @@
-import 'dart:io';
-
-import 'package:eunity/classes/UserInfoHelper.dart';
-import 'package:eunity/widgets/ProfileWidgets/EditImageSquare.dart';
-import 'package:eunity/widgets/ProfileWidgets/NewImageSquare.dart';
+import 'package:eunity/classes/AuthHelper.dart';
+import 'package:eunity/views/EditProfile.dart';
+import 'package:eunity/views/LoginSignup.dart';
 import 'package:flutter/material.dart';
 import 'package:eunity/classes/DesignVariables.dart';
 import 'package:eunity/views/FeedbackScreen.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:eunity/classes/UserInfoHelper.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -19,6 +16,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   List imageArray = [];
   int selectedImageGrid = 0;
+  bool signingOut = false;
 
   @override
   void initState() {
@@ -45,128 +43,26 @@ class _ProfileState extends State<Profile> {
     );
   }
 
+  void navigateToEditProfile() async {
+    print("clicked edit profile");
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => EditProfile()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    Future<void> handleNewImage(File imagePath) async {
-      if (imageArray.length >= selectedImageGrid + 1) {
-        await UserInfoHelper.deleteImage(imageArray[selectedImageGrid]);
-        await UserInfoHelper.uploadNewImage(imagePath);
-      } else {
-        await UserInfoHelper.uploadNewImage(imagePath);
-      }
-      setState(() {
-        updateData();
-      });
-      Navigator.pop(context);
+    void navigateBackToLogin() {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => const LoginSignup()),
+          (route) => false);
     }
 
-    Future<void> deleteImage() async {
-      if (imageArray.length >= selectedImageGrid + 1) {
-        await UserInfoHelper.deleteImage(imageArray[selectedImageGrid]);
-      } else {
-        print("No image to delete!");
-      }
-      setState(() {
-        updateData();
-      });
-      Navigator.pop(context);
-    }
-
-    Future<void> openCamera() async {
-      final image = await ImagePicker().pickImage(
-        source: ImageSource.camera,
-        imageQuality: 50,
-      );
-      if (image == null) return;
-      await handleNewImage(File(image.path));
-    }
-
-    Future<void> openGallery() async {
-      final image = await ImagePicker().pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 50,
-      );
-      if (image == null) return;
-      await handleNewImage(File(image.path));
-    }
-
-    void openCameraDialog(BuildContext context) {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return Theme(
-              data: Theme.of(context)
-                  .copyWith(dialogBackgroundColor: DesignVariables.offWhite),
-              child: SimpleDialog(
-                title: Text("Image Source"),
-                children: [
-                  SimpleDialogOption(
-                    child: Row(children: [
-                      SvgPicture.asset(
-                        "assets/MiscIcons/icon-camera.svg",
-                        height: 20,
-                        width: 20,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text("Open Camera")
-                    ]),
-                    onPressed: () async {
-                      await openCamera();
-                    },
-                  ),
-                  SimpleDialogOption(
-                    child: Row(children: [
-                      SvgPicture.asset(
-                        "assets/MiscIcons/icon-photo.svg",
-                        height: 20,
-                        width: 20,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text("From Gallery")
-                    ]),
-                    onPressed: () async {
-                      await openGallery();
-                    },
-                  ),
-                  SimpleDialogOption(
-                    child: Text("Test Delete"),
-                    onPressed: () async {
-                      await deleteImage();
-                    },
-                  ),
-                  SimpleDialogOption(
-                    child: Row(children: [
-                      SvgPicture.asset(
-                        "assets/MiscIcons/icon-x.svg",
-                        height: 20,
-                        width: 20,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text("Close")
-                    ]),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-              ),
-            );
-          });
-    }
-
-    Widget gridOption(int index) {
-      if (imageArray.length < index + 1) {
-        return NewImageSquare();
-      } else {
-        return EditImageSquare(
-            imageURL: UserInfoHelper.getPublicImageURL(imageArray[index]));
-      }
+    void handleSignOut() async {
+      await AuthHelper.signOut();
+      navigateBackToLogin();
     }
 
     return Scaffold(
@@ -199,13 +95,42 @@ class _ProfileState extends State<Profile> {
               height: 15,
             ),
             GestureDetector(
-              child: gridOption(0),
-              onTap: () {
-                setState(() {
-                  selectedImageGrid = 0;
-                  openCameraDialog(context);
-                });
-              },
+              child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(
+                          width: 1, color: DesignVariables.greyLines),
+                      color: DesignVariables.primaryRed),
+                  height: 51,
+                  width: 207,
+                  child: Center(
+                    child: Text(
+                      "Go To Edit Profile",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  )),
+              onTap: navigateToEditProfile,
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            ElevatedButton(
+                onPressed: () => {
+                      handleSignOut(),
+                      setState(() {
+                        signingOut = true;
+                      })
+                    },
+                child: const Text("Sign Out")),
+            Visibility(
+              visible: signingOut,
+              child: CircularProgressIndicator(
+                valueColor:
+                    AlwaysStoppedAnimation<Color>(DesignVariables.primaryRed),
+              ),
             ),
           ],
         ),

@@ -2,19 +2,15 @@ package controllers
 
 import (
 	"context"
-	"crypto/rand"
-	"encoding/hex"
 	"fmt"
-	"os"
 	"reflect"
 	"regexp"
-	"time"
 
 	"eunity.com/backend-main/helpers/DBManager"
 	"eunity.com/backend-main/helpers/PasswordHasher"
+	"eunity.com/backend-main/helpers/SessionManager"
 	"eunity.com/backend-main/models"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -23,19 +19,6 @@ import (
 
 // create empty struct to attach methods touser
 type User_controllers struct {
-}
-
-// https only must be true in production
-var HTTPS_only bool
-
-// must be set to eunityusa.com in production
-var Cookie_Host string
-
-// multiple init functions are execute alphabetically based on file name
-func init() {
-	godotenv.Load()
-	HTTPS_only = os.Getenv("HTTPS_ONLY") == "true"
-	Cookie_Host = os.Getenv("COOKIE_ACCEPT_HOST")
 }
 
 // @Summary User test route
@@ -48,13 +31,7 @@ func init() {
 // @Router /users/me [get]
 func (u *User_controllers) GET_me(c *gin.Context) {
 
-	user_id, err := c.Cookie("user_id")
-	if err != nil {
-		c.JSON(400, gin.H{
-			"response": "No user found",
-		})
-		return
-	}
+	user_id := c.Keys["user_id"].(string)
 
 	//turn string id into bson object id
 	bson_user_id, err := primitive.ObjectIDFromHex(user_id)
@@ -107,13 +84,7 @@ func (u *User_controllers) PATCH_me(c *gin.Context) {
 	}
 
 	//get user id
-	user_id, err := c.Cookie("user_id")
-	if err != nil {
-		c.JSON(400, gin.H{
-			"response": "No user found",
-		})
-		return
-	}
+	user_id := c.Keys["user_id"].(string)
 
 	// //turn string id into bson object id
 	bson_user_id, err := primitive.ObjectIDFromHex(user_id)
@@ -198,9 +169,7 @@ func (u *User_controllers) POST_logout(c *gin.Context) {
 	}
 
 	//remove cookies
-	c.SetCookie("session_id", "", -1, "/", Cookie_Host, HTTPS_only, true)
-	c.SetCookie("user_id", "", -1, "/", Cookie_Host, HTTPS_only, true)
-	c.SetCookie("expires_at", "", -1, "/", Cookie_Host, HTTPS_only, true)
+	c.SetCookie("session_id", "", -1, "/", SessionManager.Cookie_Host, SessionManager.HTTPS_only, true)
 
 	c.JSON(200, gin.H{
 		"response": "Logged out",
@@ -250,7 +219,6 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 
 	//check if the user already exists
 	user := DBManager.DB.Collection("users").FindOne(context.Background(), bson.M{"email": credentials.Email})
-	fmt.Println(user)
 	if user.Err() == nil {
 		// check if password is correct
 		var result models.User
@@ -262,7 +230,7 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 			return
 		}
 		passwordHash := result.PasswordHash
-		if PasswordHasher.CheckPassword(credentials.Password, passwordHash) {
+		if PasswordHasher.Check_Password(credentials.Password, passwordHash) {
 			c.JSON(400, gin.H{
 				"response": "Account with this email, already exists",
 			})
@@ -271,10 +239,11 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 		c.JSON(400, gin.H{
 			"response": "Unable to create account 2",
 		})
+		return
 	}
 
 	//hash the password
-	password_hash, err := PasswordHasher.HashPassword(credentials.Password)
+	password_hash, err := PasswordHasher.Hash_Password(credentials.Password)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"response": "Unable to create account 3",
@@ -288,29 +257,10 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 		ID:                    &objectID,
 		Email:                 credentials.Email,
 		PasswordHash:          password_hash,
-		Verified:              false,
+		Verified_email:        false,
+		Verified_phone_number: false,
 		MediaFiles:            []string{},
-		ThirdPartyConnections: make(map[string]string),
-	}
-
-	third_party_provider, err := c.Cookie("thirdParty_provider")
-	if err == nil { // if there is a provider check for a third party id
-		third_party_expire, err := c.Cookie("thirdparty_expires")
-		if err == nil {
-			if cookie_expirey_check(third_party_expire) { //if the cookie has expired then we remove the cookies
-				fmt.Println("Third party cookie has expired")
-				c.SetCookie("thirdParty_provider", "", -1, "/", "localhost", false, true) //remove the cookies
-				c.SetCookie("thirdParty_id", "", -1, "/", "localhost", false, true)
-				c.SetCookie("thirdparty_expires", "", -1, "/", "localhost", false, true)
-			} else {
-				third_party_id, err := c.Cookie("thirdParty_id")
-				if err != nil { //if there is none print a message
-					fmt.Println("No third party id found")
-				} else { // if there is one then we push the two to the map
-					new_user.ThirdPartyConnections = map[string]string{"provider": third_party_provider, "third_party_id": third_party_id}
-				}
-			}
-		}
+		Providers:             make(map[string]models.Provider),
 	}
 
 	_, err = DBManager.DB.Collection("users").InsertOne(context.Background(), new_user)
@@ -372,7 +322,7 @@ func (u *User_controllers) POST_login(c *gin.Context) {
 	}
 
 	passwordHash := result.PasswordHash
-	if !PasswordHasher.CheckPassword(credentials.Password, passwordHash) {
+	if !PasswordHasher.Check_Password(credentials.Password, passwordHash) {
 		c.JSON(400, gin.H{
 			"response": "Incorrect password",
 		})
@@ -401,23 +351,8 @@ func (u *User_controllers) POST_login(c *gin.Context) {
 		}
 	}
 
-	cookie := generate_secure_cookie(result)
-
-	//set cookie
-	c.SetCookie("session_id", cookie["session_id"].(string), 3600, "/", "/", false, true)
-	c.SetCookie("user_id", cookie["user_id"].(string), 3600, "/", "/", false, true)
-	c.SetCookie("expires_at", cookie["expires_at"].(string), 3600, "/", "/", false, true)
-
-	//turn cookie into bson to store in database
-	session_bson := bson.M{
-		"session_id": cookie["session_id"].(string),
-		"user_id":    cookie["user_id"].(string),
-		"expires_at": cookie["expires_at"].(string),
-	}
-
-	//add session to session_ids collection
-	_, err = DBManager.DB.Collection("session_ids").InsertOne(context.Background(), bson.M{cookie["session_id"].(string): session_bson})
-
+	//create a new session
+	_, err = SessionManager.Create_Session(result.ID.Hex(), c)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"response": "Unable to login",
@@ -431,38 +366,23 @@ func (u *User_controllers) POST_login(c *gin.Context) {
 	})
 }
 
-func generate_secure_cookie(user models.User) gin.H {
-	now := time.Now()
-	expires := now.AddDate(0, 0, 7)
+// @Summary User test route
+// @Schemes
+// @Description returns a string from user routes
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200 {string} Hello from user routes
+// @Router /users/Testing_Context [get]
+func (u *User_controllers) Testing_Context(c *gin.Context) {
+	session_id := c.Keys["session_id"]
+	user_id := c.Keys["user_id"]
 
-	expires_string := expires.Format(time.RFC1123)
-
-	cookie := gin.H{
-		"user_id":    user.ID.Hex(),
-		"session_id": generate_secure_token(32),
-		"expires_at": expires_string,
-	}
-
-	return cookie
-}
-
-func generate_secure_token(length int) string {
-	b := make([]byte, length)
-	if _, err := rand.Read(b); err != nil {
-		return ""
-	}
-	return hex.EncodeToString(b)
-}
-
-func cookie_expirey_check(expiry string) bool {
-	expiry_time, err := time.Parse(time.RFC1123, expiry)
-	if err != nil {
-		return true
-	}
-
-	if expiry_time.Before(time.Now()) {
-		return true
-	}
-
-	return false
+	c.JSON(200, gin.H{
+		"session_id":  session_id,
+		"user_id":     user_id,
+		"expires_at":  c.Keys["expires_at"],
+		"created_at":  c.Keys["created_at"],
+		"permissions": c.Keys["permissions"],
+	})
 }

@@ -16,8 +16,8 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/auth/google": {
-            "get": {
-                "description": "Begins the google auth process",
+            "post": {
+                "description": "Accepts jwt idToken from flutter and sets session cookies",
                 "consumes": [
                     "application/json"
                 ],
@@ -27,33 +27,19 @@ const docTemplate = `{
                 "tags": [
                     "Auth"
                 ],
-                "summary": "Begin Google Auth",
+                "summary": "Google Auth",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "idToken",
+                        "name": "idToken",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Google Auth Started",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/auth/google/callback": {
-            "get": {
-                "description": "Callback for google auth",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "Google OAuth Callback",
-                "responses": {
-                    "200": {
-                        "description": "Google Auth Callback",
                         "schema": {
                             "type": "string"
                         }
@@ -180,6 +166,107 @@ const docTemplate = `{
                         "required": true
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/twilio/send-sms": {
+            "post": {
+                "description": "Send an SMS message",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Twilio"
+                ],
+                "summary": "Send SMS",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Recipient phone number",
+                        "name": "to",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Message body",
+                        "name": "body",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "SMS sent successfully!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/twilio/verify-phone": {
+            "post": {
+                "description": "Verify a phone number",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Twilio"
+                ],
+                "summary": "Verify Phone Number",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Recipient phone number",
+                        "name": "to",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Verification code",
+                        "name": "code",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Phone number verified successfully!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/Testing_Context": {
+            "get": {
+                "description": "returns a string from user routes",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "User test route",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -363,6 +450,52 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/webAuth/google": {
+            "get": {
+                "description": "Begins the google auth process",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Web Auth"
+                ],
+                "summary": "Begin Google Auth",
+                "responses": {
+                    "200": {
+                        "description": "Google Auth Started",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/webAuth/google/callback": {
+            "get": {
+                "description": "Callback for google auth",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Web Auth"
+                ],
+                "summary": "Google OAuth Callback",
+                "responses": {
+                    "200": {
+                        "description": "Google Auth Callback",
                         "schema": {
                             "type": "string"
                         }
