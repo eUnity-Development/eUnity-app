@@ -108,6 +108,7 @@ class _IndividualTextFieldState extends State<IndividualTextField> {
       child: Stack(
         children: [
           TextField(
+            keyboardType: TextInputType.number,
             textInputAction: TextInputAction.next,
             style: const TextStyle(fontSize: 14),
             maxLength: 1,
