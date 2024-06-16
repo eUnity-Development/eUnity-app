@@ -1,6 +1,8 @@
 import 'package:eunity/classes/DesignVariables.dart';
+import 'package:eunity/classes/UserInfoHelper.dart';
 import 'package:eunity/widgets/LoginSignup/login_signup_button_content.dart';
 import 'package:eunity/widgets/NameDOBGender/birthday_section.dart';
+import 'package:eunity/widgets/SelectionWidgets/SelectionFunction.dart';
 import 'package:eunity/widgets/TopBars/PushedScreenTopBar.dart';
 import 'package:flutter/material.dart';
 
@@ -37,6 +39,14 @@ class _NameDOBGender extends State<NameDOBGender> {
   final FocusNode _yearFocus2 = FocusNode();
   final FocusNode _yearFocus3 = FocusNode();
   final FocusNode _yearFocus4 = FocusNode();
+
+  String buttonText = 'Non-Binary';
+
+  void reRender() {
+    setState(() {
+      buttonText = UserInfoHelper.userInfoCache['userGender'] ?? 'Non-Binary';
+    });
+  }
 
   void onClick() {
     print('CLICKED!');
@@ -344,7 +354,17 @@ class _NameDOBGender extends State<NameDOBGender> {
           // Gender selection: more options
           LoginSignupButton(
             color: Colors.transparent,
-            onTap: onClick,
+            onTap: () =>
+            showSelectDialog(
+              reRender: reRender,
+              context: context,
+              options: ['Agender', 'Gender Fluid', 'Non-Binary'],
+              cacheKey: 'userGender',
+              question: 'Select your gender',
+              assetPath: 'None',
+              multiSelect: false,
+            )
+          ,
             borderColor: DesignVariables.greyLines,
             height: 48 * DesignVariables.heightConversion,
             width: 393 * DesignVariables.widthConversion,
@@ -352,7 +372,7 @@ class _NameDOBGender extends State<NameDOBGender> {
               svgOffset: 15 * DesignVariables.widthConversion, 
               svgPath: 'assets/icons/chevron-right.svg', 
               svgDimensions: 20, 
-              text: 'More Options', 
+              text: buttonText,
               fontSize: 14, 
               fontColor: Colors.black.withOpacity(0.5),
               isRight: true,

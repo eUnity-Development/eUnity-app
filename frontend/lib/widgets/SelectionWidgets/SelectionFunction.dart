@@ -1,0 +1,29 @@
+import 'package:flutter/material.dart';
+import 'package:eunity/widgets/SelectionWidgets/SelectionDialog.dart';
+
+void showSelectDialog({
+  required BuildContext context,
+  required List<String> options,
+  required String question,
+  required String assetPath,
+  required String cacheKey,
+  required bool multiSelect,
+  required reRender,
+}) {
+  showModalBottomSheet(
+    context: context,
+    backgroundColor: Colors.white,
+    builder: (BuildContext context) {
+      return SelectionDialog(
+        options: options,
+        question: question,
+        assetPath: assetPath,
+        cacheKey: cacheKey,
+        multiSelect: multiSelect,
+      );
+    },
+  ).then((value) {
+    reRender();
+  });
+}
+
