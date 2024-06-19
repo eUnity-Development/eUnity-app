@@ -1,11 +1,13 @@
 import 'package:eunity/classes/AuthHelper.dart';
 import 'package:eunity/views/EditProfile.dart';
 import 'package:eunity/views/LoginSignup.dart';
+import 'package:eunity/views/ReportIssue.dart';
 import 'package:eunity/views/ReportScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:eunity/classes/DesignVariables.dart';
 import 'package:eunity/views/FeedbackScreen.dart';
 import 'package:eunity/classes/UserInfoHelper.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -61,6 +63,14 @@ class _ProfileState extends State<Profile> {
     );
   }
 
+  void navigateToReportIssue() async {
+    print('clicked report issue');
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ReportIssue()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     void navigateBackToLogin() {
@@ -75,57 +85,147 @@ class _ProfileState extends State<Profile> {
       navigateBackToLogin();
     }
 
+    Widget menuButton(String assetPath, String buttonLabel, double iconHeight) {
+      return Container(
+        height: 34,
+        width: 162,
+        decoration: BoxDecoration(
+            border: Border.all(color: DesignVariables.greyLines, width: 1),
+            borderRadius: BorderRadius.circular(25)),
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                assetPath,
+                height: iconHeight,
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Text(
+                buttonLabel,
+                style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 18,
+                    color: Colors.black),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
-      body: Center(
+      backgroundColor: Colors.white,
+      body: Padding(
+        padding: const EdgeInsets.only(top: 50, bottom: 100),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            GestureDetector(
-              child: Container(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(
-                          width: 1, color: DesignVariables.greyLines),
-                      color: DesignVariables.primaryRed),
-                  height: 51,
-                  width: 207,
-                  child: Center(
-                    child: Text(
-                      "Test Feedback Button",
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.black, width: 1),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color.fromARGB(64, 0, 0, 0),
+                          spreadRadius: 0,
+                          blurRadius: 4 * DesignVariables.widthConversion,
+                          offset:
+                              Offset(0, 4 * DesignVariables.heightConversion),
+                        ),
+                      ]),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    backgroundImage:
+                        AssetImage('assets/FakePeople/StephanieBrown.png'),
+                    radius: 69 * DesignVariables.widthConversion,
+                  ),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Column(
+                  children: [
+                    Text(
+                      "Stephanie Brown",
                       style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600),
+                          fontWeight: FontWeight.w700,
+                          fontSize: 18,
+                          color: Colors.black),
                     ),
-                  )),
-              onTap: navigateToFeedback,
+                    SizedBox(
+                      height: 5,
+                    ),
+                    GestureDetector(
+                      child: menuButton(
+                          "assets/MiscIcons/icon-pencil-square.svg",
+                          'Edit Profile',
+                          24),
+                      onTap: navigateToEditProfile,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    menuButton(
+                        "assets/MiscIcons/icon-gear.svg", 'Settings', 18),
+                  ],
+                )
+              ],
             ),
-            const SizedBox(
-              height: 15,
-            ),
-            GestureDetector(
-              child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(
-                          width: 1, color: DesignVariables.greyLines),
-                      color: DesignVariables.primaryRed),
-                  height: 51,
-                  width: 207,
-                  child: Center(
-                    child: Text(
-                      "Go To Edit Profile",
+            Padding(
+                padding: EdgeInsets.symmetric(horizontal: 50),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          "Bio",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 24),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                       style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  )),
-              onTap: navigateToEditProfile,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12,
+                          color: Colors.black),
+                    )
+                  ],
+                )),
+            Spacer(),
+            Text(
+              "Share your Feedback",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 24),
             ),
-            const SizedBox(
-              height: 15,
+            SizedBox(
+              height: 6,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                GestureDetector(
+                  child: menuButton(
+                      "assets/MiscIcons/icon-thumbsup.svg", 'Feedback', 18),
+                  onTap: navigateToFeedback,
+                ),
+                GestureDetector(
+                  child: menuButton("assets/MiscIcons/icon-megaphone.svg",
+                      'Report Issue', 24),
+                  onTap: navigateToReportIssue,
+                ),
+              ],
             ),
             GestureDetector(
               child: Container(
@@ -138,7 +238,7 @@ class _ProfileState extends State<Profile> {
                   width: 207,
                   child: Center(
                     child: Text(
-                      "Test Report Screen",
+                      "Test Report User",
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 16,
@@ -146,24 +246,6 @@ class _ProfileState extends State<Profile> {
                     ),
                   )),
               onTap: navigateToReportTest,
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            ElevatedButton(
-                onPressed: () => {
-                      handleSignOut(),
-                      setState(() {
-                        signingOut = true;
-                      })
-                    },
-                child: const Text("Sign Out")),
-            Visibility(
-              visible: signingOut,
-              child: CircularProgressIndicator(
-                valueColor:
-                    AlwaysStoppedAnimation<Color>(DesignVariables.primaryRed),
-              ),
             ),
           ],
         ),
