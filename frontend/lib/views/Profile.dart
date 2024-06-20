@@ -3,6 +3,7 @@ import 'package:eunity/views/EditProfile.dart';
 import 'package:eunity/views/LoginSignup.dart';
 import 'package:eunity/views/ReportIssue.dart';
 import 'package:eunity/views/ReportScreen.dart';
+import 'package:eunity/views/Settings.dart';
 import 'package:flutter/material.dart';
 import 'package:eunity/classes/DesignVariables.dart';
 import 'package:eunity/views/FeedbackScreen.dart';
@@ -68,6 +69,14 @@ class _ProfileState extends State<Profile> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => ReportIssue()),
+    );
+  }
+
+  void navigateToSettings() async {
+    print('clicked settings');
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Settings()),
     );
   }
 
@@ -171,8 +180,11 @@ class _ProfileState extends State<Profile> {
                     SizedBox(
                       height: 10,
                     ),
-                    menuButton(
-                        "assets/MiscIcons/icon-gear.svg", 'Settings', 18),
+                    GestureDetector(
+                      child: menuButton(
+                          "assets/MiscIcons/icon-gear.svg", 'Settings', 18),
+                      onTap: navigateToSettings,
+                    ),
                   ],
                 )
               ],
