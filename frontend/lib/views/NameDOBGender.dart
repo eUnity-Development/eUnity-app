@@ -1,7 +1,7 @@
 import 'package:eunity/classes/DesignVariables.dart';
 import 'package:eunity/classes/UserInfoHelper.dart';
 import 'package:eunity/widgets/LoginSignup/login_signup_button_content.dart';
-import 'package:eunity/widgets/NameDOBGender/birthday_section.dart';
+import 'package:eunity/widgets/NameDOBGender/birthday_classes.dart';
 import 'package:eunity/widgets/SelectionWidgets/SelectionFunction.dart';
 import 'package:eunity/widgets/TopBars/PushedScreenTopBar.dart';
 import 'package:flutter/material.dart';
@@ -76,7 +76,7 @@ class _NameDOBGender extends State<NameDOBGender> {
   }
 
   void onNext() {
-    print('Next!');
+    print('Pressed next button');
   }
 
   @override

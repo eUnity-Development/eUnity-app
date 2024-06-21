@@ -76,10 +76,10 @@ class IndividualTextField extends StatefulWidget {
   });
 
   @override
-  _IndividualTextFieldState createState() => _IndividualTextFieldState();
+  IndividualTextFieldState createState() => IndividualTextFieldState();
 }
 
-class _IndividualTextFieldState extends State<IndividualTextField> {
+class IndividualTextFieldState extends State<IndividualTextField> {
   late String _currentHintText;
 
   @override
@@ -103,7 +103,7 @@ class _IndividualTextFieldState extends State<IndividualTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 15,
       child: Stack(
         children: [
