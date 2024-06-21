@@ -40,16 +40,39 @@ class _NameDOBGender extends State<NameDOBGender> {
   final FocusNode _yearFocus3 = FocusNode();
   final FocusNode _yearFocus4 = FocusNode();
 
-  String buttonText = 'Non-Binary';
+  // Index determines which gender is selected
+  int activeButtonIndex = -1;
+  String nonBinaryButtonText = 'Non-Binary';
+  List<String> genderOptions = [];
 
-  void reRender() {
+  // Button that the user selects is the 'active' button
+  void setActiveButtonIndex(int index) {
     setState(() {
-      buttonText = UserInfoHelper.userInfoCache['userGender'] ?? 'Non-Binary';
+      activeButtonIndex = index;
+      UserInfoHelper.userInfoCache['userGender'] = genderOptions[index];
     });
   }
 
-  void onClick() {
-    print('CLICKED!');
+  // Update Non-Binary button text after selection
+  void updateNonBinaryGender() {
+    setState(() {
+      nonBinaryButtonText = UserInfoHelper.userInfoCache['userGenderOptions'] ?? 'Non-Binary';
+    });
+  }
+
+  // OnTap for Non-Binary button so it works w/ selection pop-up
+  void selectNonBinary() {
+    showSelectDialog(
+      reRender: updateNonBinaryGender,
+      context: context,
+      options: ['Agender', 'Gender Fluid', 'Non-Binary'],
+      cacheKey: 'userGenderOptions',
+      question: 'Select your gender',
+      assetPath: 'None',
+      multiSelect: false,
+    );
+    UserInfoHelper.userInfoCache['userGender'] = UserInfoHelper.userInfoCache['userGenderOptions'];
+    setActiveButtonIndex(2);
   }
 
   @override
@@ -78,6 +101,8 @@ class _NameDOBGender extends State<NameDOBGender> {
 
   @override
   Widget build(BuildContext context) {
+    genderOptions  = ['Man', 'Woman', nonBinaryButtonText];
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       
@@ -313,17 +338,19 @@ class _NameDOBGender extends State<NameDOBGender> {
 
           const BoxGap(width: 0, height: 30),
 
-          // Gender selection: man
+          // Gender selection: Man - Index 0
           LoginSignupButton(
             color: Colors.transparent,
-            onTap: onClick,
-            borderColor: DesignVariables.greyLines,
+            onTap: () => setActiveButtonIndex(0),
+            borderColor: activeButtonIndex == 0 ? 
+              DesignVariables.primaryRed : DesignVariables.greyLines,
             height: 48 * DesignVariables.heightConversion,
             width: 393 * DesignVariables.widthConversion,
             buttonContent: Text(
-              'Man',
+              genderOptions[0],
               style: TextStyle(
-                color: Colors.black.withOpacity(0.5),
+                color: activeButtonIndex == 0 ? 
+                  DesignVariables.primaryRed : Colors.black.withOpacity(0.5),
                 fontWeight: FontWeight.w500,
                 fontSize: 14
               ),
@@ -332,17 +359,19 @@ class _NameDOBGender extends State<NameDOBGender> {
 
           const BoxGap(width: 0, height: 13),
 
-          // Gender selection: woman
+          // Gender selection: Woman - Index 1
           LoginSignupButton(
             color: Colors.transparent,
-            onTap: onClick,
-            borderColor: DesignVariables.greyLines,
+            onTap: () => setActiveButtonIndex(1),
+            borderColor: activeButtonIndex == 1 ? 
+              DesignVariables.primaryRed : DesignVariables.greyLines,
             height: 48 * DesignVariables.heightConversion,
             width: 393 * DesignVariables.widthConversion,
             buttonContent: Text(
-              'Woman',
+              genderOptions[1],
               style: TextStyle(
-                color: Colors.black.withOpacity(0.5),
+                color: activeButtonIndex == 1 ? 
+                  DesignVariables.primaryRed : Colors.black.withOpacity(0.5),
                 fontWeight: FontWeight.w500,
                 fontSize: 14
               ),
@@ -351,30 +380,23 @@ class _NameDOBGender extends State<NameDOBGender> {
 
           const BoxGap(width: 0, height: 13),
 
-          // Gender selection: more options
+          // Gender selection: Non-Binary - Index 2
           LoginSignupButton(
             color: Colors.transparent,
-            onTap: () =>
-            showSelectDialog(
-              reRender: reRender,
-              context: context,
-              options: ['Agender', 'Gender Fluid', 'Non-Binary'],
-              cacheKey: 'userGender',
-              question: 'Select your gender',
-              assetPath: 'None',
-              multiSelect: false,
-            )
-          ,
-            borderColor: DesignVariables.greyLines,
+            onTap: () => selectNonBinary(),
+            borderColor: activeButtonIndex == 2 ? 
+              DesignVariables.primaryRed : DesignVariables.greyLines,
             height: 48 * DesignVariables.heightConversion,
             width: 393 * DesignVariables.widthConversion,
             buttonContent: LoginSignupButtonContent(
               svgOffset: 15 * DesignVariables.widthConversion, 
-              svgPath: 'assets/icons/chevron-right.svg', 
+              svgPath: activeButtonIndex == 2 ? 
+                'assets/icons/chevron-right-select.svg' : 'assets/icons/chevron-right.svg', 
               svgDimensions: 20, 
-              text: buttonText,
+              text: nonBinaryButtonText,
               fontSize: 14, 
-              fontColor: Colors.black.withOpacity(0.5),
+              fontColor: activeButtonIndex == 2 ? 
+                DesignVariables.primaryRed : Colors.black.withOpacity(0.5),
               isRight: true,
               fontWeight: FontWeight.w500,            
             )
