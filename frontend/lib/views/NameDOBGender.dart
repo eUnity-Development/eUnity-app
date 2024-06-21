@@ -75,6 +75,10 @@ class _NameDOBGender extends State<NameDOBGender> {
     setActiveButtonIndex(2);
   }
 
+  void onNext() {
+    print('Next!');
+  }
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -401,6 +405,29 @@ class _NameDOBGender extends State<NameDOBGender> {
               fontWeight: FontWeight.w500,            
             )
           ),
+
+          const Spacer(),
+
+          LoginSignupButton(
+            color: DesignVariables.primaryRed, 
+            onTap: onNext, 
+            borderColor: Colors.transparent, 
+            height: 52 * DesignVariables.heightConversion, 
+            width: 334.67 * DesignVariables.widthConversion, 
+            buttonContent: 
+              LoginSignupButtonContent(
+                svgOffset: 18 * DesignVariables.widthConversion,
+                svgPath: 'assets/icons/arrow-long-left.svg',
+                svgDimensions: 36,
+                text: 'Next',
+                fontSize: 22,
+                fontColor: Colors.white,
+                isRight: true,
+                fontWeight: FontWeight.w700,
+              )
+          ),
+
+          const BoxGap(width: 0, height: 36),
         ],
           
       ))
