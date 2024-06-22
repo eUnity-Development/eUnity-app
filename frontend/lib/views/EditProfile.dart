@@ -19,6 +19,7 @@ class _EditProfileState extends State<EditProfile> {
   List imageArray = [];
   int selectedImageGrid = 0;
   int draggingImageGrid = -1;
+  TextEditingController bioController = TextEditingController();
 
   @override
   void initState() {
@@ -152,72 +153,133 @@ class _EditProfileState extends State<EditProfile> {
           });
     }
 
+    Widget gridItem(int index) {
+      return GestureDetector(
+        child: (imageArray.length <= index)
+            ? NewImageSquare()
+            : EditImageSquare(
+                imageURL: UserInfoHelper.getPublicImageURL(imageArray[index])),
+        onTap: () {
+          setState(() {
+            selectedImageGrid = index;
+            openCameraDialog(context);
+          });
+        },
+      );
+    }
+
     Widget gridOption(int index) {
-      Widget gridCore() {
-        return GestureDetector(
-          child: ((imageArray.length < index + 1)
-              ? NewImageSquare()
-              : EditImageSquare(
-                  imageURL:
-                      UserInfoHelper.getPublicImageURL(imageArray[index]))),
-          onTap: () {
+      if (index >= imageArray.length) {
+        return gridItem(index);
+      }
+      return LongPressDraggable<int>(
+        data: index,
+        feedback: gridItem(index),
+        childWhenDragging: Container(
+          decoration: BoxDecoration(
+              color: DesignVariables.greyLines,
+              borderRadius:
+                  BorderRadius.circular(21 * DesignVariables.heightConversion)),
+        ),
+        child: DragTarget<int>(
+          builder: (BuildContext context, List<int?> candidateData,
+              List<dynamic> rejectedData) {
+            return gridItem(index);
+          },
+          onAccept: (int fromIndex) {
             setState(() {
-              selectedImageGrid = index;
-              openCameraDialog(context);
+              if (fromIndex < imageArray.length && index < imageArray.length) {
+                final fromItem = imageArray.removeAt(fromIndex);
+                imageArray.insert(index, fromItem);
+              }
             });
           },
-        );
-      }
+        ),
+      );
+    }
 
-      return LongPressDraggable(
-        child: (draggingImageGrid == index)
-            ? SizedBox(
-                height: 140 * DesignVariables.heightConversion,
-                width: 140 * DesignVariables.widthConversion,
-              )
-            : gridCore(),
-        feedback: gridCore(),
-        onDragStarted: () {
-          setState(() {
-            draggingImageGrid = index;
-          });
-        },
-        onDraggableCanceled: (velocity, offset) {
-          print(offset.dx);
-          print(offset.dy);
-          setState(() {
-            draggingImageGrid = -1;
-          });
+    List<int> items = List<int>.generate(9, (index) => index);
+
+    void onReorder(int oldIndex, int newIndex) {
+      setState(() {
+        if (newIndex > oldIndex) {
+          newIndex -= 1;
+        }
+        final int item = items.removeAt(oldIndex);
+        items.insert(newIndex, item);
+      });
+    }
+
+    Widget imageGrid() {
+      return GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3, // Number of columns
+          crossAxisSpacing: 10, // Horizontal spacing between grid items
+          mainAxisSpacing: 10, // Vertical spacing between grid items
+        ),
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: 9, // Total number of items (3x3 grid)
+        itemBuilder: (context, index) {
+          return gridOption(index);
         },
       );
     }
 
-    Widget imageGrids() {
-      return Column(
-        children: [
-          Row(
-            children: [gridOption(0), gridOption(1), gridOption(2)],
-          ),
-          Row(
-            children: [gridOption(3), gridOption(4), gridOption(5)],
-          ),
-          Row(
-            children: [gridOption(6), gridOption(7), gridOption(8)],
-          ),
-        ],
-      );
-    }
+    TextStyle headerStyle = const TextStyle(
+        color: Colors.black, fontSize: 24, fontWeight: FontWeight.w700);
+
+    const TextStyle hintStyle = TextStyle(
+        fontWeight: FontWeight.w400,
+        fontSize: 13,
+        color: Color.fromARGB(128, 0, 0, 0));
+
+    BoxDecoration textFieldDecorator = BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(width: 1, color: DesignVariables.greyLines));
 
     return Scaffold(
       appBar: NoLogoTopBar(title: "Edit Profile"),
-      body: Column(children: [
-        Text(
-          "Photos",
-          style: TextStyle(
-              color: Colors.black, fontSize: 24, fontWeight: FontWeight.w700),
-        ),
-        imageGrids(),
-      ]),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(
+            "Photos",
+            style: headerStyle,
+          ),
+          Container(
+            child: imageGrid(),
+            height: 400,
+          ),
+          Text(
+            "Bio",
+            style: headerStyle,
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+            decoration: textFieldDecorator,
+            height: 120,
+            width: double.infinity,
+            child: TextField(
+              controller: bioController,
+              maxLines: null,
+              maxLength: 500,
+              keyboardType: TextInputType.multiline,
+              decoration: InputDecoration(
+                hintText: "Enter Bio Here",
+                hintStyle: hintStyle,
+                hintMaxLines: 100,
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+        ]),
+      ),
     );
+  }
+
+  @override
+  void dispose() {
+    bioController.dispose();
+    super.dispose();
   }
 }

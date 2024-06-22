@@ -1,4 +1,6 @@
+import 'package:eunity/classes/AuthHelper.dart';
 import 'package:eunity/classes/DesignVariables.dart';
+import 'package:eunity/home.dart';
 import 'package:eunity/widgets/TopBars/NoLogoTopBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,6 +13,14 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+  Future<void> executeLogout() async {
+    await AuthHelper.signOut();
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => Home()),
+      (Route<dynamic> route) => false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     TextStyle headerStyle = const TextStyle(
@@ -147,8 +157,9 @@ class _SettingsState extends State<Settings> {
                     ),
                   ),
                 ),
-                onTap: () {
+                onTap: () async {
                   print("Clicked Logout");
+                  await executeLogout();
                 },
               ),
             ),
