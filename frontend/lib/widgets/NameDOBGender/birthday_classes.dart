@@ -35,10 +35,7 @@ class DOBSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
+    return Container(
           height: height,
           width: width,
           
@@ -49,14 +46,12 @@ class DOBSection extends StatelessWidget {
 
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            //crossAxisAlignment: CrossAxisAlignment.center,
             
             children: inputs,
           )
-        )
+        );
 
-      ],
-    );
   }
 }
 
@@ -81,6 +76,7 @@ class IndividualTextField extends StatefulWidget {
 
 class IndividualTextFieldState extends State<IndividualTextField> {
   late String _currentHintText;
+  TextAlign alignment = TextAlign.center;
 
   @override
   void initState() {
@@ -104,36 +100,43 @@ class IndividualTextFieldState extends State<IndividualTextField> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 15,
-      child: Stack(
+      width: 14,
+      child: Center( child: Stack(
         children: [
-          TextField(
+          // TextField with 1 entry and numbers only
+          TextFormField(
+            //textAlignVertical: TextAlignVertical.center,
+            maxLength: 1,
+            textAlign: alignment,
             keyboardType: TextInputType.number,
             textInputAction: TextInputAction.next,
             style: const TextStyle(fontSize: 14),
-            maxLength: 1,
             controller: widget.controller,
             focusNode: widget.focusNode,
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.only(bottom: 2),
+            decoration: InputDecoration(  
               hintText: _currentHintText,
               hintStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
               border: InputBorder.none,
+              counterText: "",
             ),
 
-            textAlignVertical: TextAlignVertical.center,
-            textAlign: TextAlign.center,
-
+            // When user types in a value, input isn't centered with TextAlign.center
+            // so we use TextAlign.right to get it closer to center. Not sure why it
+            // behaves like this...
             onChanged: (value) {
               if (value.isNotEmpty) {
                 widget.nextFocusNode?.requestFocus();
+                alignment = TextAlign.right;
+
               } else if (value.isEmpty) {
                 widget.focusNode.previousFocus();
+                alignment = TextAlign.center;
               }
             },
 
           ),
 
+          // Line underneath textfield
           Positioned(
             left: 0,
             right: 0,
@@ -141,7 +144,7 @@ class IndividualTextFieldState extends State<IndividualTextField> {
             child: Divider(color: Colors.black.withOpacity(0.5)),
           ),
         ],
-      ),
+      )),
     );
   }
 }

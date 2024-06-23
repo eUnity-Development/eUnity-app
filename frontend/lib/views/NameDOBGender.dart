@@ -212,7 +212,9 @@ class _NameDOBGender extends State<NameDOBGender> {
 
             const BoxGap(width: 0, height: 30),
 
-            Row(children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
               // Month section
               DOBSection(
               width: 95.53 * DesignVariables.widthConversion, 
