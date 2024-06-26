@@ -5,6 +5,7 @@ class User extends Equatable {
   final String name;
   final int age;
   final List<String> imageUrls;
+  final List<String> interests;
   final String sexPref;
   final String height;
   final String distance;
@@ -16,6 +17,7 @@ class User extends Equatable {
     required this.name,
     required this.age,
     required this.imageUrls,
+    required this.interests,
     required this.bio,
     required this.jobTitle,
     required this.height,
@@ -29,6 +31,7 @@ class User extends Equatable {
     name,
     age,
     imageUrls,
+    interests,
     bio,
     jobTitle,
     sexPref,
@@ -48,7 +51,8 @@ class User extends Equatable {
       bio: "Bookworm by day, trailblazer by weekend. I'm equally at home lost in a gripping novel or conquering new peaks. When I'm not adventuring outdoors, you'll find me cozying up to a good movie or diving into the virtual worlds of gaming.",
       sexPref: 'Straight',
       height: '5ft 7in',
-      distance: '3.8 miles away'
+      distance: '3.8 miles away',
+      interests: ['Gaming', 'Reading', 'Cooking', 'Testing']
     ),
     User(
       id: 2,
@@ -61,7 +65,8 @@ class User extends Equatable {
       bio: 'Test',
       sexPref: 'Straight',
       height: '5ft 3in',
-      distance: '6.2 miles away'
+      distance: '6.2 miles away',
+      interests: ['Gaming', 'Reading', 'Cooking']
     ),
     User(
       id: 3,
@@ -74,7 +79,8 @@ class User extends Equatable {
       bio: 'Test',
       sexPref: 'Straight',
       height: '5ft 7in',
-      distance: '3.8 miles away'
+      distance: '3.8 miles away',
+      interests: ['Gaming', 'Reading', 'Cooking']
     ),
     User(
       id: 4,
@@ -87,7 +93,8 @@ class User extends Equatable {
       bio: 'Test',
       sexPref: 'Straight',
       height: '5ft 3in',
-      distance: '6.2 miles away'
+      distance: '6.2 miles away',
+      interests: ['Gaming', 'Reading', 'Cooking']
     ),
   ];
   

@@ -1,5 +1,6 @@
 import 'package:eunity/models/models.dart';
 import 'package:flutter/material.dart';
+import 'package:rive/rive.dart' as rive;
 
 class Swiping extends StatefulWidget {
   const Swiping({Key? key});
@@ -15,6 +16,7 @@ class _SwipingState extends State<Swiping> with SingleTickerProviderStateMixin {
   late Animation<double> _heightScaleAnimation;
   late Animation<double> _profilePositionAnimation;
   int currentUserIndex = 0;
+  int interestIndex = 0;
 
   @override
   void initState() {
@@ -133,10 +135,10 @@ class _SwipingState extends State<Swiping> with SingleTickerProviderStateMixin {
                     Positioned(
                       top: (MediaQuery.of(context).size.height /
                               1.195*
-                              _heightScaleAnimation.value) +
-                          100,
+                              _heightScaleAnimation.value) ,
                       child: Column(
                         children: [
+                          InterestBuilder(user: User.users[currentUserIndex]),
                           UserHeaderInfo(
                               user: User.users[currentUserIndex],
                               textColor: Colors.black),
@@ -149,6 +151,7 @@ class _SwipingState extends State<Swiping> with SingleTickerProviderStateMixin {
                         ],
                       ),
                     ),
+                  
                 ],
               ),
             );
@@ -162,6 +165,55 @@ class _SwipingState extends State<Swiping> with SingleTickerProviderStateMixin {
     );
   }
 }
+
+class InterestBuilder extends StatelessWidget {
+  final User user;
+
+  const InterestBuilder({
+    Key? key,
+    required this.user,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 125, // Adjust the height to fit your design
+      width: MediaQuery.of(context).size.width, // Adjust the width to fit your design
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal, // Set the scroll direction to horizontal
+        itemCount: user.interests.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Stack(
+            alignment: Alignment.center,
+            children: [
+              SizedBox(
+                width: 100,
+                child: rive.RiveAnimation.asset(
+                  'assets/icons/MatchingInterest2.riv',
+                  animations: ['Timeline 1'], // specify your animation name
+                  fit: BoxFit.contain,
+                  alignment: Alignment.center,
+                ),
+              ),
+              Positioned(
+                top: 58,
+                child: Text(
+                  user.interests[index],
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+
 
 class ReactButtons extends StatelessWidget {
   final VoidCallback onHeartPressed;
@@ -324,16 +376,11 @@ class UserNameAge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '${user.name}, ${user.age}',
-          style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                color: textColor,
-              ),
-        ),
-      ],
+    return Text(
+      '${user.name}, ${user.age}',
+      style: Theme.of(context).textTheme.displaySmall?.copyWith(
+            color: textColor,
+          ),
     );
   }
 }
@@ -347,17 +394,12 @@ class UserHeaderInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '${user.sexPref} | ${user.height} | ${user.distance}',
-          style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                color: textColor,
-                fontSize: 18,
-              ),
-        ),
-      ],
+    return Text(
+      '${user.sexPref} | ${user.height} | ${user.distance}',
+      style: Theme.of(context).textTheme.displayMedium?.copyWith(
+            color: textColor,
+            fontSize: 18,
+          ),
     );
   }
 }
@@ -370,18 +412,13 @@ class UserBio extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          '${user.bio}',
-          softWrap: true,
-          style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                color: textColor,
-                fontSize: 12,
-              ),
-        ),
-      ],
+    return Text(
+      '${user.bio}',
+      softWrap: true,
+      style: Theme.of(context).textTheme.displayMedium?.copyWith(
+            color: textColor,
+            fontSize: 12,
+          ),
     );
   }
 }
