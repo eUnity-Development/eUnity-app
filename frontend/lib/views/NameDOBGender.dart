@@ -18,27 +18,8 @@ class NameDOBGender extends StatefulWidget {
 class _NameDOBGender extends State<NameDOBGender> {
   final TextEditingController _nameController = TextEditingController();
 
-  final TextEditingController _monthController1 = TextEditingController();
-  final TextEditingController _monthController2 = TextEditingController();
-
-  final TextEditingController _dayController1 = TextEditingController();
-  final TextEditingController _dayController2 = TextEditingController();
-
-  final TextEditingController _yearController1 = TextEditingController();
-  final TextEditingController _yearController2 = TextEditingController();
-  final TextEditingController _yearController3 = TextEditingController();
-  final TextEditingController _yearController4 = TextEditingController();
-
-  final FocusNode _monthFocus1 = FocusNode();
-  final FocusNode _monthFocus2 = FocusNode();
-
-  final FocusNode _dayFocus1 = FocusNode();
-  final FocusNode _dayFocus2 = FocusNode();
-
-  final FocusNode _yearFocus1 = FocusNode();
-  final FocusNode _yearFocus2 = FocusNode();
-  final FocusNode _yearFocus3 = FocusNode();
-  final FocusNode _yearFocus4 = FocusNode();
+  final List<TextEditingController> _dobControllers = List<TextEditingController>.generate(8, (int index) => TextEditingController());
+  final List<FocusNode> _dobFocusNodes = List<FocusNode>.generate(8, (int index) => FocusNode());
 
   // Index determines which gender is selected
   int activeButtonIndex = -1;
@@ -81,25 +62,11 @@ class _NameDOBGender extends State<NameDOBGender> {
 
   @override
   void dispose() {
+    for (int i = 0; i < 8; i++) {
+      _dobControllers[i].dispose();
+      _dobFocusNodes[i].dispose();
+    }
     _nameController.dispose();
-    _monthController1.dispose();
-    _monthController2.dispose();
-    _dayController1.dispose();
-    _dayController2.dispose();
-    _yearController1.dispose();
-    _yearController2.dispose();
-    _yearController3.dispose();
-    _yearController4.dispose();
-
-    _monthFocus1.dispose();
-    _monthFocus2.dispose();
-    _dayFocus1.dispose();
-    _dayFocus2.dispose();
-    _yearFocus1.dispose();
-    _yearFocus2.dispose();
-    _yearFocus3.dispose();
-    _yearFocus4.dispose();
-
     super.dispose();
   }
 
@@ -212,7 +179,14 @@ class _NameDOBGender extends State<NameDOBGender> {
 
             const BoxGap(width: 0, height: 30),
 
-            Row(
+            KeyboardListener(
+            focusNode: FocusNode(),
+            onKeyEvent: (value) => {
+              if (value.logicalKey.keyLabel == 'Backspace') {
+                print('BACKSPACE')
+              }
+            },
+             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
               // Month section
@@ -221,17 +195,17 @@ class _NameDOBGender extends State<NameDOBGender> {
               height: 48 * DesignVariables.heightConversion, 
               inputs: [
                 IndividualTextField(
-                  controller: _monthController1, 
+                  controller: _dobControllers[0], 
                   hintText: 'M',
-                  focusNode: _monthFocus1,
-                  nextFocusNode: _monthFocus2,
+                  focusNode: _dobFocusNodes[0],
+                  nextFocusNode: _dobFocusNodes[1],
                 ),
                 const SizedBox(width: 10),
                 IndividualTextField(
-                  controller: _monthController2, 
+                  controller: _dobControllers[1], 
                   hintText: 'M',
-                  focusNode: _monthFocus2,
-                  nextFocusNode: _dayFocus1,
+                  focusNode: _dobFocusNodes[1],
+                  nextFocusNode: _dobFocusNodes[2],
                 )
               ]
             ),
@@ -255,17 +229,17 @@ class _NameDOBGender extends State<NameDOBGender> {
               height: 48 * DesignVariables.heightConversion, 
               inputs: [
                 IndividualTextField(
-                  controller: _dayController1, 
+                  controller: _dobControllers[2], 
                   hintText: 'D',
-                  focusNode: _dayFocus1,
-                  nextFocusNode: _dayFocus2,
+                  focusNode: _dobFocusNodes[2],
+                  nextFocusNode: _dobFocusNodes[3],
                 ),
                 const SizedBox(width: 10),
                 IndividualTextField(
-                  controller: _dayController2, 
+                  controller: _dobControllers[3], 
                   hintText: 'D',
-                  focusNode: _dayFocus2,
-                  nextFocusNode: _yearFocus1,
+                  focusNode: _dobFocusNodes[3],
+                  nextFocusNode: _dobFocusNodes[4],
                 )
               ]
             ),
@@ -289,36 +263,36 @@ class _NameDOBGender extends State<NameDOBGender> {
               height: 48 * DesignVariables.heightConversion, 
               inputs: [
                 IndividualTextField(
-                  controller: _yearController1, 
+                  controller: _dobControllers[4], 
                   hintText: 'Y',
-                  focusNode: _yearFocus1,
-                  nextFocusNode: _yearFocus2,
+                  focusNode: _dobFocusNodes[4],
+                  nextFocusNode:  _dobFocusNodes[5],
                 ),
                 const BoxGap(width: 10, height: 0),
                 IndividualTextField(
-                  controller: _yearController2, 
+                  controller: _dobControllers[5], 
                   hintText: 'Y',
-                  focusNode: _yearFocus2,
-                  nextFocusNode: _yearFocus3,
+                  focusNode:  _dobFocusNodes[5],
+                  nextFocusNode:  _dobFocusNodes[6],
                 ),
                 const BoxGap(width: 10, height: 0),
                 IndividualTextField(
-                  controller: _yearController3, 
+                  controller: _dobControllers[6], 
                   hintText: 'Y',
-                  focusNode: _yearFocus3,
-                  nextFocusNode: _yearFocus4,
+                  focusNode:  _dobFocusNodes[6],
+                  nextFocusNode:  _dobFocusNodes[7],
                 ),
                 const BoxGap(width: 10, height: 0),
                 IndividualTextField(
-                  controller: _yearController4, 
+                  controller: _dobControllers[7], 
                   hintText: 'Y',
-                  focusNode: _yearFocus4,
+                  focusNode:  _dobFocusNodes[7],
                 ),
                 ]
               ), 
             ],
         
-          ),
+          )),
         
           const BoxGap(width: 0, height: 29),
 
