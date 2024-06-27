@@ -18,6 +18,8 @@ class _SwipingState extends State<Swiping> with SingleTickerProviderStateMixin {
   int currentUserIndex = 0;
   int interestIndex = 0;
 
+  final List<String> testInterests = ['gaming', 'reading', 'running'];
+
   @override
   void initState() {
     super.initState();
@@ -134,14 +136,19 @@ class _SwipingState extends State<Swiping> with SingleTickerProviderStateMixin {
                   if (isArrowPressed)
                     Positioned(
                       top: (MediaQuery.of(context).size.height /
-                              1.195*
+                              1.135*
                               _heightScaleAnimation.value) ,
                       child: Column(
                         children: [
                           InterestBuilder(user: User.users[currentUserIndex]),
-                          UserHeaderInfo(
-                              user: User.users[currentUserIndex],
-                              textColor: Colors.black),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 20.0, bottom: 10.0, right: 60.0),
+                            child: UserHeaderInfo(
+                                user: User.users[currentUserIndex],
+                                textColor: Colors.black,
+                                fontSize: 24,
+                                ),
+                          ),
                           SizedBox(
                             width: MediaQuery.of(context).size.width,
                             child: UserBio(
@@ -169,50 +176,85 @@ class _SwipingState extends State<Swiping> with SingleTickerProviderStateMixin {
 class InterestBuilder extends StatelessWidget {
   final User user;
 
-  const InterestBuilder({
-    Key? key,
+  InterestBuilder({
+    super.key,
     required this.user,
-  }) : super(key: key);
+  });
+
+  final List<String> testInterests = ['Gaming', 'Reading', 'Cooking'];
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 125, // Adjust the height to fit your design
-      width: MediaQuery.of(context).size.width, // Adjust the width to fit your design
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal, // Set the scroll direction to horizontal
-        itemCount: user.interests.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Stack(
-            alignment: Alignment.center,
-            children: [
-              SizedBox(
-                width: 100,
-                child: rive.RiveAnimation.asset(
-                  'assets/icons/MatchingInterest2.riv',
-                  animations: ['Timeline 1'], // specify your animation name
-                  fit: BoxFit.contain,
-                  alignment: Alignment.center,
-                ),
-              ),
-              Positioned(
-                top: 58,
-                child: Text(
-                  user.interests[index],
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+    Set<String> matchingStrings = testInterests.toSet().intersection(user.interests.toSet());
+
+    // Calculate the number of items per row based on the screen width
+    double screenWidth = MediaQuery.of(context).size.width;
+    int itemsPerRow = (screenWidth / 110).floor(); // 110 is the width + padding of each item
+
+    // Divide interests into rows
+    List<List<String>> rows = [];
+    for (int i = 0; i < user.interests.length; i += itemsPerRow) {
+      rows.add(user.interests.sublist(i, i + itemsPerRow > user.interests.length ? user.interests.length : i + itemsPerRow));
+    }
+
+    return Column(
+      children: rows.map((row) {
+        return SizedBox( // Use Container to adjust margin
+          height: 55,
+          width: screenWidth,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 30.0), // Gap of all interests from the left of screen
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: row.length,
+              itemBuilder: (BuildContext context, int index) {
+                String interest = row[index];
+                bool isMatching = matchingStrings.contains(interest);
+
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 2.0), // Reduce the gap between each interest
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      isMatching
+                          ? SizedBox(
+                              width: 90,
+                              child: rive.RiveAnimation.asset(
+                                'assets/icons/MatchingInterest4.riv',
+                                animations: ['Timeline 1'], // specify your animation name
+                                fit: BoxFit.contain,
+                                alignment: Alignment.center,
+                              ),
+                            )
+                          : SizedBox(
+                              width: 90,
+                              child: rive.RiveAnimation.asset(
+                                'assets/icons/NonMatchingInterest.riv',
+                                fit: BoxFit.contain,
+                                alignment: Alignment.center,
+                              ),
+                            ),
+                      Positioned(
+                        top: 32,
+                        child: Text(
+                          interest,
+                          style: TextStyle(
+                            color: isMatching ? Colors.white : Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ),
-            ],
-          );
-        },
-      ),
+                );
+              },
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 }
-
 
 
 class ReactButtons extends StatelessWidget {
@@ -278,7 +320,7 @@ class UserCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 10),
       child: SizedBox(
-        height: MediaQuery.of(context).size.height / 1.195,
+        height: MediaQuery.of(context).size.height / 1.175,
         width: MediaQuery.of(context).size.width,
         child: Stack(
           children: [
@@ -335,7 +377,7 @@ class UserCard extends StatelessWidget {
               Positioned(
                 bottom: 90,
                 left: 20,
-                child: UserHeaderInfo(user: user, textColor: Colors.white),
+                child: UserHeaderInfo(user: user, textColor: Colors.white, fontSize: 20),
               ),
             if (isArrowPressed)
               Positioned(
@@ -388,17 +430,18 @@ class UserNameAge extends StatelessWidget {
 class UserHeaderInfo extends StatelessWidget {
   final User user;
   final Color textColor;
+  final double fontSize;
 
   const UserHeaderInfo(
-      {super.key, required this.user, required this.textColor});
+      {super.key, required this.user, required this.textColor, required this.fontSize});
 
   @override
   Widget build(BuildContext context) {
     return Text(
       '${user.sexPref} | ${user.height} | ${user.distance}',
-      style: Theme.of(context).textTheme.displayMedium?.copyWith(
+      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             color: textColor,
-            fontSize: 18,
+            fontSize: fontSize,
           ),
     );
   }
@@ -412,13 +455,17 @@ class UserBio extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      '${user.bio}',
-      softWrap: true,
-      style: Theme.of(context).textTheme.displayMedium?.copyWith(
-            color: textColor,
-            fontSize: 12,
-          ),
+    return Padding(
+      padding: const EdgeInsets.only(left: 15.0, right: 10.0),
+      child: Text(
+        '${user.bio}',
+        softWrap: true,
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: textColor,
+              fontSize: 17,
+              height: 1.75,
+            ),
+      ),
     );
   }
 }

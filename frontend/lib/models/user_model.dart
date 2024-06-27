@@ -52,7 +52,7 @@ class User extends Equatable {
       sexPref: 'Straight',
       height: '5ft 7in',
       distance: '3.8 miles away',
-      interests: ['Gaming', 'Reading', 'Cooking', 'Testing']
+      interests: ['Gaming', 'Reading', 'Cooking', 'Testing', 'Running']
     ),
     User(
       id: 2,
