@@ -70,6 +70,24 @@ class _NameDOBGender extends State<NameDOBGender> {
     super.dispose();
   }
 
+    void handleBackspace() {
+      for (int i = 0; i < _dobControllers.length; i++) {
+        if (_dobFocusNodes[i].hasFocus && _dobControllers[i].text.isEmpty && i > 0) {
+          _dobFocusNodes[i - 1].requestFocus();
+          break;
+        }
+      }
+    }
+
+    void handleKeyPress() {
+      for (int i = 0; i < _dobControllers.length; i++) {
+        if (_dobFocusNodes[i].hasFocus && _dobControllers[i].text.isNotEmpty && i < _dobControllers.length - 1) {
+          _dobFocusNodes[i + 1].requestFocus();
+          break;
+        }
+      }
+    }
+
   @override
   Widget build(BuildContext context) {
     genderOptions  = ['Man', 'Woman', nonBinaryButtonText];
@@ -183,7 +201,9 @@ class _NameDOBGender extends State<NameDOBGender> {
             focusNode: FocusNode(),
             onKeyEvent: (value) => {
               if (value.logicalKey.keyLabel == 'Backspace') {
-                print('BACKSPACE')
+                handleBackspace()
+              } else {
+                handleKeyPress()
               }
             },
              child: Row(
