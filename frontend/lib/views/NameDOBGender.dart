@@ -21,6 +21,9 @@ class _NameDOBGender extends State<NameDOBGender> {
   final List<TextEditingController> _dobControllers = List<TextEditingController>.generate(8, (int index) => TextEditingController());
   final List<FocusNode> _dobFocusNodes = List<FocusNode>.generate(8, (int index) => FocusNode());
 
+  // Month, day, and year indices for _dobControllers and _dobFocusNodes
+  int m1 = 0, m2 = 1, d1 = 2, d2 = 3, y1 = 4, y2 = 5, y3 = 6, y4 = 7;
+
   // Index determines which gender is selected
   int activeButtonIndex = -1;
   String nonBinaryButtonText = 'Non-Binary';
@@ -46,7 +49,7 @@ class _NameDOBGender extends State<NameDOBGender> {
     showSelectDialog(
       reRender: updateNonBinaryGender,
       context: context,
-      options: ['Agender', 'Gender Fluid', 'Non-Binary'],
+      options: ['Agender', 'Gender Fluid', 'Non-Binary'], // Add more genders here
       cacheKey: 'userGenderOptions',
       question: 'Select your gender',
       assetPath: 'None',
@@ -70,6 +73,7 @@ class _NameDOBGender extends State<NameDOBGender> {
     super.dispose();
   }
 
+    // When backspacing on empty field, it should move back to previous field
     void handleBackspace() {
       for (int i = 0; i < _dobControllers.length; i++) {
         if (_dobFocusNodes[i].hasFocus && _dobControllers[i].text.isEmpty && i > 0) {
@@ -78,7 +82,8 @@ class _NameDOBGender extends State<NameDOBGender> {
         }
       }
     }
-
+    
+    // When typing anything into a filled field, it should move to next field
     void handleKeyPress() {
       for (int i = 0; i < _dobControllers.length; i++) {
         if (_dobFocusNodes[i].hasFocus && _dobControllers[i].text.isNotEmpty && i < _dobControllers.length - 1) {
@@ -215,17 +220,17 @@ class _NameDOBGender extends State<NameDOBGender> {
               height: 48 * DesignVariables.heightConversion, 
               inputs: [
                 IndividualTextField(
-                  controller: _dobControllers[0], 
+                  controller: _dobControllers[m1], 
                   hintText: 'M',
-                  focusNode: _dobFocusNodes[0],
-                  nextFocusNode: _dobFocusNodes[1],
+                  focusNode: _dobFocusNodes[m1],
+                  nextFocusNode: _dobFocusNodes[m2],
                 ),
                 const SizedBox(width: 10),
                 IndividualTextField(
-                  controller: _dobControllers[1], 
+                  controller: _dobControllers[m2], 
                   hintText: 'M',
-                  focusNode: _dobFocusNodes[1],
-                  nextFocusNode: _dobFocusNodes[2],
+                  focusNode: _dobFocusNodes[m2],
+                  nextFocusNode: _dobFocusNodes[d1],
                 )
               ]
             ),
@@ -249,17 +254,17 @@ class _NameDOBGender extends State<NameDOBGender> {
               height: 48 * DesignVariables.heightConversion, 
               inputs: [
                 IndividualTextField(
-                  controller: _dobControllers[2], 
+                  controller: _dobControllers[d1], 
                   hintText: 'D',
-                  focusNode: _dobFocusNodes[2],
-                  nextFocusNode: _dobFocusNodes[3],
+                  focusNode: _dobFocusNodes[d1],
+                  nextFocusNode: _dobFocusNodes[d2],
                 ),
                 const SizedBox(width: 10),
                 IndividualTextField(
-                  controller: _dobControllers[3], 
+                  controller: _dobControllers[d2], 
                   hintText: 'D',
-                  focusNode: _dobFocusNodes[3],
-                  nextFocusNode: _dobFocusNodes[4],
+                  focusNode: _dobFocusNodes[d2],
+                  nextFocusNode: _dobFocusNodes[y1],
                 )
               ]
             ),
@@ -283,30 +288,30 @@ class _NameDOBGender extends State<NameDOBGender> {
               height: 48 * DesignVariables.heightConversion, 
               inputs: [
                 IndividualTextField(
-                  controller: _dobControllers[4], 
+                  controller: _dobControllers[y1], 
                   hintText: 'Y',
-                  focusNode: _dobFocusNodes[4],
-                  nextFocusNode:  _dobFocusNodes[5],
+                  focusNode: _dobFocusNodes[y1],
+                  nextFocusNode:  _dobFocusNodes[y2],
                 ),
                 const BoxGap(width: 10, height: 0),
                 IndividualTextField(
-                  controller: _dobControllers[5], 
+                  controller: _dobControllers[y2], 
                   hintText: 'Y',
-                  focusNode:  _dobFocusNodes[5],
-                  nextFocusNode:  _dobFocusNodes[6],
+                  focusNode:  _dobFocusNodes[y2],
+                  nextFocusNode:  _dobFocusNodes[y3],
                 ),
                 const BoxGap(width: 10, height: 0),
                 IndividualTextField(
-                  controller: _dobControllers[6], 
+                  controller: _dobControllers[y3], 
                   hintText: 'Y',
-                  focusNode:  _dobFocusNodes[6],
-                  nextFocusNode:  _dobFocusNodes[7],
+                  focusNode:  _dobFocusNodes[y3],
+                  nextFocusNode:  _dobFocusNodes[y4],
                 ),
                 const BoxGap(width: 10, height: 0),
                 IndividualTextField(
-                  controller: _dobControllers[7], 
+                  controller: _dobControllers[y4], 
                   hintText: 'Y',
-                  focusNode:  _dobFocusNodes[7],
+                  focusNode:  _dobFocusNodes[y4],
                 ),
                 ]
               ), 
