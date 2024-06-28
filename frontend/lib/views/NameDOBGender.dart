@@ -59,8 +59,69 @@ class _NameDOBGender extends State<NameDOBGender> {
     setActiveButtonIndex(2);
   }
 
+  bool isValidDate() {
+
+    for (int i = 0; i < 8; i++) {
+      if (_dobControllers[i].text == '') {
+        return false;
+      }
+    }
+
+    int maxDay = -1;
+
+    int month = int.parse(_dobControllers[m1].text) * 10 + int.parse(_dobControllers[m2].text);
+    int day = int.parse(_dobControllers[d1].text) * 10 + int.parse(_dobControllers[d2].text);
+    int year = int.parse(_dobControllers[y1].text) * 1000 + int.parse(_dobControllers[y2].text * 100)
+                + int.parse(_dobControllers[y3].text) * 10 + int.parse(_dobControllers[y4].text);
+
+    if (month < 1 || month > 12) {
+      return false;
+    }
+
+    // month has 30 days
+    if (month == 4 || month == 6 || month == 9 || month == 11) {
+      maxDay = 30;
+      // check for leap year
+    } else if (month == 2) {
+      if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+        maxDay = 29;
+      } else {
+        maxDay = 28;
+      }
+      // month has 31 days
+    } else {
+      maxDay = 31;
+    }
+
+    if (day < 1 || day > maxDay) {
+      return false;
+    }
+
+    if (year < 1900) {
+      return false;
+    }
+    
+    return isValidAge(month, day, year);
+  }
+
+  bool isValidAge(int month, int day, int year) {
+    DateTime present = DateTime.now();
+
+    int age = present.year - year;
+
+    if (present.month < month || present.month == month && present.day < day) {
+      age--;
+    }
+
+    return age >= 18;
+  }
+
   void onNext() {
-    print('Pressed next button');
+    if (isValidDate()) {
+      print('YAY');
+    } else {
+      print('NO');
+    }
   }
 
   @override
@@ -202,6 +263,7 @@ class _NameDOBGender extends State<NameDOBGender> {
 
             const BoxGap(width: 0, height: 30),
 
+            // Birthday Textfields
             KeyboardListener(
             focusNode: FocusNode(),
             onKeyEvent: (value) => {
