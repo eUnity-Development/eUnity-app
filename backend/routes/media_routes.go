@@ -15,6 +15,8 @@ func Media_routes(r *gin.RouterGroup) {
 
 	r.DELETE("/user_image/:image_id", Media_controllers.Delete_user_image)
 
+	//video routes
+
 }
 
 // public media routes unprotected

@@ -1,7 +1,6 @@
 ## Todo's
 
 
--Finish Image conversions
 -Add 15 second clips convert all video to a standard format
 -Prevent Clips over a certain length being uploaded
 -Add twilio sign-up/login/

@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:eunity/classes/RouteHandler.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class AuthHelper {
   static String defaultHost = RouteHandler.defaultHost;
@@ -18,6 +19,7 @@ class AuthHelper {
     serverClientId:"473125180287-80hn1kcn8k3juut9p7ocvi6j77v9lnct.apps.googleusercontent.com"
   );
 
+  static FacebookAuth facebookAuth = FacebookAuth.instance;
 
   static Future<void> init() async{
     prefs = await SharedPreferences.getInstance();
@@ -135,8 +137,17 @@ class AuthHelper {
   }
 
   static Future<void> signOut() async {
-      //we want to sign out of google and our server and clear the session cookie
-      await googleSignIn.disconnect();
+
+      // final AccessToken? accessToken = await facebookAuth.accessToken;
+      // if(accessToken != null){
+      //   await facebookAuth.logOut();
+      // }
+
+      //only sign out if the user is signed in
+      if(googleSignIn.currentUser != null){
+        await googleSignIn.signOut();
+      }
+
       String endPoint = '/users/logout';
       var url = '$defaultHost$endPoint';
       try {
@@ -155,6 +166,24 @@ class AuthHelper {
       }
   }
 
+
+
+  static Future<void> signInWithFacebook() async {
+    // Trigger the sign-in flow
+    final LoginResult result = await AuthHelper.facebookAuth.login(
+      permissions: ['email', 'public_profile'],
+    );
+
+    if (result.status == LoginStatus.success) {
+      // Create a credential from the access token
+      final AccessToken accessToken = result.accessToken!;
+      print(accessToken);
+      
+    } else {
+      print(result.status);
+      print(result.message);
+    }
+  }
 
   static Future<Response> verifyGoogleIDToken(String googleKey) async {
     String endPoint = '/auth/google?idToken=$googleKey';

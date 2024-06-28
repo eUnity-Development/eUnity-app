@@ -2,10 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:eunity/classes/AuthHelper.dart';
 import 'package:eunity/classes/DesignVariables.dart';
-import 'package:eunity/views/CoreTemplate.dart';
 import 'package:eunity/views/PhoneLogin.dart';
 import 'package:eunity/widgets/LoginSignup/login_signup_button.dart';
 import 'package:eunity/widgets/LoginSignup/login_signup_button_content.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginSignup extends StatefulWidget {
@@ -19,6 +19,9 @@ class LoginSignup extends StatefulWidget {
 }
 
 class _LoginSignupState extends State<LoginSignup> {
+
+
+
   @override
   void initState() {
     super.initState();
@@ -84,6 +87,27 @@ class _LoginSignupState extends State<LoginSignup> {
     bool loginCheck = await AuthHelper.isLoggedIn();
     if (loginCheck) {
       AuthHelper.setLoggedIn(true);
+    }
+  }
+
+  void facebookLogin() async {
+    //to-do send access token to backend, retrieve info from there
+    //then create account or login.
+
+    final LoginResult result = await FacebookAuth.instance.login();
+    if (result.status == LoginStatus.success) {
+      final AccessToken accessToken = result.accessToken!;
+
+      print('Logged in!');
+      print(accessToken.tokenString);
+      print(accessToken.toJson());
+  //print results
+      final userData = await FacebookAuth.instance.getUserData();
+      //get token id
+      print(userData);
+
+    } else {
+      print('Failed to login');
     }
   }
 
@@ -236,7 +260,7 @@ class _LoginSignupState extends State<LoginSignup> {
                 fontColor: fontColor),
             height: btnHeight,
             width: btnWidth,
-            onTap: forceLogin,
+            onTap: facebookLogin,
           ),
         ],
       ),

@@ -23,6 +23,7 @@ class _HomeState extends State<Home> {
     setState(() {
       AuthHelper.loggedIn = value;
       AuthHelper.prefs!.setBool('loggedIn', value);
+
     });
   }
 
