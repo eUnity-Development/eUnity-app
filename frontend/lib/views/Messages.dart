@@ -1,6 +1,7 @@
 import 'package:eunity/widgets/Tiles/chat_tile.dart';
 import 'package:eunity/widgets/matchesWidget/match_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:eunity/views/MessagingScreen.dart';
 
 class Messages extends StatefulWidget {
   const Messages({super.key});
@@ -12,12 +13,9 @@ class Messages extends StatefulWidget {
 class _MessagesState extends State<Messages> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: CustomAppBar(),
-        body: ChatScreen(),
-      ),
+    return Scaffold(
+      appBar: CustomAppBar(),
+      body: ChatScreen(),
     );
   }
 }
@@ -122,12 +120,26 @@ class ChatScreen extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
+    void navigateToTestMessage() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MessagingScreen(
+                  matchPfp: "assets/FakePeople/StephanieBrown.png",
+                  matchName: "Stephanie",
+                )),
+      );
+    }
+
     return ListView.builder(
       itemCount: chats.length,
       itemBuilder: (context, index) {
         return Column(
           children: [
-            ChatTile(chat: chats[index]),
+            GestureDetector(
+              child: ChatTile(chat: chats[index]),
+              onTap: navigateToTestMessage,
+            ),
             const Divider(),
           ],
         );
