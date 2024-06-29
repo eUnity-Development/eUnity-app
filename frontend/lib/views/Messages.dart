@@ -132,14 +132,14 @@ class ChatScreen extends StatelessWidget {
           children: [
             if (index == 0)
               const Divider(
-                color: Colors.grey,
+                color: Color.fromRGBO(217, 217, 217, 1.0),
                 thickness: 1,
                 indent: 0,
                 endIndent: 0,
               ),
             ChatTile(chat: chats[index]),
             const Divider(
-              color: Colors.grey,
+              color: Color.fromRGBO(217, 217, 217, 1.0),
               thickness: 1,
               indent: 0,
               endIndent: 0,
