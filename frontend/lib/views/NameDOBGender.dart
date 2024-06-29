@@ -21,6 +21,13 @@ class _NameDOBGender extends State<NameDOBGender> {
   final List<TextEditingController> _dobControllers = List<TextEditingController>.generate(8, (int index) => TextEditingController());
   final List<FocusNode> _dobFocusNodes = List<FocusNode>.generate(8, (int index) => FocusNode());
 
+  Color nameBorder = DesignVariables.greyLines;
+  Color genderDescColor = Colors.black;
+
+  Color dobBorder = DesignVariables.greyLines;
+  String dobDesc = 'We will need your date of birth to confirm your age.';
+  Color dobDescColor = Colors.black;
+
   // Month, day, and year indices for _dobControllers and _dobFocusNodes
   int m1 = 0, m2 = 1, d1 = 2, d2 = 3, y1 = 4, y2 = 5, y3 = 6, y4 = 7;
 
@@ -71,7 +78,7 @@ class _NameDOBGender extends State<NameDOBGender> {
 
     int month = int.parse(_dobControllers[m1].text) * 10 + int.parse(_dobControllers[m2].text);
     int day = int.parse(_dobControllers[d1].text) * 10 + int.parse(_dobControllers[d2].text);
-    int year = int.parse(_dobControllers[y1].text) * 1000 + int.parse(_dobControllers[y2].text * 100)
+    int year = int.parse(_dobControllers[y1].text) * 1000 + int.parse(_dobControllers[y2].text) * 100
                 + int.parse(_dobControllers[y3].text) * 10 + int.parse(_dobControllers[y4].text);
 
     if (month < 1 || month > 12) {
@@ -100,13 +107,12 @@ class _NameDOBGender extends State<NameDOBGender> {
     if (year < 1900) {
       return false;
     }
-    
+
     return isValidAge(month, day, year);
   }
 
   bool isValidAge(int month, int day, int year) {
     DateTime present = DateTime.now();
-
     int age = present.year - year;
 
     if (present.month < month || present.month == month && present.day < day) {
@@ -116,11 +122,42 @@ class _NameDOBGender extends State<NameDOBGender> {
     return age >= 18;
   }
 
+  // Change dob border color when invalid
+  // See if name is empty
+  // See if gender is empty
   void onNext() {
-    if (isValidDate()) {
-      print('YAY');
+    if (!isValidDate()) {
+      setState(() {
+        dobDesc = 'Please enter a valid date.';
+        dobDescColor = Colors.red;
+        dobBorder = Colors.red;
+      });
     } else {
-      print('NO');
+      setState(() {
+        dobDesc = 'We will need your date of birth to confirm your age.';
+        dobDescColor = Colors.black;
+        dobBorder = DesignVariables.greyLines;
+      });
+    }
+
+    if (UserInfoHelper.userInfoCache['userGenderOptions'] == '') {
+      setState(() {
+        genderDescColor = Colors.red;
+      });
+    } else {
+      setState(() {
+        genderDescColor = Colors.black;
+      });
+    }
+
+    if (_nameController.text.isEmpty) {
+      setState(() {
+        nameBorder = Colors.red;
+      });
+    } else {
+      setState(() {
+        nameBorder = DesignVariables.greyLines;
+      });
     }
   }
 
@@ -222,7 +259,7 @@ class _NameDOBGender extends State<NameDOBGender> {
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide(
-                        color: DesignVariables.greyLines,
+                        color: nameBorder,
                         width: 1,
                       ),
                     ),
@@ -253,11 +290,12 @@ class _NameDOBGender extends State<NameDOBGender> {
             const BoxGap(width: 0, height: 7),
 
             // Birthday description
-            const Text(
-              "We will need your date of birth to confirm your age.",
+            Text(
+              dobDesc,
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
+                color: dobDescColor,
               ),
             ),
 
@@ -279,7 +317,8 @@ class _NameDOBGender extends State<NameDOBGender> {
               // Month section
               DOBSection(
               width: 95.53 * DesignVariables.widthConversion, 
-              height: 48 * DesignVariables.heightConversion, 
+              height: 48 * DesignVariables.heightConversion,
+              borderColor: dobBorder, 
               inputs: [
                 IndividualTextField(
                   controller: _dobControllers[m1], 
@@ -313,7 +352,8 @@ class _NameDOBGender extends State<NameDOBGender> {
             // Day section
             DOBSection(
               width: 95.53 * DesignVariables.widthConversion, 
-              height: 48 * DesignVariables.heightConversion, 
+              height: 48 * DesignVariables.heightConversion,
+              borderColor: dobBorder, 
               inputs: [
                 IndividualTextField(
                   controller: _dobControllers[d1], 
@@ -347,7 +387,8 @@ class _NameDOBGender extends State<NameDOBGender> {
             // Year section
             DOBSection(
               width: 127.92 * DesignVariables.widthConversion, 
-              height: 48 * DesignVariables.heightConversion, 
+              height: 48 * DesignVariables.heightConversion,
+              borderColor: dobBorder, 
               inputs: [
                 IndividualTextField(
                   controller: _dobControllers[y1], 
@@ -395,11 +436,12 @@ class _NameDOBGender extends State<NameDOBGender> {
           const BoxGap(width: 0, height: 7),
 
           // Gender description
-          const Text(
+          Text(
             "Pick a gender you identify the most with.",
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w500,
+              color: genderDescColor,
             ),
           ),
 

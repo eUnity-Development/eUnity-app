@@ -25,12 +25,14 @@ class DOBSection extends StatelessWidget {
   final double width;
   final double height;
   final List<Widget> inputs;
+  final Color borderColor;
 
   const DOBSection({
     super.key,
     required this.width,
     required this.height,
-    required this.inputs
+    required this.inputs,
+    required this.borderColor
   });
 
   @override
@@ -40,7 +42,7 @@ class DOBSection extends StatelessWidget {
           width: width,
           
           decoration: BoxDecoration(
-              border: Border.all(color: DesignVariables.greyLines, width: 1),
+              border: Border.all(color: borderColor, width: 1),
               borderRadius: const BorderRadius.all(Radius.circular(10))
           ),
 
