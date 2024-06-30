@@ -73,7 +73,7 @@ func (ac *Web_Auth_controllers) GET_BeginGoogleAuth(c *gin.Context) {
 // @Produce json
 // @Success 200 {string} string "Google Auth Callback"
 // @Router /webAuth/google/callback [get]
-func (ac *Web_Auth_controllers) GET_GoogleOAuthCallback(c *gin.Context) { // #TODO clean this up - @AggressiveGas
+func (ac *Web_Auth_controllers) GET_GoogleOAuthCallback(c *gin.Context) { 
 	q := c.Request.URL.Query()
 	q.Add("provider", "google")
 	c.Request.URL.RawQuery = q.Encode()
