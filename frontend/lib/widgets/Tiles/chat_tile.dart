@@ -66,7 +66,7 @@ class ChatTile extends StatelessWidget {
           if (chat.unreadMessages > 0)
             CircleAvatar(
               radius: 10,
-              backgroundColor: Colors.red,
+              backgroundColor: const Color.fromRGBO(255, 92, 92, 1.0),
               child: Text(
                 chat.unreadMessages.toString(),
                 style: const TextStyle(color: Colors.white, fontSize: 12),

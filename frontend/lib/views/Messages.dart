@@ -47,20 +47,20 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ],
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(
-              'New matches',
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+          const Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text('New matches',
+                  style: TextStyle(
+                    color: Color.fromRGBO(255, 92, 92, 1.0),
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  )),
             ),
           ),
           const SizedBox(height: 10),
           SizedBox(
-            height: 150, // Adjusted height to fit the avatars
+            height: 125, // Adjusted height to fit the avatars
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: matches.length,
@@ -79,7 +79,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize =>
-      Size.fromHeight(200); // Adjusted height to fit the content
+      const Size.fromHeight(180); // Adjusted height to fit the content
 }
 
 class ChatScreen extends StatelessWidget {
@@ -136,11 +136,23 @@ class ChatScreen extends StatelessWidget {
       itemBuilder: (context, index) {
         return Column(
           children: [
+            if (index == 0)
+              const Divider(
+                color: Color.fromRGBO(217, 217, 217, 1.0),
+                thickness: 1,
+                indent: 0,
+                endIndent: 0,
+              ),
             GestureDetector(
               child: ChatTile(chat: chats[index]),
               onTap: navigateToTestMessage,
             ),
-            const Divider(),
+            const Divider(
+              color: Color.fromRGBO(217, 217, 217, 1.0),
+              thickness: 1,
+              indent: 0,
+              endIndent: 0,
+            ),
           ],
         );
       },
