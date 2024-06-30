@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 
 import '../widgets/LoginSignup/login_signup_button.dart';
 
+const int dobNodes = 8;
+
 class NameDOBGender extends StatefulWidget {
   const NameDOBGender({super.key});
 
@@ -16,10 +18,10 @@ class NameDOBGender extends StatefulWidget {
 }
 
 class _NameDOBGender extends State<NameDOBGender> {
+  
   final TextEditingController _nameController = TextEditingController();
-
-  final List<TextEditingController> _dobControllers = List<TextEditingController>.generate(8, (int index) => TextEditingController());
-  final List<FocusNode> _dobFocusNodes = List<FocusNode>.generate(8, (int index) => FocusNode());
+  final List<TextEditingController> _dobControllers = List<TextEditingController>.generate(dobNodes, (int index) => TextEditingController());
+  final List<FocusNode> _dobFocusNodes = List<FocusNode>.generate(dobNodes, (int index) => FocusNode());
 
   Color nameBorder = DesignVariables.greyLines;
   Color genderDescColor = Colors.black;
@@ -33,7 +35,7 @@ class _NameDOBGender extends State<NameDOBGender> {
 
   // Index determines which gender is selected
   int activeButtonIndex = -1;
-  String nonBinaryButtonText = 'Non-Binary';
+  String nonBinaryOption = 'Non-Binary';
   List<String> genderOptions = [];
 
   // Button that the user selects is the 'active' button
@@ -47,7 +49,7 @@ class _NameDOBGender extends State<NameDOBGender> {
   // Update Non-Binary button text after selection
   void updateNonBinaryGender() {
     setState(() {
-      nonBinaryButtonText = UserInfoHelper.userInfoCache['userGenderOptions'] ?? 'Non-Binary';
+      nonBinaryOption = UserInfoHelper.userInfoCache['userGenderOptions'] ?? 'Non-Binary';
     });
   }
 
@@ -68,7 +70,7 @@ class _NameDOBGender extends State<NameDOBGender> {
 
   bool isValidDate() {
 
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < dobNodes; i++) {
       if (_dobControllers[i].text == '') {
         return false;
       }
@@ -85,18 +87,18 @@ class _NameDOBGender extends State<NameDOBGender> {
       return false;
     }
 
-    // month has 30 days
     if (month == 4 || month == 6 || month == 9 || month == 11) {
+      // These months have 30 days
       maxDay = 30;
-      // check for leap year
     } else if (month == 2) {
       if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+        // February has 28 or 29 days depending on leap year
         maxDay = 29;
       } else {
         maxDay = 28;
       }
-      // month has 31 days
     } else {
+      // Otherwise months will have 31 days
       maxDay = 31;
     }
 
@@ -160,7 +162,7 @@ class _NameDOBGender extends State<NameDOBGender> {
 
   @override
   void dispose() {
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < dobNodes; i++) {
       _dobControllers[i].dispose();
       _dobFocusNodes[i].dispose();
     }
@@ -178,8 +180,17 @@ class _NameDOBGender extends State<NameDOBGender> {
       }
     }
     
+    // Used to prevent handleKeyPress from triggering twice
+    bool _isHandlingKeyPress = false;
+
     // When typing anything into a filled field, it should move to next field
     void handleKeyPress(String char) {
+      if (_isHandlingKeyPress) {
+        return;
+      }
+
+      _isHandlingKeyPress = true;
+
       for (int i = 0; i < _dobControllers.length; i++) {
         if (_dobFocusNodes[i].hasFocus && _dobControllers[i].text.isNotEmpty && i < _dobControllers.length - 1) {
           _dobFocusNodes[i + 1].requestFocus();
@@ -187,11 +198,16 @@ class _NameDOBGender extends State<NameDOBGender> {
           break;
         }
       }
+
+      // Updates text and then prevents extra handleKeyPress from running
+      Future.delayed(const Duration(milliseconds: 10), () {
+        _isHandlingKeyPress = false;
+      });
     }
 
   @override
   Widget build(BuildContext context) {
-    genderOptions  = ['Man', 'Woman', nonBinaryButtonText];
+    genderOptions  = ['Man', 'Woman', nonBinaryOption];
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -500,7 +516,7 @@ class _NameDOBGender extends State<NameDOBGender> {
               svgPath: activeButtonIndex == 2 ? 
                 'assets/icons/chevron-right-select.svg' : 'assets/icons/chevron-right.svg', 
               svgDimensions: 20, 
-              text: nonBinaryButtonText,
+              text: nonBinaryOption,
               fontSize: 14, 
               fontColor: activeButtonIndex == 2 ? 
                 DesignVariables.primaryRed : Colors.black.withOpacity(0.5),
