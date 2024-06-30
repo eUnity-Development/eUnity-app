@@ -122,9 +122,6 @@ class _NameDOBGender extends State<NameDOBGender> {
     return age >= 18;
   }
 
-  // Change dob border color when invalid
-  // See if name is empty
-  // See if gender is empty
   void onNext() {
     if (!isValidDate()) {
       setState(() {
@@ -182,10 +179,11 @@ class _NameDOBGender extends State<NameDOBGender> {
     }
     
     // When typing anything into a filled field, it should move to next field
-    void handleKeyPress() {
+    void handleKeyPress(String char) {
       for (int i = 0; i < _dobControllers.length; i++) {
         if (_dobFocusNodes[i].hasFocus && _dobControllers[i].text.isNotEmpty && i < _dobControllers.length - 1) {
           _dobFocusNodes[i + 1].requestFocus();
+          _dobControllers[i + 1].text = char;
           break;
         }
       }
@@ -307,8 +305,8 @@ class _NameDOBGender extends State<NameDOBGender> {
             onKeyEvent: (value) => {
               if (value.logicalKey.keyLabel == 'Backspace') {
                 handleBackspace()
-              } else {
-                handleKeyPress()
+              } else if (value.logicalKey.keyLabel.length == 1) {
+                handleKeyPress(value.logicalKey.keyLabel)
               }
             },
              child: Row(
