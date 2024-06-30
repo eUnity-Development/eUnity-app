@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:eunity/widgets/SelectionWidgets/SelectionDialog.dart';
 
+// Allows selection pop-up to work on any button
 void showSelectDialog({
   required BuildContext context,
   required List<String> options,
@@ -26,4 +27,3 @@ void showSelectDialog({
     reRender();
   });
 }
-

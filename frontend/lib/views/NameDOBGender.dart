@@ -18,10 +18,12 @@ class NameDOBGender extends StatefulWidget {
 }
 
 class _NameDOBGender extends State<NameDOBGender> {
-  
   final TextEditingController _nameController = TextEditingController();
-  final List<TextEditingController> _dobControllers = List<TextEditingController>.generate(dobNodes, (int index) => TextEditingController());
-  final List<FocusNode> _dobFocusNodes = List<FocusNode>.generate(dobNodes, (int index) => FocusNode());
+  final List<TextEditingController> _dobControllers =
+      List<TextEditingController>.generate(
+          dobNodes, (int index) => TextEditingController());
+  final List<FocusNode> _dobFocusNodes =
+      List<FocusNode>.generate(dobNodes, (int index) => FocusNode());
 
   Color nameBorder = DesignVariables.greyLines;
   Color genderDescColor = Colors.black;
@@ -49,7 +51,8 @@ class _NameDOBGender extends State<NameDOBGender> {
   // Update Non-Binary button text after selection
   void updateNonBinaryGender() {
     setState(() {
-      nonBinaryOption = UserInfoHelper.userInfoCache['userGenderOptions'] ?? 'Non-Binary';
+      nonBinaryOption =
+          UserInfoHelper.userInfoCache['userGenderOptions'] ?? 'Non-Binary';
     });
   }
 
@@ -58,18 +61,22 @@ class _NameDOBGender extends State<NameDOBGender> {
     showSelectDialog(
       reRender: updateNonBinaryGender,
       context: context,
-      options: ['Agender', 'Gender Fluid', 'Non-Binary'], // Add more genders here
+      options: [
+        'Agender',
+        'Gender Fluid',
+        'Non-Binary'
+      ], // Add more genders here
       cacheKey: 'userGenderOptions',
       question: 'Select your gender',
       assetPath: 'None',
       multiSelect: false,
     );
-    UserInfoHelper.userInfoCache['userGender'] = UserInfoHelper.userInfoCache['userGenderOptions'];
+    UserInfoHelper.userInfoCache['userGender'] =
+        UserInfoHelper.userInfoCache['userGenderOptions'];
     setActiveButtonIndex(2);
   }
 
   bool isValidDate() {
-
     for (int i = 0; i < dobNodes; i++) {
       if (_dobControllers[i].text == '') {
         return false;
@@ -78,10 +85,14 @@ class _NameDOBGender extends State<NameDOBGender> {
 
     int maxDay = -1;
 
-    int month = int.parse(_dobControllers[m1].text) * 10 + int.parse(_dobControllers[m2].text);
-    int day = int.parse(_dobControllers[d1].text) * 10 + int.parse(_dobControllers[d2].text);
-    int year = int.parse(_dobControllers[y1].text) * 1000 + int.parse(_dobControllers[y2].text) * 100
-                + int.parse(_dobControllers[y3].text) * 10 + int.parse(_dobControllers[y4].text);
+    int month = int.parse(_dobControllers[m1].text) * 10 +
+        int.parse(_dobControllers[m2].text);
+    int day = int.parse(_dobControllers[d1].text) * 10 +
+        int.parse(_dobControllers[d2].text);
+    int year = int.parse(_dobControllers[y1].text) * 1000 +
+        int.parse(_dobControllers[y2].text) * 100 +
+        int.parse(_dobControllers[y3].text) * 10 +
+        int.parse(_dobControllers[y4].text);
 
     if (month < 1 || month > 12) {
       return false;
@@ -170,386 +181,379 @@ class _NameDOBGender extends State<NameDOBGender> {
     super.dispose();
   }
 
-    // When backspacing on empty field, it should move back to previous field
-    void handleBackspace() {
-      for (int i = 0; i < _dobControllers.length; i++) {
-        if (_dobFocusNodes[i].hasFocus && _dobControllers[i].text.isEmpty && i > 0) {
-          _dobFocusNodes[i - 1].requestFocus();
-          break;
-        }
+  // When backspacing on empty field, it should move back to previous field
+  void handleBackspace() {
+    for (int i = 0; i < _dobControllers.length; i++) {
+      if (_dobFocusNodes[i].hasFocus &&
+          _dobControllers[i].text.isEmpty &&
+          i > 0) {
+        _dobFocusNodes[i - 1].requestFocus();
+        break;
       }
     }
-    
-    // Used to prevent handleKeyPress from triggering twice
-    bool _isHandlingKeyPress = false;
+  }
 
-    // When typing anything into a filled field, it should move to next field
-    void handleKeyPress(String char) {
-      if (_isHandlingKeyPress) {
-        return;
-      }
+  // Used to prevent handleKeyPress from triggering twice
+  bool _isHandlingKeyPress = false;
 
-      _isHandlingKeyPress = true;
-
-      for (int i = 0; i < _dobControllers.length; i++) {
-        if (_dobFocusNodes[i].hasFocus && _dobControllers[i].text.isNotEmpty && i < _dobControllers.length - 1) {
-          _dobFocusNodes[i + 1].requestFocus();
-          _dobControllers[i + 1].text = char;
-          break;
-        }
-      }
-
-      // Updates text and then prevents extra handleKeyPress from running
-      Future.delayed(const Duration(milliseconds: 10), () {
-        _isHandlingKeyPress = false;
-      });
+  // When typing anything into a filled field, it should move to next field
+  void handleKeyPress(String char) {
+    if (_isHandlingKeyPress) {
+      return;
     }
+
+    _isHandlingKeyPress = true;
+
+    for (int i = 0; i < _dobControllers.length; i++) {
+      if (_dobFocusNodes[i].hasFocus &&
+          _dobControllers[i].text.isNotEmpty &&
+          i < _dobControllers.length - 1) {
+        _dobFocusNodes[i + 1].requestFocus();
+        _dobControllers[i + 1].text = char;
+        break;
+      }
+    }
+
+    // Updates text and then prevents extra handleKeyPress from running
+    Future.delayed(const Duration(milliseconds: 10), () {
+      _isHandlingKeyPress = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    genderOptions  = ['Man', 'Woman', nonBinaryOption];
+    genderOptions = ['Man', 'Woman', nonBinaryOption];
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      
-      // Navbar
-      appBar: const PushedScreenTopBar(hasArrow: false),
-      body: Padding(     
-        padding: EdgeInsets.symmetric(horizontal: 18.0 * DesignVariables.widthConversion), 
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+        resizeToAvoidBottomInset: false,
 
-            // Name header
-            const Text(
-              "Name",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-
-            const BoxGap(width: 0, height: 7),
-
-            // Name description
-            const Text(
-              "The name you enter here will appear on your profile.",
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-
-            const BoxGap(width: 0, height: 30),
-
-            // Name textfield
-            Center(
-              child: SizedBox(
-                height: 48 * DesignVariables.heightConversion,
-                width: 393 * DesignVariables.widthConversion,
-                child: TextField( 
-                  controller: _nameController,
-                  style: const TextStyle(
-                    fontSize: 14,
-                  ),
-                 textAlignVertical: TextAlignVertical.center,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 19 * DesignVariables.heightConversion,
-                      horizontal: 15 * DesignVariables.widthConversion
-                    ),
-                    labelText: 'First Name',
-                    labelStyle: TextStyle(
-                      fontSize: 14,
-                      color: Colors.black.withOpacity(0.5),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
-                        width: 1,
-                      ),
-                    ),
-
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        color: nameBorder,
-                        width: 1,
-                      ),
-                    ),
-
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        color: DesignVariables.greyLines,
-                        width: 1,
-                      ),
-                    ),
-                  )
-                )
-              )
-            ),
-
-            const BoxGap(width: 0, height: 29),
-
-            // Birthday header
-            const Text(
-              "Birthday",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-
-            const BoxGap(width: 0, height: 7),
-
-            // Birthday description
-            Text(
-              dobDesc,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                color: dobDescColor,
-              ),
-            ),
-
-            const BoxGap(width: 0, height: 30),
-
-            // Birthday Textfields
-            KeyboardListener(
-            focusNode: FocusNode(),
-            onKeyEvent: (value) => {
-              if (value.logicalKey.keyLabel == 'Backspace') {
-                handleBackspace()
-              } else if (value.logicalKey.keyLabel.length == 1) {
-                handleKeyPress(value.logicalKey.keyLabel)
-              }
-            },
-             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+        // Navbar
+        appBar: const PushedScreenTopBar(hasArrow: false),
+        body: Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: 18.0 * DesignVariables.widthConversion),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-              // Month section
-              DOBSection(
-              width: 95.53 * DesignVariables.widthConversion, 
-              height: 48 * DesignVariables.heightConversion,
-              borderColor: dobBorder, 
-              inputs: [
-                IndividualTextField(
-                  controller: _dobControllers[m1], 
-                  hintText: 'M',
-                  focusNode: _dobFocusNodes[m1],
-                  nextFocusNode: _dobFocusNodes[m2],
+                // Name header
+                const Text(
+                  "Name",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-                const SizedBox(width: 10),
-                IndividualTextField(
-                  controller: _dobControllers[m2], 
-                  hintText: 'M',
-                  focusNode: _dobFocusNodes[m2],
-                  nextFocusNode: _dobFocusNodes[d1],
-                )
-              ]
-            ),
 
-            const BoxGap(width: 12, height: 0),
+                const BoxGap(width: 0, height: 7),
 
-            Text(
-              "/",
-              style: TextStyle(
-                color: Colors.black.withOpacity(0.5), 
-                fontSize: 24,
-              ),
-              
-            ),
-
-            const BoxGap(width: 12, height: 0),
-
-            // Day section
-            DOBSection(
-              width: 95.53 * DesignVariables.widthConversion, 
-              height: 48 * DesignVariables.heightConversion,
-              borderColor: dobBorder, 
-              inputs: [
-                IndividualTextField(
-                  controller: _dobControllers[d1], 
-                  hintText: 'D',
-                  focusNode: _dobFocusNodes[d1],
-                  nextFocusNode: _dobFocusNodes[d2],
+                // Name description
+                const Text(
+                  "The name you enter here will appear on your profile.",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-                const SizedBox(width: 10),
-                IndividualTextField(
-                  controller: _dobControllers[d2], 
-                  hintText: 'D',
-                  focusNode: _dobFocusNodes[d2],
-                  nextFocusNode: _dobFocusNodes[y1],
-                )
-              ]
-            ),
 
-            const BoxGap(width: 12, height: 0),
+                const BoxGap(width: 0, height: 30),
 
-            Text(
-              "/",
-              style: TextStyle(
-                color: Colors.black.withOpacity(0.5), 
-                fontSize: 24,
-              ),
-              
-            ),
+                // Name textfield
+                Center(
+                    child: SizedBox(
+                        height: 48 * DesignVariables.heightConversion,
+                        width: 393 * DesignVariables.widthConversion,
+                        child: TextField(
+                            controller: _nameController,
+                            style: const TextStyle(
+                              fontSize: 14,
+                            ),
+                            textAlignVertical: TextAlignVertical.center,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical:
+                                      19 * DesignVariables.heightConversion,
+                                  horizontal:
+                                      15 * DesignVariables.widthConversion),
+                              labelText: 'First Name',
+                              labelStyle: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black.withOpacity(0.5),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                  width: 1,
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                  color: nameBorder,
+                                  width: 1,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                  color: DesignVariables.greyLines,
+                                  width: 1,
+                                ),
+                              ),
+                            )))),
 
-            const BoxGap(width: 12, height: 0),
+                const BoxGap(width: 0, height: 29),
 
-            // Year section
-            DOBSection(
-              width: 127.92 * DesignVariables.widthConversion, 
-              height: 48 * DesignVariables.heightConversion,
-              borderColor: dobBorder, 
-              inputs: [
-                IndividualTextField(
-                  controller: _dobControllers[y1], 
-                  hintText: 'Y',
-                  focusNode: _dobFocusNodes[y1],
-                  nextFocusNode:  _dobFocusNodes[y2],
+                // Birthday header
+                const Text(
+                  "Birthday",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-                const BoxGap(width: 10, height: 0),
-                IndividualTextField(
-                  controller: _dobControllers[y2], 
-                  hintText: 'Y',
-                  focusNode:  _dobFocusNodes[y2],
-                  nextFocusNode:  _dobFocusNodes[y3],
+
+                const BoxGap(width: 0, height: 7),
+
+                // Birthday description
+                Text(
+                  dobDesc,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: dobDescColor,
+                  ),
                 ),
-                const BoxGap(width: 10, height: 0),
-                IndividualTextField(
-                  controller: _dobControllers[y3], 
-                  hintText: 'Y',
-                  focusNode:  _dobFocusNodes[y3],
-                  nextFocusNode:  _dobFocusNodes[y4],
+
+                const BoxGap(width: 0, height: 30),
+
+                // Birthday Textfields
+                KeyboardListener(
+                    focusNode: FocusNode(),
+                    onKeyEvent: (value) => {
+                          if (value.logicalKey.keyLabel == 'Backspace')
+                            {handleBackspace()}
+                          else if (value.logicalKey.keyLabel.length == 1)
+                            {handleKeyPress(value.logicalKey.keyLabel)}
+                        },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Month section
+                        DOBSection(
+                            width: 95.53 * DesignVariables.widthConversion,
+                            height: 48 * DesignVariables.heightConversion,
+                            borderColor: dobBorder,
+                            inputs: [
+                              IndividualTextField(
+                                controller: _dobControllers[m1],
+                                hintText: 'M',
+                                focusNode: _dobFocusNodes[m1],
+                                nextFocusNode: _dobFocusNodes[m2],
+                              ),
+                              const SizedBox(width: 10),
+                              IndividualTextField(
+                                controller: _dobControllers[m2],
+                                hintText: 'M',
+                                focusNode: _dobFocusNodes[m2],
+                                nextFocusNode: _dobFocusNodes[d1],
+                              )
+                            ]),
+
+                        const BoxGap(width: 12, height: 0),
+
+                        Text(
+                          "/",
+                          style: TextStyle(
+                            color: Colors.black.withOpacity(0.5),
+                            fontSize: 24,
+                          ),
+                        ),
+
+                        const BoxGap(width: 12, height: 0),
+
+                        // Day section
+                        DOBSection(
+                            width: 95.53 * DesignVariables.widthConversion,
+                            height: 48 * DesignVariables.heightConversion,
+                            borderColor: dobBorder,
+                            inputs: [
+                              IndividualTextField(
+                                controller: _dobControllers[d1],
+                                hintText: 'D',
+                                focusNode: _dobFocusNodes[d1],
+                                nextFocusNode: _dobFocusNodes[d2],
+                              ),
+                              const SizedBox(width: 10),
+                              IndividualTextField(
+                                controller: _dobControllers[d2],
+                                hintText: 'D',
+                                focusNode: _dobFocusNodes[d2],
+                                nextFocusNode: _dobFocusNodes[y1],
+                              )
+                            ]),
+
+                        const BoxGap(width: 12, height: 0),
+
+                        Text(
+                          "/",
+                          style: TextStyle(
+                            color: Colors.black.withOpacity(0.5),
+                            fontSize: 24,
+                          ),
+                        ),
+
+                        const BoxGap(width: 12, height: 0),
+
+                        // Year section
+                        DOBSection(
+                            width: 127.92 * DesignVariables.widthConversion,
+                            height: 48 * DesignVariables.heightConversion,
+                            borderColor: dobBorder,
+                            inputs: [
+                              IndividualTextField(
+                                controller: _dobControllers[y1],
+                                hintText: 'Y',
+                                focusNode: _dobFocusNodes[y1],
+                                nextFocusNode: _dobFocusNodes[y2],
+                              ),
+                              const BoxGap(width: 10, height: 0),
+                              IndividualTextField(
+                                controller: _dobControllers[y2],
+                                hintText: 'Y',
+                                focusNode: _dobFocusNodes[y2],
+                                nextFocusNode: _dobFocusNodes[y3],
+                              ),
+                              const BoxGap(width: 10, height: 0),
+                              IndividualTextField(
+                                controller: _dobControllers[y3],
+                                hintText: 'Y',
+                                focusNode: _dobFocusNodes[y3],
+                                nextFocusNode: _dobFocusNodes[y4],
+                              ),
+                              const BoxGap(width: 10, height: 0),
+                              IndividualTextField(
+                                controller: _dobControllers[y4],
+                                hintText: 'Y',
+                                focusNode: _dobFocusNodes[y4],
+                              ),
+                            ]),
+                      ],
+                    )),
+
+                const BoxGap(width: 0, height: 29),
+
+                // Gender header
+                const Text(
+                  "Gender",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-                const BoxGap(width: 10, height: 0),
-                IndividualTextField(
-                  controller: _dobControllers[y4], 
-                  hintText: 'Y',
-                  focusNode:  _dobFocusNodes[y4],
+
+                const BoxGap(width: 0, height: 7),
+
+                // Gender description
+                Text(
+                  "Pick a gender you identify the most with.",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: genderDescColor,
+                  ),
                 ),
-                ]
-              ), 
-            ],
-        
-          )),
-        
-          const BoxGap(width: 0, height: 29),
 
-          // Gender header
-          const Text(
-            "Gender",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
+                const BoxGap(width: 0, height: 30),
 
-          const BoxGap(width: 0, height: 7),
+                // Gender selection: Man - Index 0
+                LoginSignupButton(
+                  color: Colors.transparent,
+                  onTap: () => setActiveButtonIndex(0),
+                  borderColor: activeButtonIndex == 0
+                      ? DesignVariables.primaryRed
+                      : DesignVariables.greyLines,
+                  height: 48 * DesignVariables.heightConversion,
+                  width: 393 * DesignVariables.widthConversion,
+                  buttonContent: Text(
+                    genderOptions[0],
+                    style: TextStyle(
+                        color: activeButtonIndex == 0
+                            ? DesignVariables.primaryRed
+                            : Colors.black.withOpacity(0.5),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14),
+                  ),
+                ),
 
-          // Gender description
-          Text(
-            "Pick a gender you identify the most with.",
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: genderDescColor,
-            ),
-          ),
+                const BoxGap(width: 0, height: 13),
 
-          const BoxGap(width: 0, height: 30),
+                // Gender selection: Woman - Index 1
+                LoginSignupButton(
+                  color: Colors.transparent,
+                  onTap: () => setActiveButtonIndex(1),
+                  borderColor: activeButtonIndex == 1
+                      ? DesignVariables.primaryRed
+                      : DesignVariables.greyLines,
+                  height: 48 * DesignVariables.heightConversion,
+                  width: 393 * DesignVariables.widthConversion,
+                  buttonContent: Text(
+                    genderOptions[1],
+                    style: TextStyle(
+                        color: activeButtonIndex == 1
+                            ? DesignVariables.primaryRed
+                            : Colors.black.withOpacity(0.5),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14),
+                  ),
+                ),
 
-          // Gender selection: Man - Index 0
-          LoginSignupButton(
-            color: Colors.transparent,
-            onTap: () => setActiveButtonIndex(0),
-            borderColor: activeButtonIndex == 0 ? 
-              DesignVariables.primaryRed : DesignVariables.greyLines,
-            height: 48 * DesignVariables.heightConversion,
-            width: 393 * DesignVariables.widthConversion,
-            buttonContent: Text(
-              genderOptions[0],
-              style: TextStyle(
-                color: activeButtonIndex == 0 ? 
-                  DesignVariables.primaryRed : Colors.black.withOpacity(0.5),
-                fontWeight: FontWeight.w500,
-                fontSize: 14
-              ),
-            ),
-          ),
+                const BoxGap(width: 0, height: 13),
 
-          const BoxGap(width: 0, height: 13),
+                // Gender selection: Non-Binary - Index 2
+                LoginSignupButton(
+                    color: Colors.transparent,
+                    onTap: () => selectNonBinary(),
+                    borderColor: activeButtonIndex == 2
+                        ? DesignVariables.primaryRed
+                        : DesignVariables.greyLines,
+                    height: 48 * DesignVariables.heightConversion,
+                    width: 393 * DesignVariables.widthConversion,
+                    buttonContent: LoginSignupButtonContent(
+                      svgOffset: 15 * DesignVariables.widthConversion,
+                      svgPath: activeButtonIndex == 2
+                          ? 'assets/icons/chevron-right-select.svg'
+                          : 'assets/icons/chevron-right.svg',
+                      svgDimensions: 20,
+                      text: nonBinaryOption,
+                      fontSize: 14,
+                      fontColor: activeButtonIndex == 2
+                          ? DesignVariables.primaryRed
+                          : Colors.black.withOpacity(0.5),
+                      isRight: true,
+                      fontWeight: FontWeight.w500,
+                    )),
 
-          // Gender selection: Woman - Index 1
-          LoginSignupButton(
-            color: Colors.transparent,
-            onTap: () => setActiveButtonIndex(1),
-            borderColor: activeButtonIndex == 1 ? 
-              DesignVariables.primaryRed : DesignVariables.greyLines,
-            height: 48 * DesignVariables.heightConversion,
-            width: 393 * DesignVariables.widthConversion,
-            buttonContent: Text(
-              genderOptions[1],
-              style: TextStyle(
-                color: activeButtonIndex == 1 ? 
-                  DesignVariables.primaryRed : Colors.black.withOpacity(0.5),
-                fontWeight: FontWeight.w500,
-                fontSize: 14
-              ),
-            ),
-          ),
+                const Spacer(),
 
-          const BoxGap(width: 0, height: 13),
+                LoginSignupButton(
+                    color: DesignVariables.primaryRed,
+                    onTap: onNext,
+                    borderColor: Colors.transparent,
+                    height: 52 * DesignVariables.heightConversion,
+                    width: 334.67 * DesignVariables.widthConversion,
+                    buttonContent: LoginSignupButtonContent(
+                      svgOffset: 18 * DesignVariables.widthConversion,
+                      svgPath: 'assets/icons/arrow-long-left.svg',
+                      svgDimensions: 36,
+                      text: 'Next',
+                      fontSize: 22,
+                      fontColor: Colors.white,
+                      isRight: true,
+                      fontWeight: FontWeight.w700,
+                    )),
 
-          // Gender selection: Non-Binary - Index 2
-          LoginSignupButton(
-            color: Colors.transparent,
-            onTap: () => selectNonBinary(),
-            borderColor: activeButtonIndex == 2 ? 
-              DesignVariables.primaryRed : DesignVariables.greyLines,
-            height: 48 * DesignVariables.heightConversion,
-            width: 393 * DesignVariables.widthConversion,
-            buttonContent: LoginSignupButtonContent(
-              svgOffset: 15 * DesignVariables.widthConversion, 
-              svgPath: activeButtonIndex == 2 ? 
-                'assets/icons/chevron-right-select.svg' : 'assets/icons/chevron-right.svg', 
-              svgDimensions: 20, 
-              text: nonBinaryOption,
-              fontSize: 14, 
-              fontColor: activeButtonIndex == 2 ? 
-                DesignVariables.primaryRed : Colors.black.withOpacity(0.5),
-              isRight: true,
-              fontWeight: FontWeight.w500,            
-            )
-          ),
-
-          const Spacer(),
-
-          LoginSignupButton(
-            color: DesignVariables.primaryRed, 
-            onTap: onNext, 
-            borderColor: Colors.transparent, 
-            height: 52 * DesignVariables.heightConversion, 
-            width: 334.67 * DesignVariables.widthConversion, 
-            buttonContent: 
-              LoginSignupButtonContent(
-                svgOffset: 18 * DesignVariables.widthConversion,
-                svgPath: 'assets/icons/arrow-long-left.svg',
-                svgDimensions: 36,
-                text: 'Next',
-                fontSize: 22,
-                fontColor: Colors.white,
-                isRight: true,
-                fontWeight: FontWeight.w700,
-              )
-          ),
-
-          const BoxGap(width: 0, height: 36),
-        ],
-          
-      ))
-    );
+                const BoxGap(width: 0, height: 36),
+              ],
+            )));
   }
 }

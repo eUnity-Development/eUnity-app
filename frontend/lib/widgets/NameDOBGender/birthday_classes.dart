@@ -6,11 +6,7 @@ class BoxGap extends StatelessWidget {
   final double width;
   final double height;
 
-  const BoxGap({
-    super.key,
-    required this.width,
-    required this.height
-  });
+  const BoxGap({super.key, required this.width, required this.height});
 
   @override
   Widget build(BuildContext context) {
@@ -27,36 +23,29 @@ class DOBSection extends StatelessWidget {
   final List<Widget> inputs;
   final Color borderColor;
 
-  const DOBSection({
-    super.key,
-    required this.width,
-    required this.height,
-    required this.inputs,
-    required this.borderColor
-  });
+  const DOBSection(
+      {super.key,
+      required this.width,
+      required this.height,
+      required this.inputs,
+      required this.borderColor});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-          height: height,
-          width: width,
-          
-          decoration: BoxDecoration(
-              border: Border.all(color: borderColor, width: 1),
-              borderRadius: const BorderRadius.all(Radius.circular(10))
-          ),
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+            border: Border.all(color: borderColor, width: 1),
+            borderRadius: const BorderRadius.all(Radius.circular(10))),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          //crossAxisAlignment: CrossAxisAlignment.center,
 
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            //crossAxisAlignment: CrossAxisAlignment.center,
-            
-            children: inputs,
-          )
-        );
-
+          children: inputs,
+        ));
   }
 }
-
 
 class IndividualTextField extends StatefulWidget {
   final TextEditingController controller;
@@ -103,7 +92,8 @@ class IndividualTextFieldState extends State<IndividualTextField> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 14,
-      child: Center( child: Stack(
+      child: Center(
+          child: Stack(
         children: [
           // TextField with 1 entry and numbers only
           TextFormField(
@@ -115,7 +105,7 @@ class IndividualTextFieldState extends State<IndividualTextField> {
             style: const TextStyle(fontSize: 14),
             controller: widget.controller,
             focusNode: widget.focusNode,
-            decoration: InputDecoration(  
+            decoration: InputDecoration(
               hintText: _currentHintText,
               hintStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
               border: InputBorder.none,
@@ -129,13 +119,11 @@ class IndividualTextFieldState extends State<IndividualTextField> {
               if (value.isNotEmpty) {
                 widget.nextFocusNode?.requestFocus();
                 alignment = TextAlign.right;
-
               } else if (value.isEmpty) {
                 widget.focusNode.previousFocus();
                 alignment = TextAlign.center;
               }
             },
-
           ),
 
           // Line underneath textfield
