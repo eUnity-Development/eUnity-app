@@ -9,6 +9,8 @@ class UserInfoHelper {
   static void loadDefaultCache() {
     userInfoCache['genderPreference'] = ['Women'];
     userInfoCache['relationshipType'] = 'Long Term Relationships';
+    userInfoCache['userGender'] = '';
+    userInfoCache['userGenderOptions'] = 'Non-Binary';
   }
 
   static void updateCacheVariable(String variable, var newValue) {

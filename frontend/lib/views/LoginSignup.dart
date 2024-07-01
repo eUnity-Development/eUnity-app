@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:eunity/views/NameDOBGender.dart';
 import 'package:flutter/material.dart';
 import 'package:eunity/classes/AuthHelper.dart';
 import 'package:eunity/classes/DesignVariables.dart';
@@ -77,6 +78,14 @@ class _LoginSignupState extends State<LoginSignup> {
     if (loginCheck) {
       AuthHelper.setLoggedIn(true);
     }
+  }
+
+  // Temporary function to get to profile setup screens
+  void navigateToProfileSetup() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const NameDOBGender()),
+    );
   }
 
   @override
@@ -227,6 +236,26 @@ class _LoginSignupState extends State<LoginSignup> {
             height: btnHeight,
             width: btnWidth,
             onTap: forceLogin,
+          ),
+
+          // Test out the dating profile creation flow
+          SizedBox(height: spaceBetweenLogin),
+
+          LoginSignupButton(
+            color: loginBackground,
+            borderColor: loginBorder,
+            buttonContent: const Text(
+              'Test - Profile Creation',
+              style: TextStyle(
+                fontSize: fontSize, 
+                color: fontColor,
+                fontWeight: FontWeight.w700,
+              )
+            ),
+            
+            height: btnHeight,
+            width: btnWidth,
+            onTap: navigateToProfileSetup,
           ),
         ],
       ),
