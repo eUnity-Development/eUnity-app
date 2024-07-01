@@ -50,7 +50,7 @@ dependencies:
   image_picker: ^1.0.8
   flutter_swipe_detector: ^2.0.0
   shared_preferences: ^2.2.3
-  rive: ^0.13.4
+  rive: ^0.13.7
 
 dev_dependencies:
   flutter_test:
