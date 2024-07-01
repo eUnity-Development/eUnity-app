@@ -32,13 +32,16 @@ class _NoLogoTopBarState extends State<NoLogoTopBar> {
                 },
               )),
           Container(
-            child: Center(
-              child: Text(
-                widget.title,
-                style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 24,
-                    color: Colors.black),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 5.0),
+              child: Center(
+                child: Text(
+                  widget.title,
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 24,
+                      color: Colors.black),
+                ),
               ),
             ),
           ),

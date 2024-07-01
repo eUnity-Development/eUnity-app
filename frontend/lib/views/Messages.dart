@@ -1,6 +1,7 @@
 import 'package:eunity/widgets/Tiles/chat_tile.dart';
 import 'package:eunity/widgets/matchesWidget/match_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:eunity/views/MessagingScreen.dart';
 
 class Messages extends StatefulWidget {
   const Messages({super.key});
@@ -12,12 +13,9 @@ class Messages extends StatefulWidget {
 class _MessagesState extends State<Messages> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: CustomAppBar(),
-        body: ChatScreen(),
-      ),
+    return Scaffold(
+      appBar: CustomAppBar(),
+      body: ChatScreen(),
     );
   }
 }
@@ -52,15 +50,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           const Center(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(
-                'New matches',
-                style: TextStyle(
-                  color: Color.fromRGBO(255, 92, 92, 1.0),
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  
-                )
-              ),
+              child: Text('New matches',
+                  style: TextStyle(
+                    color: Color.fromRGBO(255, 92, 92, 1.0),
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  )),
             ),
           ),
           const SizedBox(height: 10),
@@ -125,6 +120,17 @@ class ChatScreen extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
+    void navigateToTestMessage() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MessagingScreen(
+                  matchPfp: "assets/FakePeople/StephanieBrown.png",
+                  matchName: "Stephanie",
+                )),
+      );
+    }
+
     return ListView.builder(
       itemCount: chats.length,
       itemBuilder: (context, index) {
@@ -137,7 +143,10 @@ class ChatScreen extends StatelessWidget {
                 indent: 0,
                 endIndent: 0,
               ),
-            ChatTile(chat: chats[index]),
+            GestureDetector(
+              child: ChatTile(chat: chats[index]),
+              onTap: navigateToTestMessage,
+            ),
             const Divider(
               color: Color.fromRGBO(217, 217, 217, 1.0),
               thickness: 1,

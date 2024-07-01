@@ -81,6 +81,7 @@ flutter:
     - assets/FakePeople/
     - assets/login/
     - assets/MiscIcons/
+    - assets/icons/
     - assets/icons/MatchingInterest4.riv
     - assets/icons/NonMatchingInterest.riv
 
