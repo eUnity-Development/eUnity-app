@@ -58,6 +58,36 @@ paths:
       summary: Add Feedback
       tags:
       - Feedback
+  /feedback/get:
+    get:
+      consumes:
+      - application/json
+      description: Get all feedback
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Feedback retrieved successfully!
+          schema:
+            type: string
+      summary: Get Feedback
+      tags:
+      - Feedback
+  /feedback/getall:
+    get:
+      consumes:
+      - application/json
+      description: Get all feedback
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Feedback retrieved successfully!
+          schema:
+            type: string
+      summary: Get All Feedback
+      tags:
+      - Feedback
   /media/{user_id}/{image_id}:
     get:
       consumes:

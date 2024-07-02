@@ -100,6 +100,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/feedback/get": {
+            "get": {
+                "description": "Get all feedback",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Feedback"
+                ],
+                "summary": "Get Feedback",
+                "responses": {
+                    "200": {
+                        "description": "Feedback retrieved successfully!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/feedback/getall": {
+            "get": {
+                "description": "Get all feedback",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Feedback"
+                ],
+                "summary": "Get All Feedback",
+                "responses": {
+                    "200": {
+                        "description": "Feedback retrieved successfully!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/media/user_image": {
             "post": {
                 "consumes": [
