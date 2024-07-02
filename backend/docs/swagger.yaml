@@ -22,6 +22,42 @@ paths:
       summary: Google Auth
       tags:
       - Auth
+  /feedback/add:
+    post:
+      consumes:
+      - application/json
+      description: Add feedback from a user
+      parameters:
+      - description: User ID
+        in: query
+        name: user
+        required: true
+        type: string
+      - description: Stars
+        in: query
+        name: stars
+        required: true
+        type: integer
+      - description: Positive Text
+        in: query
+        name: positive_text
+        required: true
+        type: string
+      - description: Negative Text
+        in: query
+        name: negative_text
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Feedback added successfully!
+          schema:
+            type: string
+      summary: Add Feedback
+      tags:
+      - Feedback
   /media/{user_id}/{image_id}:
     get:
       consumes:
