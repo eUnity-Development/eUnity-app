@@ -78,14 +78,14 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Positive Text",
-                        "name": "positive_text",
+                        "name": "positive_message",
                         "in": "query",
                         "required": true
                     },
                     {
                         "type": "string",
                         "description": "Negative Text",
-                        "name": "negative_text",
+                        "name": "negative_message",
                         "in": "query",
                         "required": true
                     }

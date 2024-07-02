@@ -89,7 +89,7 @@ func (u *User_controllers) PATCH_me(c *gin.Context) {
 	// //turn string id into bson object id
 	bson_user_id, err := primitive.ObjectIDFromHex(user_id)
 	if err != nil {
-		c.JSON(400, gin.H{
+		c.JSON(400, gin.H{                      
 			"response": "Invalid user ID",
 		})
 		return

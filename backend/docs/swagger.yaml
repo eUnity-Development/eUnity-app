@@ -40,12 +40,12 @@ paths:
         type: integer
       - description: Positive Text
         in: query
-        name: positive_text
+        name: positive_message
         required: true
         type: string
       - description: Negative Text
         in: query
-        name: negative_text
+        name: negative_message
         required: true
         type: string
       produces:

@@ -21,8 +21,8 @@ type Feedback_controllers struct{}
 // @Produce json
 // @Param user query string true "User ID"
 // @Param stars query int true "Stars"
-// @Param positive_text query string true "Positive Text"
-// @Param negative_text query string true "Negative Text"
+// @Param positive_message query string true "Positive Text"
+// @Param negative_message query string true "Negative Text"
 // @Success 200 {string} string "Feedback added successfully!"
 // @Router /feedback/add [post]
 func (fc *Feedback_controllers) Add_feedback(c *gin.Context) {
