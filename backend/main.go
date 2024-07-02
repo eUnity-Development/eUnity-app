@@ -31,6 +31,7 @@ func main() {
 	//unprotected routes
 	routes.Pub_User_routes(r.Group("/users"))
 	routes.Pub_Media_routes(r.Group("/media"))
+	routes.Feedback_routes(r.Group("/feedback"))
 
 	//change goth auth route names to web auth
 	routes.Web_Auth_routes(r.Group("/webAuth"))
