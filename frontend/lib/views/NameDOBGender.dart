@@ -26,6 +26,8 @@ class _NameDOBGender extends State<NameDOBGender> {
       List<FocusNode>.generate(dobNodes, (int index) => FocusNode());
 
   Color nameBorder = DesignVariables.greyLines;
+  Color nameDescColor = Colors.black;
+
   Color genderDescColor = Colors.black;
 
   Color dobBorder = DesignVariables.greyLines;
@@ -150,7 +152,7 @@ class _NameDOBGender extends State<NameDOBGender> {
       });
     }
 
-    if (UserInfoHelper.userInfoCache['userGenderOptions'] == '') {
+    if (UserInfoHelper.userInfoCache['userGender'] == '') {
       setState(() {
         genderDescColor = Colors.red;
       });
@@ -163,10 +165,12 @@ class _NameDOBGender extends State<NameDOBGender> {
     if (_nameController.text.isEmpty) {
       setState(() {
         nameBorder = Colors.red;
+        nameDescColor = Colors.red;
       });
     } else {
       setState(() {
         nameBorder = DesignVariables.greyLines;
+        nameDescColor = Colors.black;
       });
     }
   }
@@ -247,11 +251,12 @@ class _NameDOBGender extends State<NameDOBGender> {
                 const BoxGap(width: 0, height: 7),
 
                 // Name description
-                const Text(
+                Text(
                   "The name you enter here will appear on your profile.",
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
+                    color: nameDescColor,
                   ),
                 ),
 
