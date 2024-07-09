@@ -52,6 +52,7 @@ class IndividualTextField extends StatefulWidget {
   final String hintText;
   final FocusNode focusNode;
   final FocusNode? nextFocusNode;
+  final bool? isLast;
 
   const IndividualTextField({
     super.key,
@@ -59,6 +60,7 @@ class IndividualTextField extends StatefulWidget {
     required this.hintText,
     required this.focusNode,
     this.nextFocusNode,
+    this.isLast,
   });
 
   @override
@@ -90,6 +92,7 @@ class IndividualTextFieldState extends State<IndividualTextField> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLastFocusNode = widget.isLast ?? false;
     return SizedBox(
       width: 14,
       child: Center(
@@ -111,6 +114,12 @@ class IndividualTextFieldState extends State<IndividualTextField> {
               border: InputBorder.none,
               counterText: "",
             ),
+
+            onFieldSubmitted: isLastFocusNode
+                ? (value) {
+                    FocusScope.of(context).unfocus();
+                  }
+                : null,
 
             // When user types in a value, input isn't centered with TextAlign.center
             // so we use TextAlign.right to get it closer to center. Not sure why it

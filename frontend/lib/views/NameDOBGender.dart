@@ -435,6 +435,7 @@ class _NameDOBGender extends State<NameDOBGender> {
                                 controller: _dobControllers[y4],
                                 hintText: 'Y',
                                 focusNode: _dobFocusNodes[y4],
+                                isLast: true,
                               ),
                             ]),
                       ],
