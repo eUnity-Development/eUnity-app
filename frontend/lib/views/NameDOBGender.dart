@@ -1,5 +1,6 @@
 import 'package:eunity/classes/DesignVariables.dart';
 import 'package:eunity/classes/UserInfoHelper.dart';
+import 'package:eunity/views/UserPrefs.dart';
 import 'package:eunity/widgets/LoginSignup/login_signup_button_content.dart';
 import 'package:eunity/widgets/NameDOBGender/birthday_classes.dart';
 import 'package:eunity/widgets/SelectionWidgets/SelectionFunction.dart';
@@ -138,11 +139,13 @@ class _NameDOBGender extends State<NameDOBGender> {
   }
 
   void onNext() {
+    bool isValid = true;
     if (!isValidDate()) {
       setState(() {
         dobDesc = 'Please enter a valid date.';
         dobDescColor = Colors.red;
         dobBorder = Colors.red;
+        isValid = false;
       });
     } else {
       setState(() {
@@ -155,6 +158,7 @@ class _NameDOBGender extends State<NameDOBGender> {
     if (UserInfoHelper.userInfoCache['userGender'] == '') {
       setState(() {
         genderDescColor = Colors.red;
+        isValid = false;
       });
     } else {
       setState(() {
@@ -166,12 +170,20 @@ class _NameDOBGender extends State<NameDOBGender> {
       setState(() {
         nameBorder = Colors.red;
         nameDescColor = Colors.red;
+        isValid = false;
       });
     } else {
       setState(() {
         nameBorder = DesignVariables.greyLines;
         nameDescColor = Colors.black;
       });
+    }
+
+    if (isValid) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const UserPrefs()),
+      );
     }
   }
 
