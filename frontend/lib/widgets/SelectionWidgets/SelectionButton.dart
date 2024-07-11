@@ -5,17 +5,22 @@ import 'package:eunity/widgets/SelectionWidgets/SelectionDialog.dart';
 
 class SelectionButton extends StatefulWidget {
   final String cacheKey;
+  final String cacheObject;
   final List options;
   final String question;
   final String assetPath;
   final bool multiSelect;
-  const SelectionButton(
-      {super.key,
-      required this.cacheKey,
-      required this.options,
-      required this.question,
-      required this.assetPath,
-      required this.multiSelect});
+  final bool allowNull;
+  const SelectionButton({
+    super.key,
+    required this.cacheKey,
+    required this.cacheObject,
+    required this.options,
+    required this.question,
+    required this.assetPath,
+    required this.multiSelect,
+    required this.allowNull,
+  });
 
   @override
   State<SelectionButton> createState() => _SelectionButtonState();
@@ -32,7 +37,9 @@ class _SelectionButtonState extends State<SelectionButton> {
             question: widget.question,
             assetPath: widget.assetPath,
             cacheKey: widget.cacheKey,
+            cacheObject: widget.cacheObject,
             multiSelect: widget.multiSelect,
+            allowNull: widget.allowNull,
           );
         }).then((value) {
       setState(() {});
@@ -49,7 +56,25 @@ class _SelectionButtonState extends State<SelectionButton> {
       return newInput;
     }
 
-    String cachePointer = widget.cacheKey;
+    String getDisplayValue() {
+      if (widget.cacheObject != '') {
+        if (UserInfoHelper.userInfoCache[widget.cacheObject][widget.cacheKey]
+                .runtimeType !=
+            String) {
+          return varToText(UserInfoHelper.userInfoCache[widget.cacheObject]
+              [widget.cacheKey]);
+        }
+        return UserInfoHelper.userInfoCache[widget.cacheObject]
+            [widget.cacheKey];
+      } else {
+        if (UserInfoHelper.userInfoCache[widget.cacheKey].runtimeType !=
+            String) {
+          return varToText(UserInfoHelper.userInfoCache[widget.cacheKey]);
+        }
+        return UserInfoHelper.userInfoCache[widget.cacheKey];
+      }
+    }
+
     return GestureDetector(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16),
@@ -65,10 +90,7 @@ class _SelectionButtonState extends State<SelectionButton> {
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Center(
               child: Text(
-                (UserInfoHelper.userInfoCache[cachePointer].runtimeType !=
-                        String)
-                    ? varToText(UserInfoHelper.userInfoCache[cachePointer])
-                    : UserInfoHelper.userInfoCache[cachePointer],
+                getDisplayValue(),
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 16,

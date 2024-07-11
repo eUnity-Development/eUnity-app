@@ -1,3 +1,4 @@
+import 'package:eunity/classes/UserInfoHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:eunity/widgets/SelectionWidgets/SelectionButton.dart';
 import 'package:eunity/widgets/MatchPreferencesWidgets/MatchPreferencesRangeSlider.dart';
@@ -12,6 +13,27 @@ class MatchPreferences extends StatefulWidget {
 }
 
 class _MatchPreferencesState extends State<MatchPreferences> {
+  Future<void> updateData() async {
+    await UserInfoHelper.getUserInfo();
+    setState(() {});
+  }
+
+  Future<void> patchData() async {
+    await UserInfoHelper.patchUserInfo();
+  }
+
+  @override
+  void initState() {
+    updateData();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    patchData();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     const TextStyle headerStyle =
@@ -56,13 +78,15 @@ class _MatchPreferencesState extends State<MatchPreferences> {
                 ),
                 spacerBox,
                 SelectionButton(
-                    cacheKey: "genderPreference",
+                    cacheKey: "genders",
+                    cacheObject: 'match_preferences',
                     assetPath: "None",
                     options: [
                       "Men",
                       "Women",
                     ],
                     multiSelect: true,
+                    allowNull: false,
                     question: "Select Preferred Gender(s)"),
                 largeSpacer,
                 Text(
@@ -76,12 +100,14 @@ class _MatchPreferencesState extends State<MatchPreferences> {
                 ),
                 spacerBox,
                 SelectionButton(
-                    cacheKey: "relationshipType",
+                    cacheKey: "relationship_types",
+                    cacheObject: 'match_preferences',
                     options: [
                       "Long Term Relationships",
                       "Short Term Relationships"
                     ],
-                    multiSelect: false,
+                    multiSelect: true,
+                    allowNull: false,
                     question: "Preferred Relationship",
                     assetPath: "assets/MiscIcons/icon-outline-star.svg"),
                 largeSpacer,
@@ -96,7 +122,12 @@ class _MatchPreferencesState extends State<MatchPreferences> {
                 ),
                 spacerBox,
                 MatchPreferencesRangeSlider(
-                    initialMinimum: 20, initialMaximum: 27),
+                    initialMinimum: UserInfoHelper
+                        .userInfoCache['match_preferences']['minimum_age']
+                        .toDouble(),
+                    initialMaximum: UserInfoHelper
+                        .userInfoCache['match_preferences']['maximum_age']
+                        .toDouble()),
                 largeSpacer,
                 Text(
                   "Maximum Distance",
@@ -107,7 +138,10 @@ class _MatchPreferencesState extends State<MatchPreferences> {
                   "Select the maximum distance you would like your matches to be away from you",
                   style: subStyle,
                 ),
-                MatchPreferencesSlider(initialValue: 1),
+                MatchPreferencesSlider(
+                    initialValue: UserInfoHelper
+                        .userInfoCache['match_preferences']['maximum_distance']
+                        .toDouble()),
               ],
             ),
           ),

@@ -8,7 +8,9 @@ void showSelectDialog({
   required String question,
   required String assetPath,
   required String cacheKey,
+  required String cacheObject,
   required bool multiSelect,
+  required bool allowNull,
   required reRender,
 }) {
   showModalBottomSheet(
@@ -20,7 +22,9 @@ void showSelectDialog({
         question: question,
         assetPath: assetPath,
         cacheKey: cacheKey,
+        cacheObject: cacheObject,
         multiSelect: multiSelect,
+        allowNull: allowNull,
       );
     },
   ).then((value) {

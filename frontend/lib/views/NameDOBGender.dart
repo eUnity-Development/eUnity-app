@@ -1,5 +1,6 @@
 import 'package:eunity/classes/DesignVariables.dart';
 import 'package:eunity/classes/UserInfoHelper.dart';
+import 'package:eunity/home.dart';
 import 'package:eunity/widgets/LoginSignup/login_signup_button_content.dart';
 import 'package:eunity/widgets/NameDOBGender/birthday_classes.dart';
 import 'package:eunity/widgets/SelectionWidgets/SelectionFunction.dart';
@@ -40,11 +41,18 @@ class _NameDOBGender extends State<NameDOBGender> {
   String nonBinaryOption = 'Non-Binary';
   List<String> genderOptions = [];
 
+  @override
+  @override
+  void initState() {
+    UserInfoHelper.loadDOBTempCache();
+    super.initState();
+  }
+
   // Button that the user selects is the 'active' button
   void setActiveButtonIndex(int index) {
     setState(() {
       activeButtonIndex = index;
-      UserInfoHelper.userInfoCache['userGender'] = genderOptions[index];
+      UserInfoHelper.tempCache['userGender'] = genderOptions[index];
     });
   }
 
@@ -52,7 +60,7 @@ class _NameDOBGender extends State<NameDOBGender> {
   void updateNonBinaryGender() {
     setState(() {
       nonBinaryOption =
-          UserInfoHelper.userInfoCache['userGenderOptions'] ?? 'Non-Binary';
+          UserInfoHelper.tempCache['userGenderOptions'] ?? 'Non-Binary';
     });
   }
 
@@ -67,12 +75,14 @@ class _NameDOBGender extends State<NameDOBGender> {
         'Non-Binary'
       ], // Add more genders here
       cacheKey: 'userGenderOptions',
+      cacheObject: '',
       question: 'Select your gender',
       assetPath: 'None',
       multiSelect: false,
+      allowNull: true,
     );
-    UserInfoHelper.userInfoCache['userGender'] =
-        UserInfoHelper.userInfoCache['userGenderOptions'];
+    UserInfoHelper.tempCache['userGender'] =
+        UserInfoHelper.tempCache['userGenderOptions'];
     setActiveButtonIndex(2);
   }
 
@@ -135,7 +145,7 @@ class _NameDOBGender extends State<NameDOBGender> {
     return age >= 18;
   }
 
-  void onNext() {
+  void onNext() async {
     if (!isValidDate()) {
       setState(() {
         dobDesc = 'Please enter a valid date.';
@@ -150,7 +160,7 @@ class _NameDOBGender extends State<NameDOBGender> {
       });
     }
 
-    if (UserInfoHelper.userInfoCache['userGenderOptions'] == '') {
+    if (UserInfoHelper.tempCache['userGenderOptions'] == '') {
       setState(() {
         genderDescColor = Colors.red;
       });
@@ -169,6 +179,34 @@ class _NameDOBGender extends State<NameDOBGender> {
         nameBorder = DesignVariables.greyLines;
       });
     }
+
+    if (isValidDate() &&
+        (_nameController.text.isEmpty == false) &&
+        UserInfoHelper.tempCache['userGender'] != '') {
+      String chosenGender = UserInfoHelper.tempCache['userGender'];
+      if (chosenGender == 'Non-Binary') {
+        chosenGender = nonBinaryOption;
+      }
+      UserInfoHelper.updateCacheVariable(
+          'first_name', '', _nameController.text);
+      UserInfoHelper.updateCacheVariable('gender', '', chosenGender);
+      int month = int.parse(_dobControllers[m1].text) * 10 +
+          int.parse(_dobControllers[m2].text);
+      int day = int.parse(_dobControllers[d1].text) * 10 +
+          int.parse(_dobControllers[d2].text);
+      int year = int.parse(_dobControllers[y1].text) * 1000 +
+          int.parse(_dobControllers[y2].text) * 100 +
+          int.parse(_dobControllers[y3].text) * 10 +
+          int.parse(_dobControllers[y4].text);
+      Map<dynamic, dynamic> dobMap = {'day': day, 'month': month, 'year': year};
+      UserInfoHelper.updateCacheVariable('dob', '', dobMap);
+      UserInfoHelper.updateCacheVariable('is_profile_set_up', '', true);
+      await UserInfoHelper.patchUserInfo();
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => Home()),
+        (Route<dynamic> route) => false,
+      );
+    }
   }
 
   @override
@@ -178,6 +216,7 @@ class _NameDOBGender extends State<NameDOBGender> {
       _dobFocusNodes[i].dispose();
     }
     _nameController.dispose();
+    UserInfoHelper.clearTempCache();
     super.dispose();
   }
 

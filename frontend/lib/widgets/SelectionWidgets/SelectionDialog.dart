@@ -10,13 +10,18 @@ class SelectionDialog extends StatefulWidget {
   final String assetPath;
   final bool multiSelect;
   final String cacheKey;
-  const SelectionDialog(
-      {super.key,
-      required this.options,
-      required this.question,
-      required this.assetPath,
-      required this.multiSelect,
-      required this.cacheKey});
+  final String cacheObject;
+  final bool allowNull;
+  const SelectionDialog({
+    super.key,
+    required this.options,
+    required this.question,
+    required this.assetPath,
+    required this.multiSelect,
+    required this.cacheKey,
+    required this.cacheObject,
+    required this.allowNull,
+  });
 
   @override
   State<SelectionDialog> createState() => _SelectionDialogState();
@@ -47,6 +52,64 @@ class _SelectionDialogState extends State<SelectionDialog> {
 
     TextStyle unselectedText = TextStyle(
         fontWeight: FontWeight.w500, fontSize: 16, color: Colors.black);
+
+    bool checkIfSelected(var checkedVar) {
+      if (widget.cacheObject != '') {
+        if (widget.multiSelect) {
+          if (UserInfoHelper.userInfoCache[widget.cacheObject][widget.cacheKey]
+              .contains(checkedVar)) {
+            return true;
+          }
+        } else {
+          if (UserInfoHelper.userInfoCache[widget.cacheObject]
+                  [widget.cacheKey] ==
+              checkedVar) {
+            return true;
+          }
+        }
+      } else {
+        if (widget.multiSelect) {
+          if (UserInfoHelper.userInfoCache[widget.cacheKey]
+              .contains(checkedVar)) {
+            return true;
+          }
+        } else {
+          if (UserInfoHelper.userInfoCache[widget.cacheKey] == checkedVar) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
+    dynamic getNewCacheValue(var checkedVar) {
+      if (widget.cacheObject != '') {
+        if (widget.multiSelect) {
+          List cacheValue =
+              UserInfoHelper.userInfoCache[widget.cacheObject][widget.cacheKey];
+          if (cacheValue.contains(checkedVar)) {
+            if (cacheValue.length != 1) {
+              cacheValue.remove(checkedVar);
+            }
+          } else {
+            cacheValue.add(checkedVar);
+          }
+          return cacheValue;
+        }
+        return checkedVar;
+      } else {
+        if (widget.multiSelect) {
+          List cacheValue = UserInfoHelper.userInfoCache[widget.cacheKey];
+          if (cacheValue.contains(checkedVar)) {
+            cacheValue.remove(checkedVar);
+          } else {
+            cacheValue.add(checkedVar);
+          }
+          return cacheValue;
+        }
+        return checkedVar;
+      }
+    }
 
     return Container(
         height: 400,
@@ -110,51 +173,25 @@ class _SelectionDialogState extends State<SelectionDialog> {
                         child: Container(
                           width: double.infinity,
                           height: 42,
-                          decoration: (widget.multiSelect)
-                              ? (UserInfoHelper.userInfoCache[widget.cacheKey]
-                                      .contains(widget.options[index]))
-                                  ? selectedBox
-                                  : unselectedBox
-                              : (UserInfoHelper
-                                          .userInfoCache[widget.cacheKey] ==
-                                      widget.options[index])
-                                  ? selectedBox
-                                  : unselectedBox,
+                          decoration: (checkIfSelected(widget.options[index]))
+                              ? selectedBox
+                              : unselectedBox,
                           child: Center(
                             child: Text(
                               widget.options[index],
-                              style: (widget.multiSelect)
-                                  ? (UserInfoHelper
-                                          .userInfoCache[widget.cacheKey]
-                                          .contains(widget.options[index]))
-                                      ? selectedText
-                                      : unselectedText
-                                  : (UserInfoHelper
-                                              .userInfoCache[widget.cacheKey] ==
-                                          widget.options[index])
-                                      ? selectedText
-                                      : unselectedText,
+                              style: (checkIfSelected(widget.options[index]))
+                                  ? selectedText
+                                  : unselectedText,
                             ),
                           ),
                         ),
                       ),
-                      onTap: () {
-                        setState(() {
-                          if (widget.multiSelect) {
-                            List cacheValue =
-                                UserInfoHelper.userInfoCache[widget.cacheKey];
-                            if (cacheValue.contains(widget.options[index])) {
-                              cacheValue.remove(widget.options[index]);
-                            } else {
-                              cacheValue.add(widget.options[index]);
-                            }
-                            UserInfoHelper.updateCacheVariable(
-                                widget.cacheKey, cacheValue);
-                          } else {
-                            UserInfoHelper.updateCacheVariable(
-                                widget.cacheKey, widget.options[index]);
-                          }
-                        });
+                      onTap: () async {
+                        dynamic newValue =
+                            getNewCacheValue(widget.options[index]);
+                        await UserInfoHelper.updateCacheVariable(
+                            widget.cacheKey, widget.cacheObject, newValue);
+                        setState(() {});
                       },
                     );
                   },

@@ -253,14 +253,24 @@ func (u *User_controllers) POST_signup(c *gin.Context) {
 
 	//we do not store the users password in the database
 	objectID := primitive.NewObjectID()
+	default_match_preferences := models.MatchPreferences{
+		Genders:           []string{},
+		RelationshipTypes: []string{},
+		MinimumAge:        18,
+		MaximumAge:        32,
+		MaximumDistance:   25,
+	}
+
 	new_user := models.User{
 		ID:                    &objectID,
 		Email:                 credentials.Email,
 		PasswordHash:          password_hash,
 		Verified_email:        false,
 		Verified_phone_number: false,
+		IsProfileSetUp:        false,
 		MediaFiles:            []string{},
 		Providers:             make(map[string]models.Provider),
+		MatchPreferences:      default_match_preferences,
 	}
 
 	_, err = DBManager.DB.Collection("users").InsertOne(context.Background(), new_user)

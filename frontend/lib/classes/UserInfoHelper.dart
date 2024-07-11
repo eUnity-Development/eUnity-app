@@ -1,20 +1,53 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:eunity/classes/RouteHandler.dart';
 import 'package:dio/dio.dart';
 
 class UserInfoHelper {
   static String defaultHost = RouteHandler.defaultHost;
+  static Map<dynamic, dynamic> tempCache = {};
   static Map<dynamic, dynamic> userInfoCache = {};
 
-  static void loadDefaultCache() {
-    userInfoCache['genderPreference'] = ['Women'];
-    userInfoCache['relationshipType'] = 'Long Term Relationships';
-    userInfoCache['userGender'] = '';
-    userInfoCache['userGenderOptions'] = 'Non-Binary';
+  static void clearTempCache() {
+    tempCache = {};
   }
 
-  static void updateCacheVariable(String variable, var newValue) {
-    userInfoCache[variable] = newValue;
+  static void loadDOBTempCache() {
+    tempCache['userGender'] = '';
+    tempCache['userGenderOptions'] = 'Non-Binary';
+  }
+
+  static Future<void> updateCacheVariable(
+      String variable, String object, var newValue) async {
+    if (object == '') {
+      userInfoCache[variable] = newValue;
+    } else {
+      userInfoCache[object][variable] = newValue;
+    }
+  }
+
+  static Future<void> emptyUserCache() async {
+    userInfoCache = {};
+  }
+
+  static Future<Response> patchUserInfo() async {
+    String endpoint = '/users/me';
+    var url = '$defaultHost$endpoint';
+    try {
+      final response = await RouteHandler.dio.patch(
+        url,
+        data: jsonEncode(userInfoCache),
+      );
+      return response;
+    } on DioException catch (e) {
+      print(e);
+      return Response(
+        requestOptions: RequestOptions(path: url),
+        data: {'message': 'Unable to connect to server'},
+        statusCode: 500,
+        statusMessage: 'Unable to connect to server',
+      );
+    }
   }
 
   static Future<Response> getUserInfo() async {
@@ -25,6 +58,8 @@ class UserInfoHelper {
         url,
         options: Options(contentType: Headers.jsonContentType),
       );
+      userInfoCache = response.data;
+      print(response.data);
       return response;
     } on DioException catch (e) {
       print(e);
