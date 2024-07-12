@@ -25,7 +25,10 @@ class _HomeTopBarState extends State<HomeTopBar> {
   void navigateToMatchPreferences() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => MatchPreferences()),
+      MaterialPageRoute(
+          builder: (context) => MatchPreferences(
+                inSetUp: false,
+              )),
     );
   }
 

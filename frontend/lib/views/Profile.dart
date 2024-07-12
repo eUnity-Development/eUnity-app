@@ -140,8 +140,9 @@ class _ProfileState extends State<Profile> {
                       ]),
                   child: CircleAvatar(
                     backgroundColor: Colors.transparent,
-                    backgroundImage:
-                        AssetImage('assets/FakePeople/StephanieBrown.png'),
+                    backgroundImage: NetworkImage(
+                        UserInfoHelper.getPublicImageURL(
+                            UserInfoHelper.userInfoCache['media_files'][0])),
                     radius: 69 * DesignVariables.widthConversion,
                   ),
                 ),
@@ -151,7 +152,7 @@ class _ProfileState extends State<Profile> {
                 Column(
                   children: [
                     Text(
-                      "Stephanie Brown",
+                      UserInfoHelper.userInfoCache['first_name'],
                       style: TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 18,
