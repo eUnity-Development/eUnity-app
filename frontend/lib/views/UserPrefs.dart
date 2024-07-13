@@ -1,7 +1,7 @@
 import 'package:eunity/classes/DesignVariables.dart';
 import 'package:eunity/widgets/TopBars/PushedScreenTopBar.dart';
+import 'package:eunity/widgets/UserPrefs/user_prefs_button.dart';
 import 'package:flutter/material.dart';
-
 import '../widgets/NameDOBGender/birthday_classes.dart';
 
 class UserPrefs extends StatefulWidget {
@@ -25,11 +25,11 @@ class UserPrefsState extends State<UserPrefs> {
         body: Padding(
             padding: EdgeInsets.symmetric(
               horizontal: 18.0 * DesignVariables.widthConversion),
-              child: const Column(
+              child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start, 
                     children: [
                       // About header
-                      Text(
+                      const Text(
                         "About",
                         style: TextStyle(
                           fontSize: 24,
@@ -37,10 +37,10 @@ class UserPrefsState extends State<UserPrefs> {
                         ),
                       ),
 
-                      BoxGap(width: 0, height: 7),
+                      const BoxGap(width: 0, height: 7),
 
                       // About description
-                      Text(
+                      const Text(
                         "Matches will want to know more about you!",
                         style: TextStyle(
                           fontSize: 12,
@@ -48,6 +48,18 @@ class UserPrefsState extends State<UserPrefs> {
                           color: Colors.black,
                         ),
                       ),
+                      
+                      const BoxGap(width: 0, height: 7),
+
+                      UserPrefsButton(
+                        name: 'Pronouns',
+                        context: context, 
+                        options: const ['He/him', 'She/hers', 'They/them'], 
+                        question: 'Select your pronouns', 
+                        assetPath: 'assets/preferences/user-group.svg', 
+                        cacheKey: 'pronouns', 
+                        multiSelect: false,
+                        )
                     ]
                   )
                 )

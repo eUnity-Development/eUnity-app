@@ -82,6 +82,7 @@ flutter:
     - assets/login/
     - assets/MiscIcons/
     - assets/icons/
+    - assets/preferences/
     - assets/icons/MatchingInterest4.riv
     - assets/icons/NonMatchingInterest.riv
 

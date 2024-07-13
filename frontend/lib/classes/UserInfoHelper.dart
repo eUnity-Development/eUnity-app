@@ -11,6 +11,7 @@ class UserInfoHelper {
     userInfoCache['relationshipType'] = 'Long Term Relationships';
     userInfoCache['userGender'] = '';
     userInfoCache['userGenderOptions'] = 'Non-Binary';
+    userInfoCache['pronouns'] = 'Add';
   }
 
   static void updateCacheVariable(String variable, var newValue) {
