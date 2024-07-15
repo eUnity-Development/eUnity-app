@@ -15,10 +15,13 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   Future<void> executeLogout() async {
     await AuthHelper.signOut();
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => Home()),
-      (Route<dynamic> route) => false,
-    );
+    print(AuthHelper.loggedIn);
+    if (mounted) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => Home()),
+        (Route<dynamic> route) => false,
+      );
+    }
   }
 
   @override

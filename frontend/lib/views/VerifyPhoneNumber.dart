@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:eunity/classes/AuthHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:eunity/classes/DesignVariables.dart';
@@ -45,7 +44,6 @@ class _VerifyPhoneNumber extends State<VerifyPhoneNumber> {
       }
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +91,6 @@ class _VerifyPhoneNumber extends State<VerifyPhoneNumber> {
                       content: Text('Code entered is $verificationCode'),
                     );
                   });
-              AuthHelper.setLoggedIn(true);
             },
           ),
           SizedBox(

@@ -23,6 +23,7 @@ type User struct {
 	Providers             map[string]Provider `bson:"providers" json:"providers,omitempty"`
 	MediaFiles            []string            `bson:"media_files" json:"media_files,omitempty"`
 	MatchPreferences      MatchPreferences    `bson:"match_preferences" json:"match_preferences,omitempty"`
+	Bio                   string              `bson:"bio" json:"bio,omitempty"`
 }
 
 type RestrictedUser struct {
@@ -33,6 +34,7 @@ type RestrictedUser struct {
 	DateOfBirth *DateOfBirth        `bson:"dob" json:"dob,omitempty"`
 	FirstName   string              `bson:"first_name" json:"first_name,omitempty"`
 	MediaFiles  []string            `bson:"media_files" json:"media_files,omitempty"`
+	Bio         string              `bson:"bio" json:"bio,omitempty"`
 }
 
 type DateOfBirth struct {

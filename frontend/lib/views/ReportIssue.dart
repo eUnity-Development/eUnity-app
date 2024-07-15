@@ -1,5 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:eunity/classes/DesignVariables.dart';
+import 'package:eunity/classes/FeedbackHelper.dart';
 import 'package:eunity/classes/UserInfoHelper.dart';
+import 'package:eunity/views/ConfirmationScreen.dart';
 import 'package:eunity/widgets/ProfileWidgets/EditImageSquare.dart';
 import 'package:eunity/widgets/ProfileWidgets/NewImageSquare.dart';
 import 'package:eunity/widgets/TopBars/PushedScreenTopBar.dart';
@@ -15,6 +18,96 @@ class ReportIssue extends StatefulWidget {
 class _ReportIssueState extends State<ReportIssue> {
   TextEditingController reportController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  late bool hasOpenReport;
+
+  @override
+  void initState() {
+    loadReportData();
+    super.initState();
+  }
+
+  Future<void> loadReportData() async {
+    var response = await FeedbackHelper.getIssueReport();
+    if (response.statusCode == 200) {
+      hasOpenReport = true;
+      reportController.text = response.data['description'];
+      emailController.text = response.data['email'];
+    } else {
+      hasOpenReport = false;
+    }
+  }
+
+  Future<void> patchData() async {
+    if (hasOpenReport) {
+      Map<dynamic, dynamic> newData = {
+        'description': reportController.text,
+        'email': emailController.text,
+      };
+      print('NEW DATA');
+      print(newData);
+      await FeedbackHelper.updateIssueReport(newData);
+    } else {
+      if (reportController.text != "" || emailController.text != "") {
+        await FeedbackHelper.AddIssueReport(
+            reportController.text, emailController.text);
+      }
+    }
+  }
+
+  Future<void> onSubmit() async {
+    Response response;
+    bool reportSwitch = hasOpenReport;
+
+    print('i clicka the button');
+    print(hasOpenReport);
+    if (hasOpenReport) {
+      Map<dynamic, dynamic> newData = {
+        'description': reportController.text,
+        'email': emailController.text,
+      };
+      response = await FeedbackHelper.updateIssueReport(newData);
+    } else {
+      response = await FeedbackHelper.AddIssueReport(
+          reportController.text, emailController.text);
+    }
+
+    if (response.statusCode == 200) {
+      reportSwitch = true;
+      Response submitResponse = await FeedbackHelper.submitIssueReport();
+      if (submitResponse.statusCode == 200) {
+        reportSwitch = false;
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (BuildContext context) {
+              return const Scaffold(
+                body: ConfirmationScreen(
+                  confirmationTitle: "Thank you for submitting your report!",
+                  confirmationBody:
+                      "At eUnity, our user's experiences are always important to us. Thank you for sharing yours with us. We will do our best to ensure it is heard and your concerns are addressed as quickly as possible.",
+                ),
+              );
+            },
+          ),
+        );
+      } else {
+        if (reportController.text == "") {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Please Describe the Issue!'),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        }
+        setState(() {
+          hasOpenReport = reportSwitch;
+        });
+      }
+    } else {
+      setState(() {
+        hasOpenReport = reportSwitch;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -184,12 +277,7 @@ class _ReportIssueState extends State<ReportIssue> {
                         ),
                       ),
                     ),
-                    onTap: () {
-                      print("Report Text");
-                      print(reportController.text);
-                      print("Email Text");
-                      print(emailController.text);
-                    },
+                    onTap: onSubmit,
                   ),
                 )
               ],
@@ -202,6 +290,7 @@ class _ReportIssueState extends State<ReportIssue> {
 
   @override
   void dispose() {
+    patchData();
     reportController.dispose();
     emailController.dispose();
     super.dispose();

@@ -133,6 +133,8 @@ class AuthHelper {
     }
   }
 
+  static Future<void> SendPhoneVerification() async {}
+
   static Future<void> signInWithGoogle() async {
     try {
       await googleSignIn.signIn();
@@ -153,6 +155,7 @@ class AuthHelper {
         url,
       );
       await UserInfoHelper.emptyUserCache();
+      AuthHelper.loggedIn = false;
       return;
     } on DioException catch (e) {
       if (e.response != null) {

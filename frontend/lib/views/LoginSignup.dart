@@ -50,7 +50,7 @@ class _LoginSignupState extends State<LoginSignup> {
     );
   }
 
-  void handleGoogleSignInClick() async {
+  Future<void> handleGoogleSignInClick() async {
     await AuthHelper.signInWithGoogle();
   }
 
@@ -69,7 +69,7 @@ class _LoginSignupState extends State<LoginSignup> {
     //}
   }
 
-  void forceLogin() async {
+  Future<void> forceLogin() async {
     print('forced login');
     await AuthHelper.signUp("testemail@test.com", "Test123123");
     await AuthHelper.login("testemail@test.com", "Test123123");

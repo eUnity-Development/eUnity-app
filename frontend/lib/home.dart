@@ -22,10 +22,12 @@ class _HomeState extends State<Home> {
   }
 
   void setLoggedIn(bool value) {
-    setState(() {
-      AuthHelper.loggedIn = value;
-      AuthHelper.prefs!.setBool('loggedIn', value);
-    });
+    AuthHelper.loggedIn = value;
+    AuthHelper.prefs!.setBool('loggedIn', value);
+    if (value) {
+      UserInfoHelper.getUserInfo().then((onValue) {});
+    }
+    setState(() {});
   }
 
   Future<void> updateData() async {

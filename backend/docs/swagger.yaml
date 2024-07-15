@@ -172,6 +172,101 @@ paths:
       summary: Gets user image
       tags:
       - Media
+  /report_issue/add_report:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Adds a new Issue Report to the database
+      parameters:
+      - description: Issue Description
+        in: formData
+        name: description
+        type: string
+      - description: Contact Email
+        in: formData
+        name: email
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Add Report Issue
+      tags:
+      - Report Issue
+  /report_issue/get_report:
+    get:
+      consumes:
+      - application/json
+      description: If the user has an unsubmitted report for an app issue, returns
+        it.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get Unsubmitted Report Issue
+      tags:
+      - Report Issue
+  /report_issue/submit_report:
+    patch:
+      consumes:
+      - application/json
+      description: If the user has an unsubmitted report for an app issue, submits
+        it.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Submit Report Issue
+      tags:
+      - Report Issue
+  /report_issue/update_report:
+    patch:
+      consumes:
+      - application/json
+      description: If the user has an unsubmitted report for an app issue, patches
+        it with the new information
+      parameters:
+      - description: Data
+        in: body
+        name: data
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Patch Unsubmitted Issue Report
+      tags:
+      - Report Issue
   /twilio/send-sms:
     post:
       consumes:

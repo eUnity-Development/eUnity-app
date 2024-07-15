@@ -20,11 +20,13 @@ class _ProfileState extends State<Profile> {
   List imageArray = [];
   int selectedImageGrid = 0;
   bool signingOut = false;
+  late String bioText;
 
   @override
   void initState() {
     super.initState();
     updateData();
+    bioText = UserInfoHelper.userInfoCache['bio'];
   }
 
   Future<void> updateData() async {
@@ -48,10 +50,16 @@ class _ProfileState extends State<Profile> {
 
   void navigateToEditProfile() async {
     print("clicked edit profile");
-    Navigator.push(
+    await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => EditProfile()),
     );
+    if (mounted) {
+      setState(() {
+        bioText = UserInfoHelper.userInfoCache['bio'];
+        print(bioText);
+      });
+    }
   }
 
   void navigateToReportIssue() async {
@@ -187,7 +195,7 @@ class _ProfileState extends State<Profile> {
                     Row(
                       children: [
                         Text(
-                          "Bio",
+                          'Bio',
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.w700,
@@ -196,12 +204,14 @@ class _ProfileState extends State<Profile> {
                       ],
                     ),
                     Text(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                      bioText,
+                      textAlign: TextAlign.left,
+                      maxLines: null,
                       style: TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: 12,
                           color: Colors.black),
-                    )
+                    ),
                   ],
                 )),
             Spacer(),

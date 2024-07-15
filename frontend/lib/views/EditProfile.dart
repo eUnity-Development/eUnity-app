@@ -20,11 +20,14 @@ class _EditProfileState extends State<EditProfile> {
   int selectedImageGrid = 0;
   int draggingImageGrid = -1;
   TextEditingController bioController = TextEditingController();
+  late String originalBio;
 
   @override
   void initState() {
     super.initState();
     updateData();
+    bioController.text = UserInfoHelper.userInfoCache['bio'];
+    originalBio = UserInfoHelper.userInfoCache['bio'];
   }
 
   Future<void> updateData() async {
@@ -36,6 +39,10 @@ class _EditProfileState extends State<EditProfile> {
         imageArray = [];
       }
     });
+  }
+
+  Future<void> patchData() async {
+    await UserInfoHelper.patchUserInfo();
   }
 
   @override
@@ -239,46 +246,57 @@ class _EditProfileState extends State<EditProfile> {
 
     return Scaffold(
       appBar: NoLogoTopBar(title: "Edit Profile"),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            "Photos",
-            style: headerStyle,
-          ),
-          Container(
-            child: imageGrid(),
-            height: 400,
-          ),
-          Text(
-            "Bio",
-            style: headerStyle,
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-            decoration: textFieldDecorator,
-            height: 120,
-            width: double.infinity,
-            child: TextField(
-              controller: bioController,
-              maxLines: null,
-              maxLength: 500,
-              keyboardType: TextInputType.multiline,
-              decoration: InputDecoration(
-                hintText: "Enter Bio Here",
-                hintStyle: hintStyle,
-                hintMaxLines: 100,
-                border: InputBorder.none,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(
+              "Photos",
+              style: headerStyle,
+            ),
+            Container(
+              child: imageGrid(),
+              height: 400,
+            ),
+            Text(
+              "Bio",
+              style: headerStyle,
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+              decoration: textFieldDecorator,
+              height: 120,
+              width: double.infinity,
+              child: TextField(
+                onChanged: (value) {
+                  UserInfoHelper.userInfoCache['bio'] = value;
+                },
+                controller: bioController,
+                maxLines: null,
+                maxLength: 500,
+                keyboardType: TextInputType.multiline,
+                decoration: InputDecoration(
+                  hintText: "Enter Bio Here",
+                  hintStyle: hintStyle,
+                  hintMaxLines: 100,
+                  border: InputBorder.none,
+                ),
               ),
             ),
-          ),
-        ]),
+          ]),
+        ),
       ),
     );
   }
 
   @override
   void dispose() {
+    if (bioController.text != '') {
+      patchData();
+    } else {
+      UserInfoHelper.userInfoCache['bio'] = originalBio;
+    }
     bioController.dispose();
     super.dispose();
   }

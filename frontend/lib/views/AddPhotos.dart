@@ -1,4 +1,4 @@
-import 'package:eunity/views/MatchPreferences.dart';
+import 'package:eunity/views/InitBio.dart';
 import 'package:eunity/widgets/LoginSignup/login_signup_button.dart';
 import 'package:eunity/widgets/LoginSignup/login_signup_button_content.dart';
 import 'package:eunity/widgets/NameDOBGender/birthday_classes.dart';
@@ -53,7 +53,9 @@ class _AddPhotosState extends State<AddPhotos> {
       setState(() {
         updateData();
       });
-      Navigator.pop(context);
+      if (mounted) {
+        Navigator.pop(context);
+      }
     }
 
     Future<void> deleteImage() async {
@@ -219,10 +221,7 @@ class _AddPhotosState extends State<AddPhotos> {
         if (response.statusCode == 200) {
           Navigator.push(
             context,
-            MaterialPageRoute(
-                builder: (context) => MatchPreferences(
-                      inSetUp: true,
-                    )),
+            MaterialPageRoute(builder: (context) => InitBio()),
           );
         }
       }

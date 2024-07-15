@@ -275,6 +275,147 @@ const docTemplate = `{
                 }
             }
         },
+        "/report_issue/add_report": {
+            "post": {
+                "description": "Adds a new Issue Report to the database",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Report Issue"
+                ],
+                "summary": "Add Report Issue",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Issue Description",
+                        "name": "description",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Contact Email",
+                        "name": "email",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/report_issue/get_report": {
+            "get": {
+                "description": "If the user has an unsubmitted report for an app issue, returns it.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Report Issue"
+                ],
+                "summary": "Get Unsubmitted Report Issue",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/report_issue/submit_report": {
+            "patch": {
+                "description": "If the user has an unsubmitted report for an app issue, submits it.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Report Issue"
+                ],
+                "summary": "Submit Report Issue",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/report_issue/update_report": {
+            "patch": {
+                "description": "If the user has an unsubmitted report for an app issue, patches it with the new information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Report Issue"
+                ],
+                "summary": "Patch Unsubmitted Issue Report",
+                "parameters": [
+                    {
+                        "description": "Data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/twilio/send-sms": {
             "post": {
                 "description": "Send an SMS message",
