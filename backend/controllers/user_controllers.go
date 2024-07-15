@@ -142,6 +142,50 @@ func (u *User_controllers) PATCH_me(c *gin.Context) {
 
 }
 
+// @Summary Get User Route
+// @Schemes
+// @Description Takes a User ID as a route parameter and uses that ID to find and return the requested user
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param user_id path string true "User ID"
+// @Success 200 {string} Returned User
+// @Success 400 {string} Unable return User
+// @Router /users/get_user/{user_id} [get]
+func (u *User_controllers) GET_user(c *gin.Context) {
+	//Get the user id parameter
+	user_id := c.Param("user_id")
+
+	//turn string id into bson object id
+	bson_user_id, err := primitive.ObjectIDFromHex(user_id)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"response": "Invalid user ID",
+		})
+		return
+	}
+
+	user := DBManager.DB.Collection("users").FindOne(context.Background(), bson.M{"_id": bson_user_id})
+	if user.Err() != nil {
+		c.JSON(400, gin.H{
+			"response": "No user found",
+		})
+		return
+	}
+
+	result := models.RestrictedUser{}
+	err = user.Decode(&result)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"response": "No user found",
+		})
+		return
+	}
+
+	c.JSON(200, result)
+
+}
+
 // @Summary User logout route
 // @Schemes
 // @Description logs out a user

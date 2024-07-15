@@ -25,6 +25,16 @@ type User struct {
 	MatchPreferences      MatchPreferences    `bson:"match_preferences" json:"match_preferences,omitempty"`
 }
 
+type RestrictedUser struct {
+	ID          *primitive.ObjectID `bson:"_id" json:"_id,omitempty"`
+	Gender      string              `bson:"gender" json:"gender,omitempty"`
+	Location    string              `bson:"location" json:"location,omitempty"`
+	Height      *Height             `bson:"height" json:"height,omitempty"`
+	DateOfBirth *DateOfBirth        `bson:"dob" json:"dob,omitempty"`
+	FirstName   string              `bson:"first_name" json:"first_name,omitempty"`
+	MediaFiles  []string            `bson:"media_files" json:"media_files,omitempty"`
+}
+
 type DateOfBirth struct {
 	Day   int `json:"day,omitempty"`
 	Month int `json:"month,omitempty"`

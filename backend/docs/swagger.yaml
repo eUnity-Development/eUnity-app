@@ -239,6 +239,32 @@ paths:
       summary: User test route
       tags:
       - User
+  /users/get_user/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: Takes a User ID as a route parameter and uses that ID to find and
+        return the requested user
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get User Route
+      tags:
+      - User
   /users/login:
     post:
       consumes:

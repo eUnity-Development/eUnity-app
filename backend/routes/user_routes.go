@@ -25,6 +25,9 @@ func User_routes(r *gin.RouterGroup) {
 	//PATCH ME
 	r.PATCH("/me", User_controllers.PATCH_me)
 
+	//GET USER BY ID
+	r.GET("/get_user/:user_id", User_controllers.GET_user)
+
 	//LOGOUT
 	r.POST("/logout", User_controllers.POST_logout)
 
