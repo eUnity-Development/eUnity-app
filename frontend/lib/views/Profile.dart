@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:eunity/classes/AuthHelper.dart';
 import 'package:eunity/classes/UserInfoHelper.dart';
+import 'package:eunity/views/LoginSignup.dart';
 import 'package:eunity/widgets/ProfileWidgets/EditImageSquare.dart';
 import 'package:eunity/widgets/ProfileWidgets/NewImageSquare.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +21,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   List imageArray = [];
   int selectedImageGrid = 0;
+  bool signingOut = false;
 
   @override
   void initState() {
@@ -88,6 +91,12 @@ class _ProfileState extends State<Profile> {
       );
       if (image == null) return;
       await handleNewImage(File(image.path));
+    }
+
+
+    void handleSignOut() async {
+      await AuthHelper.signOut();
+      AuthHelper.setLoggedIn(false);
     }
 
     void openCameraDialog(BuildContext context) {
@@ -206,6 +215,22 @@ class _ProfileState extends State<Profile> {
                   openCameraDialog(context);
                 });
               },
+            ),
+            ElevatedButton(
+                onPressed: () => {
+                  handleSignOut(),
+                  setState(() {
+                    signingOut = true;
+                  })
+                }, 
+                child: const Text("Sign Out")
+                
+                ),
+            Visibility(
+              visible: signingOut,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(DesignVariables.primaryRed),
+              ),
             ),
           ],
         ),

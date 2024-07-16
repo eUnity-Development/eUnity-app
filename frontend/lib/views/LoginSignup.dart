@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:eunity/classes/AuthHelper.dart';
 import 'package:eunity/classes/DesignVariables.dart';
@@ -5,12 +6,16 @@ import 'package:eunity/views/CoreTemplate.dart';
 import 'package:eunity/views/PhoneLogin.dart';
 import 'package:eunity/widgets/LoginSignup/login_signup_button.dart';
 import 'package:eunity/widgets/LoginSignup/login_signup_button_content.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginSignup extends StatefulWidget {
-  const LoginSignup({super.key});
+  const LoginSignup({
+    super.key
+  });
 
   @override
-  State<LoginSignup> createState() => _LoginSignupState();
+  State<LoginSignup> createState( ) => _LoginSignupState(
+  );
 }
 
 class _LoginSignupState extends State<LoginSignup> {
@@ -19,17 +24,32 @@ class _LoginSignupState extends State<LoginSignup> {
     super.initState();
     AuthHelper.isLoggedIn().then((value) {
       if (value) {
-        navigateToPrimaryScreens();
+        print("logging in right here");
+        AuthHelper.setLoggedIn(true);
       }
     });
+
+    //when we detect user change we trigger this function
+    AuthHelper.googleSignIn.onCurrentUserChanged
+        .listen((GoogleSignInAccount? account) async {
+      GoogleSignInAuthentication? auth = await account?.authentication;
+      if (auth != null) {
+        String googleKey = auth.idToken!;
+        if(AuthHelper.loggedIn) return;
+        Response res = await AuthHelper.verifyGoogleIDToken(googleKey);
+        if (res.statusCode == 200) {
+          AuthHelper.setLoggedIn(true);
+        }
+      }
+
+
+    });
+
+
+    //try to login silently on app load
+    AuthHelper.googleSignIn.signInSilently();
   }
 
-  void navigateToPrimaryScreens() {
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => const CoreTemplate()),
-        (route) => false);
-  }
 
   void navigateToPhoneLogin() {
     Navigator.push(
@@ -38,19 +58,13 @@ class _LoginSignupState extends State<LoginSignup> {
     );
   }
 
-  void handleGoogleSignIn() async {
-    //I actually need to open a google sign in page
-    print("clicked google");
+  void handleGoogleSignInClick() async {
     await AuthHelper.signInWithGoogle();
-    //var response = await AuthHelper.googleSignIn();
-    //print(response);
   }
 
   void testSignup() async {
     print("clicked signup");
     navigateToPhoneLogin();
-    //var response = await AuthHelper.signUp("testemail@test.com", "Test123123");
-    //print(response);
   }
 
   void testLogin() async {
@@ -69,7 +83,7 @@ class _LoginSignupState extends State<LoginSignup> {
     await AuthHelper.login("testemail@test.com", "Test123123");
     bool loginCheck = await AuthHelper.isLoggedIn();
     if (loginCheck) {
-      navigateToPrimaryScreens();
+      AuthHelper.setLoggedIn(true);
     }
   }
 
@@ -98,6 +112,8 @@ class _LoginSignupState extends State<LoginSignup> {
     const Color loginBackground = Colors.transparent;
 
     final double spaceBetweenLogin = ((31 / 932) * screenHeight);
+
+
 
     return Scaffold(
       body: Column(
@@ -202,7 +218,7 @@ class _LoginSignupState extends State<LoginSignup> {
                 fontColor: fontColor),
             height: btnHeight,
             width: btnWidth,
-            onTap: handleGoogleSignIn,
+            onTap: handleGoogleSignInClick,
           ),
 
           SizedBox(height: spaceBetweenLogin),

@@ -11,7 +11,7 @@ class RouteHandler {
   static const defaultHost = "http://10.0.2.2:3200/api/v1";
   static final dio = Dio();
   static bool started = false;
-  static var cookieJar;
+  static var cookieJar = PersistCookieJar();
 
   static init() async {
     if (started) return;

@@ -1,5 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:eunity/classes/AuthHelper.dart';
 import 'package:eunity/classes/DesignVariables.dart';
+import 'package:eunity/views/LoginSignup.dart';
 import 'package:eunity/views/Messages.dart';
 import 'package:eunity/views/PremiumFeatures.dart';
 import 'package:eunity/views/Profile.dart';
@@ -19,6 +21,17 @@ class _CoreTemplateState extends State<CoreTemplate> {
   int selectedIndex = 0;
   Color unselectedColor = DesignVariables.greyLines;
   Color selectedColor = DesignVariables.primaryRed;
+
+  @override
+ void initState() {
+    super.initState();
+    AuthHelper.isLoggedIn().then((value) {
+      if (value) {
+        AuthHelper.setLoggedIn(true);
+      }
+    });
+ }
+  
 
   final screens = [
     const Swiping(),

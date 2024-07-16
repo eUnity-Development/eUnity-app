@@ -2,17 +2,33 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:eunity/classes/RouteHandler.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthHelper {
   static String defaultHost = RouteHandler.defaultHost;
-  static GoogleSignIn activeGoogleSignIn =
-      GoogleSignIn(scopes: ['email', 'openid', 'profile']);
+
+  //we should cache this value so that on app startup we go straight to main screens
+  //and after isLoggedIn() is called, if it's false we log the user out
+  static bool loggedIn = false;
+  static Function setLoggedIn = (bool value) {};
+  static SharedPreferences? prefs;
+
+  static GoogleSignIn googleSignIn = GoogleSignIn(
+    scopes: ['email', 'openid', 'profile'],
+    serverClientId:"473125180287-80hn1kcn8k3juut9p7ocvi6j77v9lnct.apps.googleusercontent.com"
+  );
+
+
+  static Future<void> init() async{
+    prefs = await SharedPreferences.getInstance();
+    loggedIn = prefs!.getBool('loggedIn') ?? false;
+    setLoggedIn(loggedIn);
+  }
 
   static Future<bool> isLoggedIn() async {
     var sessionCookie = await readCookie('session_id');
-    print('COOKIES!');
-    print(sessionCookie);
     if (sessionCookie == null) {
+      setLoggedIn(false);
       return false;
     }
 
@@ -25,14 +41,18 @@ class AuthHelper {
         options: Options(contentType: Headers.jsonContentType),
       );
       if (response.statusCode == 200) {
+        setLoggedIn(true);
         return true;
       } else {
+        setLoggedIn(false);
         return false;
       }
     } on DioException catch (e) {
       if (e.response != null) {
+        setLoggedIn(false);
         return false;
       } else {
+        setLoggedIn(false);
         return false;
       }
     }
@@ -108,26 +128,49 @@ class AuthHelper {
 
   static Future<void> signInWithGoogle() async {
     try {
-      await activeGoogleSignIn.signIn();
+      await googleSignIn.signIn();
     } on Exception catch (e) {
       print(e);
     }
   }
 
-  /*static Future<Response> googleSignIn() async {
-    String endPoint = '/auth/google';
+  static Future<void> signOut() async {
+      //we want to sign out of google and our server and clear the session cookie
+      await googleSignIn.disconnect();
+      String endPoint = '/users/logout';
+      var url = '$defaultHost$endPoint';
+      try {
+        await RouteHandler.dio.post(
+          url,
+        );
+        return;
+      } on DioException catch (e) {
+        if (e.response != null) {
+          print(e.response!.data);
+          return;
+        } else {
+          print('Unable to connect to server');
+          return;
+        }
+      }
+  }
+
+
+  static Future<Response> verifyGoogleIDToken(String googleKey) async {
+    String endPoint = '/auth/google?idToken=$googleKey';
     var url = '$defaultHost$endPoint';
-    //this is the dio library making a post request
+
     try {
-      final response = await RouteHandler.dio.get(
+      final response = await RouteHandler.dio.post(
         url,
       );
       return response;
-      //on anything but a 200 response this code will run
     } on DioException catch (e) {
       if (e.response != null) {
+        print(e.response!.data);
         return e.response!;
       } else {
+        print('Unable to connect to server');
         return Response(
           requestOptions: RequestOptions(path: url),
           data: {'message': 'Unable to connect to server'},
@@ -136,5 +179,5 @@ class AuthHelper {
         );
       }
     }
-  }*/
+  }
 }
