@@ -358,6 +358,43 @@ paths:
       summary: Patch Unsubmitted Issue Report
       tags:
       - Report Issue
+  /report_user/add_report:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Adds a new User Report to the database
+      parameters:
+      - description: Reported User
+        in: formData
+        name: reported_user
+        required: true
+        type: string
+      - collectionFormat: csv
+        description: Rule Violations
+        in: formData
+        items:
+          type: string
+        name: rule_violations
+        required: true
+        type: array
+      - description: Additional comments that explain why the user was reported
+        in: formData
+        name: report_comments
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Add Report User
+      tags:
+      - Report User
   /twilio/send-sms:
     post:
       consumes:

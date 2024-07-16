@@ -1,4 +1,4 @@
-import 'package:eunity/classes/FeedbackHelper.dart';
+import 'package:eunity/classes/ReportHelper.dart';
 import 'package:eunity/classes/UserInfoHelper.dart';
 import 'package:eunity/widgets/ProfileWidgets/EditImageSquare.dart';
 import 'package:eunity/widgets/ProfileWidgets/NewImageSquare.dart';
@@ -35,7 +35,7 @@ class _PhotoGridItemState extends State<PhotoGridItem> {
             ? NewImageSquare()
             : EditImageSquare(
                 imageURL: (widget.isReport)
-                    ? FeedbackHelper.getPublicReportImageURL(
+                    ? ReportHelper.getPublicReportImageURL(
                         widget.imageArray[widget.index])
                     : UserInfoHelper.getPublicImageURL(
                         widget.imageArray[widget.index])),

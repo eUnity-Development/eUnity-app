@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:eunity/classes/RouteHandler.dart';
 import 'package:dio/dio.dart';
 
-class FeedbackHelper {
+class ReportHelper {
   static String defaultHost = RouteHandler.defaultHost;
 
   static Future<Response> submitFeedback(
@@ -203,6 +203,36 @@ class FeedbackHelper {
         statusCode: 500,
         statusMessage: 'Unable to connect to server',
       );
+    }
+  }
+
+  static Future<Response> AddUserReport(
+      String reportedUser, List ruleViolations, String reportComments) async {
+    String endPoint = '/report_user/add_report';
+    final url = '$defaultHost$endPoint';
+    final params = {
+      'reported_user': reportedUser,
+      'rule_violations': ruleViolations,
+      'report_comments': reportComments
+    };
+    final formData = FormData.fromMap(params);
+    try {
+      final response = await RouteHandler.dio.post(
+        url,
+        data: formData,
+      );
+      return response;
+    } on DioException catch (e) {
+      if (e.response != null) {
+        return e.response!;
+      } else {
+        return Response(
+          requestOptions: RequestOptions(path: url),
+          data: {'message': 'Unable to connect to server'},
+          statusCode: 500,
+          statusMessage: 'Unable to connect to server',
+        );
+      }
     }
   }
 }

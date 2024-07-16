@@ -42,6 +42,7 @@ func main() {
 	routes.Media_routes(r.Group("/media", SessionManager.AuthRequired()))
 	routes.Twilio_routes(r.Group("/twilio"))
 	routes.Report_Issue_routes(r.Group("/report_issue", SessionManager.AuthRequired()))
+	routes.Report_User_routes(r.Group("/report_user", SessionManager.AuthRequired()))
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Serve Swagger UI at /docs

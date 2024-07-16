@@ -544,6 +544,61 @@
                 }
             }
         },
+        "/report_user/add_report": {
+            "post": {
+                "description": "Adds a new User Report to the database",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Report User"
+                ],
+                "summary": "Add Report User",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Reported User",
+                        "name": "reported_user",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Rule Violations",
+                        "name": "rule_violations",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Additional comments that explain why the user was reported",
+                        "name": "report_comments",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/twilio/send-sms": {
             "post": {
                 "description": "Send an SMS message",

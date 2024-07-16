@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:eunity/classes/DesignVariables.dart';
-import 'package:eunity/classes/FeedbackHelper.dart';
+import 'package:eunity/classes/ReportHelper.dart';
 import 'package:eunity/classes/PhotoHelper.dart';
 import 'package:eunity/views/ConfirmationScreen.dart';
 import 'package:eunity/widgets/ImageWidgets/PhotoGridItem.dart';
@@ -27,7 +27,7 @@ class _ReportIssueState extends State<ReportIssue> {
   }
 
   Future<void> loadReportData() async {
-    var response = await FeedbackHelper.getIssueReport();
+    var response = await ReportHelper.getIssueReport();
     if (response.statusCode == 200) {
       hasOpenReport = true;
       reportController.text = response.data['description'];
@@ -47,19 +47,19 @@ class _ReportIssueState extends State<ReportIssue> {
         'email': emailController.text,
         'media_files': imageArray,
       };
-      await FeedbackHelper.updateIssueReport(newData);
+      await ReportHelper.updateIssueReport(newData);
     } else {
       if ((reportController.text != "" ||
               emailController.text != "" ||
               imageArray != []) ||
           forceUpdate) {
-        await FeedbackHelper.AddIssueReport(
+        await ReportHelper.AddIssueReport(
             reportController.text, emailController.text, imageArray);
         Map<dynamic, dynamic> newData = {
           'description': reportController.text,
           'email': emailController.text,
         };
-        await FeedbackHelper.updateIssueReport(newData);
+        await ReportHelper.updateIssueReport(newData);
         setState(() {
           hasOpenReport = true;
         });
@@ -76,15 +76,15 @@ class _ReportIssueState extends State<ReportIssue> {
         'description': reportController.text,
         'email': emailController.text,
       };
-      response = await FeedbackHelper.updateIssueReport(newData);
+      response = await ReportHelper.updateIssueReport(newData);
     } else {
-      response = await FeedbackHelper.AddIssueReport(
+      response = await ReportHelper.AddIssueReport(
           reportController.text, emailController.text, imageArray);
     }
 
     if (response.statusCode == 200) {
       reportSwitch = true;
-      Response submitResponse = await FeedbackHelper.submitIssueReport();
+      Response submitResponse = await ReportHelper.submitIssueReport();
       if (submitResponse.statusCode == 200) {
         reportSwitch = false;
         Navigator.of(context).pushReplacement(

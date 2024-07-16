@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:eunity/classes/DesignVariables.dart';
-import 'package:eunity/classes/FeedbackHelper.dart';
+import 'package:eunity/classes/ReportHelper.dart';
 import 'package:eunity/classes/UserInfoHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -18,15 +18,15 @@ class PhotoHelper {
       bool isReport) async {
     if (imageArray.length >= selectedImageGrid + 1) {
       if (isReport) {
-        await FeedbackHelper.deleteReportImage(imageArray[selectedImageGrid]);
-        await FeedbackHelper.uploadNewReportImage(imagePath);
+        await ReportHelper.deleteReportImage(imageArray[selectedImageGrid]);
+        await ReportHelper.uploadNewReportImage(imagePath);
       } else {
         await UserInfoHelper.deleteImage(imageArray[selectedImageGrid]);
         await UserInfoHelper.uploadNewImage(imagePath);
       }
     } else {
       if (isReport) {
-        await FeedbackHelper.uploadNewReportImage(imagePath);
+        await ReportHelper.uploadNewReportImage(imagePath);
       } else {
         await UserInfoHelper.uploadNewImage(imagePath);
       }
@@ -39,7 +39,7 @@ class PhotoHelper {
       BuildContext context, Function updateState, bool isReport) async {
     if (imageArray.length >= selectedImageGrid + 1) {
       if (isReport) {
-        await FeedbackHelper.deleteReportImage(imageArray[selectedImageGrid]);
+        await ReportHelper.deleteReportImage(imageArray[selectedImageGrid]);
       } else {
         await UserInfoHelper.deleteImage(imageArray[selectedImageGrid]);
       }

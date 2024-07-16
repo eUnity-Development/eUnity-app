@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:eunity/classes/FeedbackHelper.dart';
+import 'package:eunity/classes/ReportHelper.dart';
 import 'package:eunity/views/ConfirmationScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -108,7 +108,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
 
     Future<void> submitFeedback(
         int starRating, String positiveText, String negativeText) async {
-      Response response = await FeedbackHelper.submitFeedback(
+      Response response = await ReportHelper.submitFeedback(
           starRating, positiveText, negativeText);
       print(response);
     }
