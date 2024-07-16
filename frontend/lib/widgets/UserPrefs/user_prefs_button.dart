@@ -44,46 +44,50 @@ class UserPrefsButtonState extends State<UserPrefsButton> {
   @override
   Widget build(BuildContext context) {
     action = UserInfoHelper.userInfoCache[widget.cacheKey];
-    String button_name = widget.name;
+    String buttonName = widget.name;
     return(
-      Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SvgPicture.asset(
-            'assets/preferences/user-group.svg',
-            height: 20,
-            width: 20,
-          ),
-          BoxGap(width: 9 * DesignVariables.widthConversion, height: 0),
-          Text(button_name, style: const TextStyle(fontSize: 18)),
-
-          const Spacer(),
-
-          GestureDetector(
-            onTap: () => showSelectDialog(
-              reRender: update,
-              context: widget.context,
-              options: widget.options,
-              cacheKey: widget.cacheKey,
-              question: widget.question,
-              // assetPath is the svg for the question in selection dialog option
-              assetPath: widget.assetPath,
-              multiSelect: widget.multiSelect,
+      Column(children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              widget.assetPath,
+              height: 20,
+              width: 20,
             ),
-            child: Row(
-              children: [
-                // Set up like the non-binary gender option, pull from userInfoHelper!
-                Text(action, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-                BoxGap(width: 15 * DesignVariables.widthConversion, height: 0),
-                SvgPicture.asset(
-                  'assets/preferences/arrow-right.svg',
-                  height: 20,
-                  width: 20,
-                ),
-              ],),
-          ),
-        ],
-      )
+            BoxGap(width: 9 * DesignVariables.widthConversion, height: 0),
+
+            Text(buttonName, style: const TextStyle(fontSize: 18)),
+
+            const Spacer(),
+
+            GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () => showSelectDialog(
+                reRender: update,
+                context: widget.context,
+                options: widget.options,
+                cacheKey: widget.cacheKey,
+                question: widget.question,
+                assetPath: widget.assetPath,
+                multiSelect: widget.multiSelect,
+              ),
+
+              child: Row(
+                children: [
+                  Text(action, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                  BoxGap(width: 15 * DesignVariables.widthConversion, height: 0),
+                  SvgPicture.asset(
+                    'assets/preferences/arrow-right.svg',
+                    height: 20,
+                    width: 20,
+                  ),
+                ],),
+            ),
+          ],
+        ),
+        BoxGap(width: 0, height: 9 * DesignVariables.heightConversion),
+      ])
     );
   }
 }

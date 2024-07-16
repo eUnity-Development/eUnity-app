@@ -11,7 +11,23 @@ class UserInfoHelper {
     userInfoCache['relationshipType'] = 'Long Term Relationships';
     userInfoCache['userGender'] = '';
     userInfoCache['userGenderOptions'] = 'Non-Binary';
+
     userInfoCache['pronouns'] = 'Add';
+    userInfoCache['education'] = 'Add';
+    userInfoCache['job'] = 'Add';
+    userInfoCache['interests'] = 'Select';
+    userInfoCache['ethnicity'] = 'Select';
+    userInfoCache['politics'] = 'Add';
+    userInfoCache['religion'] = 'Add';
+    userInfoCache['city'] = 'Edit';
+
+    userInfoCache['exercise'] = 'Add';
+    userInfoCache['drinking'] = 'Add';
+    userInfoCache['cannabis'] = 'Add';
+    userInfoCache['height'] = 'Add';
+    userInfoCache['social-media'] = 'Add';
+    userInfoCache['pets'] = 'Add';
+    userInfoCache['diet'] = 'Add';
   }
 
   static void updateCacheVariable(String variable, var newValue) {
