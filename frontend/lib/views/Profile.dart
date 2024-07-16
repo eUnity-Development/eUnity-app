@@ -203,14 +203,17 @@ class _ProfileState extends State<Profile> {
                         ),
                       ],
                     ),
-                    Text(
-                      bioText,
-                      textAlign: TextAlign.left,
-                      maxLines: null,
-                      style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                          color: Colors.black),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        bioText,
+                        textAlign: TextAlign.left,
+                        maxLines: null,
+                        style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12,
+                            color: Colors.black),
+                      ),
                     ),
                   ],
                 )),

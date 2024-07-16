@@ -63,6 +63,7 @@ func (rc *Report_Issue_controllers) GET_Get_Issue(c *gin.Context) {
 // @Produce json
 // @Param description formData string false "Issue Description"
 // @Param email formData string false "Contact Email"
+// @Param media_files formData []string false "Media Files"
 // @Success 200 {string} Successfully Added Report
 // @Success 400 {string} Couldn't Add Report
 // @Router /report_issue/add_report [post]
@@ -93,6 +94,11 @@ func (rc *Report_Issue_controllers) POST_Add_Issue(c *gin.Context) {
 	//Init a new Object ID
 	objectID := primitive.NewObjectID()
 
+	media_choice := []string{}
+	if report.MediaFiles != nil && len(report.MediaFiles) > 0 {
+		media_choice = report.MediaFiles
+	}
+
 	//Init a new IssueReport struct
 	new_report := models.IssueReport{
 		ID:               &objectID,
@@ -100,7 +106,7 @@ func (rc *Report_Issue_controllers) POST_Add_Issue(c *gin.Context) {
 		IssueDescription: report.IssueDescription,
 		Contact_Email:    report.Contact_Email,
 		Submitted:        false,
-		MediaFiles:       []string{},
+		MediaFiles:       media_choice,
 		Updated_At:       time.Now(),
 	}
 
