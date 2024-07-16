@@ -2,10 +2,12 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"path/filepath"
 
 	"eunity.com/backend-main/helpers/DBManager"
+	"eunity.com/backend-main/helpers/MediaEncoder"
 	"eunity.com/backend-main/models"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -33,6 +35,17 @@ func (m *Media_controllers) Add_user_image(c *gin.Context) {
 	extension := filepath.Ext(file.Filename)
 	//get user_id from cookies
 	user_id := c.Keys["user_id"].(string)
+	image_id := uuid.New().String()
+
+	err := MediaEncoder.SaveToWebp(file, image_id, user_id)
+	if err != nil {
+		c.JSON(500, gin.H{
+			"response": "Error Saving to Webp" + err.Error(),
+		})
+		return
+	}
+
+	image_id += ".webp"
 
 	//we generate an id for the image
 	//we will use the user_id as the folder name
@@ -68,6 +81,7 @@ func (m *Media_controllers) Add_user_image(c *gin.Context) {
 			"response": "User has reached maximum number of images",
 		})
 	}
+
 	link := "http://localhost:3200/api/v1/media/" + user_id + "/" + image_id
 	//add image to user profile
 	_, err = DBManager.DB.Collection("users").UpdateOne(context.Background(), bson.M{"_id": bson_user_id}, bson.M{"$push": bson.M{"media_files": link}})
@@ -77,7 +91,9 @@ func (m *Media_controllers) Add_user_image(c *gin.Context) {
 		})
 	}
 
-	c.SaveUploadedFile(file, "images/"+user_id+"/"+image_id)
+	fmt.Print("images/" + user_id + "/" + image_id)
+
+	//save image
 
 	//return param as json
 	c.JSON(200, gin.H{
