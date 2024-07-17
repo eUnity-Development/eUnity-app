@@ -90,7 +90,45 @@ func Create_Session(user_id string, c *gin.Context) (models.Session, error) {
 		//we don't deny access if expired we just rotate session_ids
 		Expires_at:  time.Now().Unix() + 3600*6, //6 hours
 		User_id:     user_id,
-		Permissions: []string{"read", "write"}, //default permissions
+		Permissions: []string{"user"}, //default permissions
+	}
+	jsonSession, err := json.Marshal(session)
+	if err != nil {
+		return session, err
+	}
+	switch ValKey {
+	case true:
+		fmt.Println("Creating session in Valkey")
+		//add session to Valkey as map from session_id to session in json
+		err = rdb.Set(ctx, session.Session_id, jsonSession, 0).Err()
+		if err != nil {
+			return session, err
+		}
+
+		c.SetCookie("session_id", session.Session_id, cookie_max_age, "/", Cookie_Host, HTTPS_only, true)
+		return session, nil
+
+	default:
+		//create session id in mongo db
+		_, err = DBManager.DB.Collection("session_ids").InsertOne(context.Background(), session)
+		if err != nil {
+			return session, err
+		}
+		c.SetCookie("session_id", session.Session_id, cookie_max_age, "/", Cookie_Host, HTTPS_only, true)
+		return session, nil
+	}
+
+}
+
+func Create_Developer_Session(user_id string, c *gin.Context) (models.Session, error) {
+	cookie_max_age := 365 * 24 * 60 * 60 //1 year
+	session := models.Session{
+		Session_id: uuid.New().String(),
+		Created_at: time.Now().Unix(),
+		//we don't deny access if expired we just rotate session_ids
+		Expires_at:  time.Now().Unix() + 3600*6, //6 hours
+		User_id:     user_id,
+		Permissions: []string{"developer"}, //default permissions
 	}
 	jsonSession, err := json.Marshal(session)
 	if err != nil {

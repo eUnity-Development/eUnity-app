@@ -1,6 +1,6 @@
 import 'package:eunity/classes/AuthHelper.dart';
 import 'package:eunity/classes/DesignVariables.dart';
-import 'package:eunity/views/CoreTemplate.dart';
+import 'package:eunity/views/LoginSignup.dart';
 import 'package:eunity/views/LoginSignup.dart';
 import 'package:flutter/material.dart';
 

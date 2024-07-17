@@ -29,7 +29,6 @@ func main() {
 	//ROUTE GROUPS
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//unprotected routes
-	routes.Pub_User_routes(r.Group("/users"))
 	routes.Pub_Media_routes(r.Group("/media"))
 
 	//change goth auth route names to web auth
@@ -40,6 +39,9 @@ func main() {
 	routes.User_routes(r.Group("/users", SessionManager.AuthRequired()))
 	routes.Media_routes(r.Group("/media", SessionManager.AuthRequired()))
 	routes.Twilio_routes(r.Group("/twilio"))
+
+	//development only routes
+	routes.Dev_routes(r.Group("/dev"))
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Serve Swagger UI at /docs

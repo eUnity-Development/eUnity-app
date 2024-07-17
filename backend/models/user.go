@@ -7,9 +7,7 @@ import (
 
 type User struct {
 	ID                    *primitive.ObjectID `bson:"_id" json:"_id,omitempty"`
-	Password              string              `bson:"-" json:"-" form:"password"  validate:"required,min=8,max=100"`
 	Email                 string              `bson:"email" json:"email,omitempty" form:"email" validate:"required,email"`
-	PasswordHash          string              `bson:"passwordHash" json:"-"`
 	Verified_email        bool                `bson:"verified_email" json:"verified_email,omitempty"`
 	Verified_phone_number bool                `bson:"verified_phone_number" json:"verified_phone_number,omitempty"`
 	PhoneNumber           string              `bson:"phone_number" json:"phone_number,omitempty"`

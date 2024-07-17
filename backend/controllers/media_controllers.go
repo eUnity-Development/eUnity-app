@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"path/filepath"
 
 	"eunity.com/backend-main/helpers/DBManager"
 	"eunity.com/backend-main/helpers/MediaEncoder"
@@ -31,8 +30,6 @@ func (m *Media_controllers) Add_user_image(c *gin.Context) {
 
 	file, _ := c.FormFile("image")
 
-	//get file extension from Header
-	extension := filepath.Ext(file.Filename)
 	//get user_id from cookies
 	user_id := c.Keys["user_id"].(string)
 	image_id := uuid.New().String()
@@ -46,10 +43,6 @@ func (m *Media_controllers) Add_user_image(c *gin.Context) {
 	}
 
 	image_id += ".webp"
-
-	//we generate an id for the image
-	//we will use the user_id as the folder name
-	image_id := uuid.New().String() + extension
 
 	//check how many images the user has in the database
 	//if the user has more than 9 images, return error
