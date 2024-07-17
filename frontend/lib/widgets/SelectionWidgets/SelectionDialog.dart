@@ -25,7 +25,7 @@ class SelectionDialog extends StatefulWidget {
 class _SelectionDialogState extends State<SelectionDialog> {
   @override
   Widget build(BuildContext context) {
-    const TextStyle questionSyle = TextStyle(
+    const TextStyle questionStyle = TextStyle(
         color: Colors.black, fontWeight: FontWeight.w700, fontSize: 24);
 
     BoxDecoration selectedBox = BoxDecoration(
@@ -51,7 +51,11 @@ class _SelectionDialogState extends State<SelectionDialog> {
     double maxHeight = MediaQuery.of(context).size.height - 40;
     double minHeight = 400;
     double height = 80.0 * widget.options.length;
-
+    
+    if (widget.question.length > 25) {
+      height += 100.0;
+    }
+    
     if (height < minHeight) {
       height = minHeight;
     } else if (height > maxHeight) {
@@ -86,29 +90,35 @@ class _SelectionDialogState extends State<SelectionDialog> {
               SizedBox(
                 height: 10,
               ),
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                (widget.assetPath == 'None')
-                    ? SizedBox()
-                    : Row(
-                        children: [
-                          SvgPicture.asset(
-                            widget.assetPath,
-                            height: 31,
-                            width: 31,
+              Center(
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    children: [
+                      if (widget.assetPath != 'None') ...[
+                        WidgetSpan(
+                          child: Transform.translate(
+                            // manually center the svg
+                            offset: Offset(0, (questionStyle.fontSize ?? 24) * 0.16),
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 5.0),
+                              child: SvgPicture.asset(
+                                widget.assetPath,
+                                height: 31,
+                                width: 31,
+                              ),
+                              ),
                           ),
-                          SizedBox(width: 5)
-                        ],
+                        ),
+                      ],
+                      TextSpan(
+                        text: widget.question,
+                        style:questionStyle,
                       ),
-    Wrap(
-      alignment: WrapAlignment.center,
-      children: [
-        Text(
-          widget.question,
-          style: questionSyle,
-        ),
-      ],
-    ),
-              ]),
+                    ],
+                  ),
+                ),
+              ),
               SizedBox(
                 height: 20,
               ),
