@@ -48,8 +48,18 @@ class _SelectionDialogState extends State<SelectionDialog> {
     TextStyle unselectedText = TextStyle(
         fontWeight: FontWeight.w500, fontSize: 16, color: Colors.black);
 
+    double maxHeight = MediaQuery.of(context).size.height - 40;
+    double minHeight = 400;
+    double height = 80.0 * widget.options.length;
+
+    if (height < minHeight) {
+      height = minHeight;
+    } else if (height > maxHeight) {
+      height = maxHeight;
+    }
+
     return Container(
-        height: 400,
+        height: height, // here
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
@@ -89,16 +99,21 @@ class _SelectionDialogState extends State<SelectionDialog> {
                           SizedBox(width: 5)
                         ],
                       ),
-                Text(
-                  widget.question,
-                  style: questionSyle,
-                )
+    Wrap(
+      alignment: WrapAlignment.center,
+      children: [
+        Text(
+          widget.question,
+          style: questionSyle,
+        ),
+      ],
+    ),
               ]),
               SizedBox(
                 height: 20,
               ),
               SizedBox(
-                height: 200,
+                height: height-150, // here
                 child: ListView.builder(
                   itemBuilder: (BuildContext context, int index) {
                     if (index > (widget.options.length) - 1) {

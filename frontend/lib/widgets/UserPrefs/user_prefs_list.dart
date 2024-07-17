@@ -13,7 +13,8 @@ class UserPrefsList {
     // Later on, add school email verification.
     {
       'name': 'Education',
-      'options': ['High School', 'Associate\'s', 'Bachelor\'s', 'None'],
+      'options': ['High School', 'Associate\'s Degree', 'Bachelor\'s Degree', 
+        'Master\'s or PHD', 'Trade School', 'Other','None'],
       'question': 'Select your education',
       'assetPath': 'assets/preferences/education.svg',
       'cacheKey': 'education',
@@ -22,8 +23,8 @@ class UserPrefsList {
 
     {
       'name': 'Job',
-      'options': ['Full-Time', 'Part-Time', 'Other', 'None'],
-      'question': 'Select your job type',
+      'options': ['Placeholder'],
+      'question': 'Enter your job title',
       'assetPath': 'assets/preferences/job.svg',
       'cacheKey': 'job',
       'multiSelect': false,
@@ -32,8 +33,8 @@ class UserPrefsList {
     // Need special menu for 30+ options. Allow multi select.
     {
       'name': 'Interests',
-      'options': ['Unlimited Bacon', 'No More Games'],
-      'question': 'Select your job type',
+      'options': ['Placeholder'],
+      'question': 'Select your top 3 interests',
       'assetPath': 'assets/preferences/interests.svg',
       'cacheKey': 'interests',
       'multiSelect': false,
@@ -42,16 +43,16 @@ class UserPrefsList {
     // Will also need special menu? Allow multi select.
     {
       'name': 'Ethnicity',
-      'options': ['Unlimited Bacon', 'No More Games'],
-      'question': 'Select your job type',
+      'options': ['Placeholder'],
+      'question': 'Select your ethnicities',
       'assetPath': 'assets/preferences/ethnicity.svg',
       'cacheKey': 'ethnicity',
       'multiSelect': false,
     },
     {
       'name': 'Politics',
-      'options': ['Unlimited Bacon', 'No More Games'],
-      'question': 'Select your job type',
+      'options': ['Liberal', 'Moderate', 'Conservative', 'Other', 'Prefer not to say'],
+      'question': 'What is your political alignment?',
       'assetPath': 'assets/preferences/politics.svg',
       'cacheKey': 'politics',
       'multiSelect': false,
@@ -60,7 +61,7 @@ class UserPrefsList {
     // Will also need a new menu. Around 14 options.
     {
       'name': 'Religion',
-      'options': ['Unlimited Bacon', 'No More Games'],
+      'options': ['Placeholder'],
       'question': 'Select your job type',
       'assetPath': 'assets/preferences/religion.svg',
       'cacheKey': 'religion',
@@ -73,7 +74,7 @@ class UserPrefsList {
     // on their current location (dynamic).
     {
       'name': 'City',
-      'options': ['Unlimited Bacon', 'No More Games'],
+      'options': ['Set location', 'Dynamic Location'],
       'question': 'Select your job type',
       'assetPath': 'assets/preferences/city.svg',
       'cacheKey': 'city',
@@ -85,7 +86,7 @@ class UserPrefsList {
   static List<Map<String, dynamic>> lifestyleList = [
     {
       'name': 'Exercise',
-      'options': ['Very frequent', 'Frequent', 'Occasionally', 'None'],
+      'options': ['Frequently', 'Occasionally', 'Rarely', 'Never'],
       'question': 'How much do you exercise?',
       'assetPath': 'assets/preferences/placeholder.svg',
       'cacheKey': 'exercise',
@@ -93,16 +94,16 @@ class UserPrefsList {
     },
     {
       'name': 'Drinking',
-      'options': ['Very frequent', 'Frequent', 'Occasionally', 'None'],
-      'question': 'How much do you exercise?',
+      'options': ['Frequently', 'Occasionally', 'Rarely', 'Never'],
+      'question': 'How much do you drink alcohol?',
       'assetPath': 'assets/preferences/placeholder.svg',
       'cacheKey': 'drinking',
       'multiSelect': false,
     },
     {
       'name': 'Cannabis',
-      'options': ['Very frequent', 'Frequent', 'Occasionally', 'None'],
-      'question': 'How much do you exercise?',
+      'options': ['Frequently', 'Occasionally', 'Rarely', 'Never'],
+      'question': 'How much do you use cannabis?',
       'assetPath': 'assets/preferences/placeholder.svg',
       'cacheKey': 'cannabis',
       'multiSelect': false,
@@ -111,24 +112,24 @@ class UserPrefsList {
     // Might make a special menu for this too.
     {
       'name': 'Height',
-      'options': ['Very frequent', 'Frequent', 'Occasionally', 'None'],
-      'question': 'How much do you exercise?',
+      'options': ['Placeholder'],
+      'question': 'What is your height?',
       'assetPath': 'assets/preferences/placeholder.svg',
       'cacheKey': 'height',
       'multiSelect': false,
     },
     {
       'name': 'Social Media',
-      'options': ['Very frequent', 'Frequent', 'Occasionally', 'None'],
-      'question': 'How much do you exercise?',
+      'options': ['Frequently', 'Occasionally', 'Rarely', 'Never'],
+      'question': 'How much do you use social media?',
       'assetPath': 'assets/preferences/social-media.svg',
       'cacheKey': 'social-media',
       'multiSelect': false,
     },
     {
       'name': 'Pets',
-      'options': ['Very frequent', 'Frequent', 'Occasionally', 'None'],
-      'question': 'How much do you exercise?',
+      'options': ['Yes', 'No'],
+      'question': 'Do you have any pets?',
       'assetPath': 'assets/preferences/placeholder.svg',
       'cacheKey': 'pets',
       'multiSelect': false,
@@ -137,8 +138,8 @@ class UserPrefsList {
     // Will also have a longer list for this too.
     {
       'name': 'Dietary Preferences',
-      'options': ['Very frequent', 'Frequent', 'Occasionally', 'None'],
-      'question': 'How much do you exercise?',
+      'options': ['Placeholder'],
+      'question': 'Do you have any dietary preferences?',
       'assetPath': 'assets/preferences/placeholder.svg',
       'cacheKey': 'diet',
       'multiSelect': false,

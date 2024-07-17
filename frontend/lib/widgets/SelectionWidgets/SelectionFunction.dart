@@ -12,6 +12,7 @@ void showSelectDialog({
   required reRender,
 }) {
   showModalBottomSheet(
+    isScrollControlled: true,
     context: context,
     backgroundColor: Colors.white,
     builder: (BuildContext context) {
