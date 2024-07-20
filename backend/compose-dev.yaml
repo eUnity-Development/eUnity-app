@@ -6,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: docker/dev/dockerfile
+    ports:
+     - "3300:3200"
     init: true
     volumes:
     - type: bind

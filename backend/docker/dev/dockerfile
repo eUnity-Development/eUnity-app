@@ -1,29 +1,80 @@
 
 
-# Use golang:1.23-alpine as the base image
-FROM golang:1.23-rc-alpine
+FROM eunity-dev-container:latest
 
-WORKDIR /app
 
-# Install necessary tools for debugging
-RUN apk add --no-cache bash curl
 
-# Copy application files into the container
-COPY ../../. .
+# RUN apt update && \
+#     apt install -y \
+#     vim \
+#     pkg-config \
+#     libvips-dev \
+#     curl \
+#     build-essential \
+#     g++ \
+#     git \
+#     gcc-multilib && \
+#     { \
+#         echo '#!/bin/bash'; \
+#         echo ''; \
+#         echo '# Backup existing .bashrc or .zshrc'; \
+#         echo 'if [ -f ~/.bashrc ]; then'; \
+#         echo '    cp ~/.bashrc ~/.bashrc.bak'; \
+#         echo 'elif [ -f ~/.zshrc ]; then'; \
+#         echo '    cp ~/.zshrc ~/.zshrc.bak'; \
+#         echo 'else'; \
+#         echo '    echo "No .bashrc or .zshrc found to backup."'; \
+#         echo 'fi'; \
+#         echo ''; \
+#         echo '# Function to append color settings to .bashrc or .zshrc'; \
+#         echo 'add_colors() {'; \
+#         echo '    local file=$1'; \
+#         echo '    if grep -q "# Custom Colors" "$file"; then'; \
+#         echo '        echo "Color settings already present in $file"'; \
+#         echo '        return'; \
+#         echo '    fi'; \
+#         echo '    echo -e "\n# Custom Colors" >> "$file"'; \
+#         echo '    echo "export PS1=\"\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$ \"" >> "$file"'; \
+#         echo '    echo "export LS_COLORS=\"di=34:fi=0:ln=35:pi=33:so=32:bd=33:cd=33:or=31:mi=31:ex=32\"" >> "$file"'; \
+#         echo '    # Enable color support for ls'; \
+#         echo '    echo "alias ls=\"ls --color=auto\"" >> "$file"'; \
+#         echo '    echo "alias ll=\"ls -la\"" >> "$file"'; \
+#         echo '    echo "alias l=\"ls -CF\"" >> "$file"'; \
+#         echo ''; \
+#         echo '    echo "Color settings added to $file"'; \
+#         echo '}'; \
+#         echo ''; \
+#         echo '# Add colors to .bashrc or .zshrc'; \
+#         echo 'if [ -f ~/.bashrc ]; then'; \
+#         echo '    add_colors ~/.bashrc'; \
+#         echo 'elif [ -f ~/.zshrc ]; then'; \
+#         echo '    add_colors ~/.zshrc'; \
+#         echo 'else'; \
+#         echo '    echo "No .bashrc or .zshrc found to modify."'; \
+#         echo 'fi'; \
+#         echo ''; \
+#         echo '# Reload the shell configuration'; \
+#         echo 'if [ -f ~/.bashrc ]; then'; \
+#         echo '    source ~/.bashrc'; \
+#         echo 'elif [ -f ~/.zshrc ]; then'; \
+#         echo '    source ~/.zshrc'; \
+#         echo 'fi'; \
+#         echo ''; \
+#         echo 'echo "Terminal colors applied. Restart your terminal to see the changes."'; \
+#     } > /colorize_terminal.sh && \
+#     chmod +x /colorize_terminal.sh && \
+#     /colorize_terminal.sh && \
+#     rm /colorize_terminal.sh && \
+#     curl -OL https://golang.org/dl/go1.22.5.linux-386.tar.gz && \
+#     sha256sum go1.22.5.linux-386.tar.gz && \
+#     tar -C /usr/local -xvf go1.22.5.linux-386.tar.gz && \
+#     echo 'export PATH=$PATH:/usr/local/go/bin' | tee -a /etc/profile && \
+#     echo 'export PATH=$(go env GOPATH)/bin:$PATH' | tee -a /etc/profile && \
+#     . /etc/profile && \
+#     go install github.com/swaggo/swag/cmd/swag@latest && \
+#     go install github.com/air-verse/air@latest && \
+#     rm go1.22.5.linux-386.tar.gz
 
-RUN apk add --no-cache \
-    pkgconfig \
-    vips-dev \
-    g++ \
-    make \
-    git
-
-RUN go mod tidy
 
 
 EXPOSE 3200
-
-# # Set the entrypoint to bash for debugging
-# ENTRYPOINT ["bash"]
-# CMD can be specified here if you want a default command
-CMD ["make","serve"]
