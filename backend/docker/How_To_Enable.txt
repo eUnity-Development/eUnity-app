@@ -16,7 +16,7 @@ How to run Valkey(open source Redis fork)
 
 --Then run either of the following two commands, they do the same thing:
 
-        docker compose up --build -d
+        docker compose up -d
 
 
 --Add the following to .env
