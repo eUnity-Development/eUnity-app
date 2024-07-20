@@ -3,6 +3,7 @@ services:
     entrypoint:
     - sleep
     - infinity
+   
     build:
       context: .
       dockerfile: docker/dev/dockerfile
@@ -10,6 +11,11 @@ services:
      - "3300:3200"
     init: true
     volumes:
-    - type: bind
-      source: /var/run/docker.sock
-      target: /var/run/docker.sock
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+      - type: bind
+        source: $SSH_AUTH_SOCK
+        target: /ssh-agent
+    environment:
+      SSH_AUTH_SOCK: /ssh-agent

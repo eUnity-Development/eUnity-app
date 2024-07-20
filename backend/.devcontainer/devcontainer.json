@@ -19,7 +19,7 @@
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 	"features": {
 		"git": "os-provided",
-		"sshd": "latest"
+		"sshd": "os-provided"
 	},
 
 	
@@ -50,7 +50,7 @@
 	},
 
 	"mounts": [
-		 "source=${env:SSH_AUTH_SOCK},target=/ssh-auth.sock,type=bind"
+		"source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
 	]
 
 	// Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
