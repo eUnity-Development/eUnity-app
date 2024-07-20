@@ -125,6 +125,7 @@ func insert_Mock_Users() error {
 func Gen_Mock_Users() error {
 	err := insert_Mock_Users()
 	if err != nil {
+		fmt.Println("Error inserting mock users:", err)
 		return err
 	}
 	return nil

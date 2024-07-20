@@ -68,7 +68,7 @@ func (d *Dev_Controllers) Generate_Mock_Users(c *gin.Context) {
 	err := MockUsersGen.Gen_Mock_Users()
 	if err != nil {
 		c.JSON(400, gin.H{
-			"response": "Unable to create mock users",
+			"response": "Unable to create mock users" + err.Error(),
 		})
 		return
 	}

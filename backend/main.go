@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	docs "eunity.com/backend-main/docs"
@@ -14,6 +15,8 @@ import (
 )
 
 func main() {
+
+	fmt.Println("Starting server...")
 
 	//init server
 	router := gin.Default()

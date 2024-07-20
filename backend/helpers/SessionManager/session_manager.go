@@ -29,16 +29,17 @@ var Cookie_Host string
 
 func init() {
 	godotenv.Load()
-	godotenv.Load()
 	HTTPS_only = os.Getenv("HTTPS_ONLY") == "true"
 	Cookie_Host = os.Getenv("COOKIE_ACCEPT_HOST")
 	valkey := os.Getenv("VALKEY_ENABLED")
+	valkey_url := os.Getenv("VALKEY_URL")
+	valkey_pass := os.Getenv("VALKEY_PASS")
 	if valkey == "true" {
 		ValKey = true
 		rdb = redis.NewClient(&redis.Options{
-			Addr:     "localhost:6379",
-			Password: "123456", // no password set
-			DB:       0,        // use default DB
+			Addr:     valkey_url,
+			Password: valkey_pass, // no password set
+			DB:       0,           // use default DB
 		})
 
 		_, err := rdb.Ping(ctx).Result()
