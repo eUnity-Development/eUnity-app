@@ -18,9 +18,11 @@
 	// connected. This is typically a file mount in .devcontainer/docker-compose.yml
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 	"features": {
-	
-	}
+		"git": "os-provided",
+		"sshd": "latest"
+	},
 
+	
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 
@@ -37,8 +39,19 @@
 	// "postCreateCommand": "cat /etc/os-release",
 
 	// Configure tool-specific properties.
-	// "customizations": {},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-azuretools.vscode-docker",
+				"ms-vscode-remote.remote-containers"
+			]
+		}
+	},
+
+	"mounts": [
+		 "source=${env:SSH_AUTH_SOCK},target=/ssh-auth.sock,type=bind"
+	]
 
 	// Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "devcontainer"
+	// "remoteUser": "vscode"
 }

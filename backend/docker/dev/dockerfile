@@ -1,6 +1,8 @@
 
 
-FROM eunity-dev-container:latest
+# FROM eunity-dev-container:latest
+
+FROM debian:latest
 
 
 
@@ -12,7 +14,6 @@ FROM eunity-dev-container:latest
 #     curl \
 #     build-essential \
 #     g++ \
-#     git \
 #     gcc-multilib && \
 #     { \
 #         echo '#!/bin/bash'; \
