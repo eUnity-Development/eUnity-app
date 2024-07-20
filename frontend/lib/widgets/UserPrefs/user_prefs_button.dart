@@ -13,6 +13,7 @@ class UserPrefsButton extends StatefulWidget {
   final String assetPath;
   final String cacheKey;
   final bool multiSelect;
+  final bool isLongList;
 
   const UserPrefsButton(
     {super.key,
@@ -23,6 +24,7 @@ class UserPrefsButton extends StatefulWidget {
     required this.assetPath,
     required this.cacheKey,
     required this.multiSelect,
+    required this.isLongList,
     });
 
   @override
@@ -33,17 +35,18 @@ class UserPrefsButton extends StatefulWidget {
 
 class UserPrefsButtonState extends State<UserPrefsButton> {
   String action = '';
+  String staticText = 'Select';
 
   void update() {
-    action = UserInfoHelper.userInfoCache[widget.cacheKey];
     setState(() {
-      action = UserInfoHelper.userInfoCache[widget.cacheKey];
+      staticText = 'Edit';
+      action = widget.multiSelect ? staticText : UserInfoHelper.userInfoCache[widget.cacheKey];
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    action = UserInfoHelper.userInfoCache[widget.cacheKey];
+    action = widget.multiSelect ? staticText : UserInfoHelper.userInfoCache[widget.cacheKey];
     String buttonName = widget.name;
     return(
       Column(children: [
@@ -71,6 +74,7 @@ class UserPrefsButtonState extends State<UserPrefsButton> {
                 question: widget.question,
                 assetPath: widget.assetPath,
                 multiSelect: widget.multiSelect,
+                isListLong: widget.isLongList
               ),
 
               child: Row(

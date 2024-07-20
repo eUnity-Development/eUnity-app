@@ -15,10 +15,10 @@ class UserInfoHelper {
     userInfoCache['pronouns'] = 'Add';
     userInfoCache['education'] = 'Add';
     userInfoCache['job'] = 'Add';
-    userInfoCache['interests'] = 'Select';
-    userInfoCache['ethnicity'] = 'Select';
+    userInfoCache['interests'] = [];
+    userInfoCache['ethnicity'] = [];
     userInfoCache['politics'] = 'Add';
-    userInfoCache['religion'] = 'Add';
+    userInfoCache['religion'] = [];
     userInfoCache['city'] = 'Edit';
 
     userInfoCache['exercise'] = 'Add';
@@ -27,7 +27,7 @@ class UserInfoHelper {
     userInfoCache['height'] = 'Add';
     userInfoCache['social-media'] = 'Add';
     userInfoCache['pets'] = 'Add';
-    userInfoCache['diet'] = 'Add';
+    userInfoCache['diet'] = [];
   }
 
   static void updateCacheVariable(String variable, var newValue) {

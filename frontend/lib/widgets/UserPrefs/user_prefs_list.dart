@@ -7,18 +7,27 @@ class UserPrefsList {
       'assetPath': 'assets/preferences/pronouns.svg',
       'cacheKey': 'pronouns',
       'multiSelect': false,
+      'longList': false,
     },
 
     // If time, add a second prompt to let users type in school name.
     // Later on, add school email verification.
     {
       'name': 'Education',
-      'options': ['High School', 'Associate\'s Degree', 'Bachelor\'s Degree', 
-        'Master\'s or PHD', 'Trade School', 'Other','None'],
+      'options': [
+        'High School',
+        'Associate\'s Degree',
+        'Bachelor\'s Degree',
+        'Master\'s or PHD',
+        'Trade School',
+        'Other',
+        'None'
+      ],
       'question': 'Select your education',
       'assetPath': 'assets/preferences/education.svg',
       'cacheKey': 'education',
       'multiSelect': false,
+      'longList': false,
     },
 
     {
@@ -28,44 +37,135 @@ class UserPrefsList {
       'assetPath': 'assets/preferences/job.svg',
       'cacheKey': 'job',
       'multiSelect': false,
+      'longList': false,
     },
 
     // Need special menu for 30+ options. Allow multi select.
     {
       'name': 'Interests',
-      'options': ['Placeholder'],
-      'question': 'Select your top 3 interests',
+      'options': [
+           'Reading',
+    'Cooking',
+    'Traveling',
+    'Music',
+    'Fitness',
+    'Movies',
+    'Sports',
+    'Art',
+    'Gardening',
+    'Hiking',
+    'Photography',
+    'Gaming',
+    'Writing',
+    'Yoga',
+    'Technology',
+    'Fashion',
+    'Cars',
+    'Animals',
+    'DIY Projects',
+    'History',
+    'Science',
+    'Meditation',
+    'Comedy',
+    'Dancing',
+    'Socializing',
+    'Volunteering',
+    'Crafts',
+    'Cycling',
+    'Baking',
+    'Languages',
+    'Astronomy',
+    'Architecture',
+    'Bird Watching',
+    'Investing',
+    'Fishing',
+    'Theater'
+      ],
+      'question': 'Select up to 7 interests',
       'assetPath': 'assets/preferences/interests.svg',
       'cacheKey': 'interests',
-      'multiSelect': false,
+      'multiSelect': true,
+      'longList': true,
     },
 
     // Will also need special menu? Allow multi select.
     {
       'name': 'Ethnicity',
-      'options': ['Placeholder'],
+      'options': [
+        'Black/African Descent',
+        'Hispanic/Latino',
+        'White/Caucasian',
+        'Middle Eastern',
+        'Native American',
+        'Pacific Islander',
+        'South Asian',
+        'East Asian',
+        'Southeast Asian',
+        'West African',
+        'East African',
+        'North African',
+        'Central African',
+        'Southern African',
+        'Caribbean',
+        'Latin American',
+        'Eastern European',
+        'Western European',
+        'Northern European',
+        'Southern European',
+        'Jewish',
+        'Arab',
+        'Persian',
+        'Turkish',
+        'Central Asian',
+        'Other',
+        'Prefer Not to Say'
+      ],
       'question': 'Select your ethnicities',
       'assetPath': 'assets/preferences/ethnicity.svg',
       'cacheKey': 'ethnicity',
-      'multiSelect': false,
+      'multiSelect': true,
+      'longList': true,
     },
     {
       'name': 'Politics',
-      'options': ['Liberal', 'Moderate', 'Conservative', 'Other', 'Prefer not to say'],
+      'options': [
+        'Liberal',
+        'Moderate',
+        'Conservative',
+        'Other',
+        'Prefer not to say'
+      ],
       'question': 'What is your political alignment?',
       'assetPath': 'assets/preferences/politics.svg',
       'cacheKey': 'politics',
       'multiSelect': false,
+      'longList': false,
     },
 
     // Will also need a new menu. Around 14 options.
     {
       'name': 'Religion',
-      'options': ['Placeholder'],
-      'question': 'Select your job type',
+      'options': [
+        'Christian',
+        'Catholic',
+        'Protestant',
+        'Jewish',
+        'Muslim',
+        'Buddhist',
+        'Hindu',
+        'Sikh',
+        'Other specific religion',
+        'Spiritual but not religious',
+        'Agnostic',
+        'Atheist',
+        'Non-religious',
+        'Prefer not to say'
+      ],
+      'question': 'Select your religion',
       'assetPath': 'assets/preferences/religion.svg',
       'cacheKey': 'religion',
-      'multiSelect': false,
+      'multiSelect': true,
+      'longList': true,
     },
 
     // Have this based on the user's location.
@@ -79,8 +179,8 @@ class UserPrefsList {
       'assetPath': 'assets/preferences/city.svg',
       'cacheKey': 'city',
       'multiSelect': false,
+      'longList': false,
     },
-
   ];
 
   static List<Map<String, dynamic>> lifestyleList = [
@@ -91,6 +191,7 @@ class UserPrefsList {
       'assetPath': 'assets/preferences/placeholder.svg',
       'cacheKey': 'exercise',
       'multiSelect': false,
+      'longList': false,
     },
     {
       'name': 'Drinking',
@@ -99,6 +200,7 @@ class UserPrefsList {
       'assetPath': 'assets/preferences/placeholder.svg',
       'cacheKey': 'drinking',
       'multiSelect': false,
+      'longList': false,
     },
     {
       'name': 'Cannabis',
@@ -107,6 +209,7 @@ class UserPrefsList {
       'assetPath': 'assets/preferences/placeholder.svg',
       'cacheKey': 'cannabis',
       'multiSelect': false,
+      'longList': false,
     },
 
     // Might make a special menu for this too.
@@ -117,6 +220,7 @@ class UserPrefsList {
       'assetPath': 'assets/preferences/placeholder.svg',
       'cacheKey': 'height',
       'multiSelect': false,
+      'longList': false,
     },
     {
       'name': 'Social Media',
@@ -125,6 +229,7 @@ class UserPrefsList {
       'assetPath': 'assets/preferences/social-media.svg',
       'cacheKey': 'social-media',
       'multiSelect': false,
+      'longList': false,
     },
     {
       'name': 'Pets',
@@ -133,21 +238,32 @@ class UserPrefsList {
       'assetPath': 'assets/preferences/placeholder.svg',
       'cacheKey': 'pets',
       'multiSelect': false,
+      'longList': false,
     },
 
     // Will also have a longer list for this too.
     {
       'name': 'Dietary Preferences',
-      'options': ['Placeholder'],
+      'options': [
+        'Omnivore',
+        'Vegetarian',
+        'Vegan',
+        'Pescatarian',
+        'Flexitarian',
+        'Gluten-free',
+        'Dairy-free',
+        'Nut-free',
+        'Paleo',
+        'Keto',
+        'Other'
+      ],
       'question': 'Do you have any dietary preferences?',
       'assetPath': 'assets/preferences/placeholder.svg',
       'cacheKey': 'diet',
-      'multiSelect': false,
+      'multiSelect': true,
+      'longList': true,
     },
   ];
 
-  static List<Map<String, dynamic>> relationshipList = [
-
-  ];
+  static List<Map<String, dynamic>> relationshipList = [];
 }
-

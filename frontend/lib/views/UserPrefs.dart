@@ -31,6 +31,7 @@ class UserPrefsState extends State<UserPrefs> {
           assetPath: prefs['assetPath'],
           cacheKey: prefs['cacheKey'],
           multiSelect: prefs['multiSelect'],
+          isLongList: prefs['longList'],
         );
       }).toList();
     }

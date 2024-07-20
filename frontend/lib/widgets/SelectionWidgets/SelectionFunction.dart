@@ -10,6 +10,7 @@ void showSelectDialog({
   required String cacheKey,
   required bool multiSelect,
   required reRender,
+  bool? isListLong
 }) {
   showModalBottomSheet(
     isScrollControlled: true,
@@ -22,6 +23,7 @@ void showSelectDialog({
         assetPath: assetPath,
         cacheKey: cacheKey,
         multiSelect: multiSelect,
+        isListLong: isListLong,
       );
     },
   ).then((value) {

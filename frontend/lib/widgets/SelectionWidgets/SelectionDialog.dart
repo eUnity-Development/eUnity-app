@@ -10,13 +10,16 @@ class SelectionDialog extends StatefulWidget {
   final String assetPath;
   final bool multiSelect;
   final String cacheKey;
+  final bool? isListLong;
   const SelectionDialog(
       {super.key,
       required this.options,
       required this.question,
       required this.assetPath,
       required this.multiSelect,
-      required this.cacheKey});
+      required this.cacheKey,
+      this.isListLong,
+      });
 
   @override
   State<SelectionDialog> createState() => _SelectionDialogState();
@@ -48,9 +51,11 @@ class _SelectionDialogState extends State<SelectionDialog> {
     TextStyle unselectedText = TextStyle(
         fontWeight: FontWeight.w500, fontSize: 16, color: Colors.black);
 
+    bool isLongList = widget.isListLong ?? false;
+
     double maxHeight = MediaQuery.of(context).size.height - 40;
     double minHeight = 400;
-    double height = 80.0 * widget.options.length;
+    double height = (isLongList ? 32.0 : 80.0) * widget.options.length;
     
     if (widget.question.length > 25) {
       height += 100.0;
@@ -63,7 +68,7 @@ class _SelectionDialogState extends State<SelectionDialog> {
     }
 
     return Container(
-        height: height, // here
+        height: height,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
@@ -123,70 +128,83 @@ class _SelectionDialogState extends State<SelectionDialog> {
                 height: 20,
               ),
               SizedBox(
-                height: height-150, // here
-                child: ListView.builder(
-                  itemBuilder: (BuildContext context, int index) {
-                    if (index > (widget.options.length) - 1) {
-                      return null;
-                    }
-                    return GestureDetector(
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 15, left: 40, right: 40),
-                        child: Container(
-                          width: double.infinity,
-                          height: 42,
-                          decoration: (widget.multiSelect)
-                              ? (UserInfoHelper.userInfoCache[widget.cacheKey]
-                                      .contains(widget.options[index]))
-                                  ? selectedBox
-                                  : unselectedBox
-                              : (UserInfoHelper
-                                          .userInfoCache[widget.cacheKey] ==
-                                      widget.options[index])
-                                  ? selectedBox
-                                  : unselectedBox,
-                          child: Center(
-                            child: Text(
-                              widget.options[index],
-                              style: (widget.multiSelect)
-                                  ? (UserInfoHelper
-                                          .userInfoCache[widget.cacheKey]
-                                          .contains(widget.options[index]))
-                                      ? selectedText
-                                      : unselectedText
-                                  : (UserInfoHelper
-                                              .userInfoCache[widget.cacheKey] ==
-                                          widget.options[index])
-                                      ? selectedText
-                                      : unselectedText,
-                            ),
-                          ),
-                        ),
-                      ),
-                      onTap: () {
-                        setState(() {
-                          if (widget.multiSelect) {
-                            List cacheValue =
-                                UserInfoHelper.userInfoCache[widget.cacheKey];
-                            if (cacheValue.contains(widget.options[index])) {
-                              cacheValue.remove(widget.options[index]);
-                            } else {
-                              cacheValue.add(widget.options[index]);
-                            }
-                            UserInfoHelper.updateCacheVariable(
-                                widget.cacheKey, cacheValue);
-                          } else {
-                            UserInfoHelper.updateCacheVariable(
-                                widget.cacheKey, widget.options[index]);
-                          }
-                        });
-                      },
-                    );
-                  },
+                height: height - 150,
+                width: double.infinity,
+
+                  child: Wrap(
+                    spacing: 6.0,
+                    alignment: WrapAlignment.center,
+                    children: List<Widget>.generate(widget.options.length, (index) {
+                      return buildOptionButton(
+                        index, 
+                        selectedBox, 
+                        unselectedBox, 
+                        selectedText, 
+                        unselectedText,
+                        isLongList
+                      );
+                    }),
+                  ),
                 ),
-              ),
             ],
           ),
         ));
+  }
+   Widget buildOptionButton(int index, BoxDecoration selectedBox, BoxDecoration unselectedBox, TextStyle selectedText, TextStyle unselectedText, bool isLongList) {
+    bool isSelected;
+    if (widget.multiSelect) {
+      isSelected = UserInfoHelper.userInfoCache[widget.cacheKey].contains(widget.options[index]);
+    } else {
+      isSelected = UserInfoHelper.userInfoCache[widget.cacheKey] == widget.options[index];
+    }
+
+    return GestureDetector(
+      child: (!isLongList) ?
+        Padding(
+          padding: EdgeInsets.only(top: 15, left: 40, right: 40),
+          child: Container(
+            width: double.infinity,
+            height: 42,
+            decoration: isSelected ? selectedBox : unselectedBox,
+            child: Center(
+              child: Text(
+                widget.options[index],
+                style: isSelected ? selectedText : unselectedText,
+              ),
+            ),
+          ),
+        ) :
+        Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 1.0),
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          children: [
+            Container(
+              decoration: isSelected ? selectedBox : unselectedBox,
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 3.5),
+              child: Text(
+                widget.options[index],
+                style: isSelected ? selectedText : unselectedText,
+              ),
+            ),
+          ],
+        ),
+      ),
+      onTap: () {
+        setState(() {
+          if (widget.multiSelect) {
+            List cacheValue = UserInfoHelper.userInfoCache[widget.cacheKey];
+            if (cacheValue.contains(widget.options[index])) {
+              cacheValue.remove(widget.options[index]);
+            } else {
+              cacheValue.add(widget.options[index]);
+            }
+            UserInfoHelper.updateCacheVariable(widget.cacheKey, cacheValue);
+          } else {
+            UserInfoHelper.updateCacheVariable(widget.cacheKey, widget.options[index]);
+          }
+        });
+      },
+    );
   }
 }
