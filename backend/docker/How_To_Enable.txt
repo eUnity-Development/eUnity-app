@@ -1,4 +1,4 @@
-How to run Valkey(open source Redis fork)
+How to run Docker backend
 
 --Download and install docker-desktop
     Windows:
@@ -14,7 +14,8 @@ How to run Valkey(open source Redis fork)
 
 
 
---Then run either of the following two commands, they do the same thing:
+
+--Then run  the following two command:
 
         docker compose up -d
 
