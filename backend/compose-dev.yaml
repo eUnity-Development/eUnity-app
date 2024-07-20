@@ -1,21 +1,17 @@
 services:
-  app:
+  development:
     entrypoint:
     - sleep
     - infinity
-   
     build:
       context: .
       dockerfile: docker/dev/dockerfile
+    environment:
+      - HOST_WORKING_DIR=${PWD}
     ports:
-     - "3300:3200"
+     - "3200:3200"
     init: true
     volumes:
       - type: bind
         source: /var/run/docker.sock
         target: /var/run/docker.sock
-      - type: bind
-        source: $SSH_AUTH_SOCK
-        target: /ssh-agent
-    environment:
-      SSH_AUTH_SOCK: /ssh-agent

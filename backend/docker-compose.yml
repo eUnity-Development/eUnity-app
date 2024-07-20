@@ -22,9 +22,9 @@ services:
       dockerfile: docker/app/dockerfile
     container_name: go_app
     volumes:
-      - .:/app/
+      - ${HOST_WORKING_DIR}:/app/
     ports:
-      - "3200:3200"
+      - "8259:3200"
     depends_on:
       - mongodb
       - valkey

@@ -1,6 +1,6 @@
 
 
-run: get_packages swag
+run: compose get_packages swag 
 	air
 
 serve: compile
@@ -17,3 +17,8 @@ get_packages:
 swag:
 	swag init
 
+compose:
+	docker compose up -d
+
+
+ 
