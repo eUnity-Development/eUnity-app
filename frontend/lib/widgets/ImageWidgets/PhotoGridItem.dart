@@ -1,7 +1,7 @@
 import 'package:eunity/classes/ReportHelper.dart';
 import 'package:eunity/classes/UserInfoHelper.dart';
-import 'package:eunity/widgets/ProfileWidgets/EditImageSquare.dart';
-import 'package:eunity/widgets/ProfileWidgets/NewImageSquare.dart';
+import 'package:eunity/widgets/ImageWidgets/EditImageSquare.dart';
+import 'package:eunity/widgets/ImageWidgets/NewImageSquare.dart';
 import 'package:flutter/widgets.dart';
 
 class PhotoGridItem extends StatefulWidget {
