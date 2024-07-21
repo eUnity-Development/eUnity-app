@@ -1,36 +1,49 @@
 package routes
 
 import (
+	"fmt"
+
 	"eunity.com/backend-main/controllers"
 	"github.com/gin-gonic/gin"
 )
 
 var User_controllers = controllers.User_controllers{}
 
-func Pub_User_routes(r *gin.RouterGroup) {
-
-	//SIGNUP
-	r.POST("/signup", User_controllers.POST_signup)
-
-	//LOGIN
-	r.POST("/login", User_controllers.POST_login)
-
-}
-
 func User_routes(r *gin.RouterGroup) {
+	//all this routes require user permissons
 
 	//GET ME
-	r.GET("/me", User_controllers.GET_me)
+	r.GET("/me", Check_User_Permissions, User_controllers.GET_me)
 
 	//PATCH ME
-	r.PATCH("/me", User_controllers.PATCH_me)
+	r.PATCH("/me", Check_User_Permissions, User_controllers.PATCH_me)
 
 	//GET USER BY ID
 	r.GET("/get_user/:user_id", User_controllers.GET_user)
 
 	//LOGOUT
-	r.POST("/logout", User_controllers.POST_logout)
+	r.POST("/logout", Check_User_Permissions, User_controllers.POST_logout)
 
-	r.GET("/Testing_Context", User_controllers.Testing_Context)
+	r.GET("/Testing_Context", Check_User_Permissions, User_controllers.Testing_Context)
+
+}
+
+func Check_User_Permissions(c *gin.Context) {
+	//check if user has permissions
+	perms := c.MustGet("permissions").([]string)
+
+	fmt.Println(perms)
+
+	for _, perm := range perms {
+		if perm == "user" {
+			c.Next()
+			return
+		}
+	}
+
+	c.JSON(401, gin.H{
+		"response": "Don't have permissions",
+	})
+	c.Abort()
 
 }

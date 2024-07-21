@@ -22,6 +22,42 @@ paths:
       summary: Google Auth
       tags:
       - Auth
+  /dev/force_login:
+    get:
+      consumes:
+      - application/json
+      description: Creates a session for a user by email
+      parameters:
+      - description: email
+        in: query
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Session created, user logged in
+          schema:
+            type: string
+      summary: Force Login
+      tags:
+      - Dev
+  /dev/generate_mock_users:
+    get:
+      consumes:
+      - application/json
+      description: Creates mock users for development purposes
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Mock users created
+          schema:
+            type: string
+      summary: Create Mock Users
+      tags:
+      - Dev
   /feedback/add:
     post:
       consumes:
@@ -488,36 +524,6 @@ paths:
       summary: Get User Route
       tags:
       - User
-  /users/login:
-    post:
-      consumes:
-      - multipart/form-data
-      description: logs in a user
-      parameters:
-      - description: Email
-        in: formData
-        name: email
-        required: true
-        type: string
-      - description: Password
-        in: formData
-        name: password
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-      summary: User login route
-      tags:
-      - Public User
   /users/logout:
     post:
       consumes:
@@ -578,36 +584,6 @@ paths:
       summary: User update route
       tags:
       - User
-  /users/signup:
-    post:
-      consumes:
-      - multipart/form-data
-      description: creates a new user
-      parameters:
-      - description: Email
-        in: formData
-        name: email
-        required: true
-        type: string
-      - description: Password
-        in: formData
-        name: password
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-      summary: User signup route
-      tags:
-      - Public User
   /webAuth/google:
     get:
       consumes:

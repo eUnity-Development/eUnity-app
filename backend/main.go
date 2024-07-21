@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	docs "eunity.com/backend-main/docs"
@@ -14,6 +15,8 @@ import (
 )
 
 func main() {
+
+	fmt.Println("Starting server...")
 
 	//init server
 	router := gin.Default()
@@ -29,7 +32,6 @@ func main() {
 	//ROUTE GROUPS
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//unprotected routes
-	routes.Pub_User_routes(r.Group("/users"))
 	routes.Pub_Media_routes(r.Group("/media"))
 	routes.Feedback_routes(r.Group("/feedback"))
 
@@ -43,6 +45,9 @@ func main() {
 	routes.Twilio_routes(r.Group("/twilio"))
 	routes.Report_Issue_routes(r.Group("/report_issue", SessionManager.AuthRequired()))
 	routes.Report_User_routes(r.Group("/report_user", SessionManager.AuthRequired()))
+
+	//development only routes
+	routes.Dev_routes(r.Group("/dev"))
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Serve Swagger UI at /docs

@@ -2,37 +2,45 @@ package controllers
 
 import (
 	//"fmt" // for debugging
-	"encoding/json"
+
+	"context"
 	"fmt"
 	"net/http"
 	"os" // to access .env file
 
+	"eunity.com/backend-main/helpers/DBManager"
+	"eunity.com/backend-main/helpers/SessionManager"
+	"eunity.com/backend-main/models"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv" // to load .env file
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/gothic"
 	"github.com/markbates/goth/providers/google"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	//"go.mongodb.org/mongo-driver/bson"
 	//"go.mongodb.org/mongo-driver/bson/primitive"
 )
+
+//we will be using this endpoints for login into the dashboard
 
 type Web_Auth_controllers struct{}
 
 // required google env variables
 var GoogleClientID string
 var GoogleClientSecret string
-var GoogleRedirectURI string = "http://localhost:3200/api/v1/webAuth/google/callback"
 
-//this other url will redirect to the app under the schema eunity://open.my.app.com -> we can change this later
-//then we can call the correct callback url from withing the app. using 10.0.2.2
-
-//var GoogleRedirectURI string = "https://eunityusa.com/api/v1/redirect_google_auth_app"
+// var GoogleRedirectURI string = "http://localhost:3200/api/v1/webAuth/google/callback"
+var GoogleRedirectURI string = "https://eunityusa.com/api/v1/webAuth/google/callback"
 
 func init() {
 
 	godotenv.Load() //loads the .env file
-	Google_key := os.Getenv("GOOGLE_KEY")
-	Google_secret := os.Getenv("GOOGLE_SECRET")
+	GoogleClientID = os.Getenv("GOOGLE_CLIENT_ID")
+	GoogleClientSecret = os.Getenv("GOOGLE_SECRET")
+
+	fmt.Println(GoogleClientID)
+	fmt.Println(GoogleClientSecret)
 
 	scopes := []string{
 		"email",
@@ -40,7 +48,7 @@ func init() {
 	}
 
 	goth.UseProviders(
-		google.New(Google_key, Google_secret, GoogleRedirectURI, scopes...),
+		google.New(GoogleClientID, GoogleClientSecret, GoogleRedirectURI, scopes...),
 	)
 }
 
@@ -73,7 +81,7 @@ func (ac *Web_Auth_controllers) GET_BeginGoogleAuth(c *gin.Context) {
 // @Produce json
 // @Success 200 {string} string "Google Auth Callback"
 // @Router /webAuth/google/callback [get]
-func (ac *Web_Auth_controllers) GET_GoogleOAuthCallback(c *gin.Context) { 
+func (ac *Web_Auth_controllers) GET_GoogleOAuthCallback(c *gin.Context) {
 	q := c.Request.URL.Query()
 	q.Add("provider", "google")
 	c.Request.URL.RawQuery = q.Encode()
@@ -85,23 +93,90 @@ func (ac *Web_Auth_controllers) GET_GoogleOAuthCallback(c *gin.Context) {
 		return
 	}
 
-	// print the user as pretty json and save to file
-	jsonObject, err := json.MarshalIndent(user, "", "    ")
-	if err != nil {
-		fmt.Println(err)
+	//check if the developer is already in the database
+	email := user.Email
+
+	dev := DBManager.DB.Collection("whitelisted-devs").FindOne(context.Background(), bson.M{"email": email})
+	if dev.Err() != nil {
+		c.JSON(400, gin.H{
+			"response": "Account not authorized",
+		})
+	}
+
+	//check if they exists in the developer collection if net we add all their info
+	//to the developer collection
+	developer := DBManager.DB.Collection("developers").FindOne(context.Background(), bson.M{"email": email})
+	fmt.Println(email)
+	fmt.Println(user.FirstName)
+	fmt.Println(user.LastName)
+	fmt.Println(user.Name)
+	fmt.Println(user.RawData["verified_email"])
+	fmt.Println(user.UserID)
+
+	objectID := primitive.NewObjectID()
+
+	if developer.Err() != nil {
+		newDev := models.Developer{
+			ID:        &objectID,
+			Email:     email,
+			FirstName: user.FirstName,
+			LastName:  user.LastName,
+			AvatarURL: user.AvatarURL,
+			Providers: map[string]models.Provider{
+				"google": {
+					Name:           user.Name,
+					Email:          user.Email,
+					Email_verified: user.RawData["verified_email"].(bool),
+					Sub:            user.UserID,
+				},
+			},
+		}
+
+		fmt.Println("made it here bruh")
+
+		//create a new developer
+		_, err := DBManager.DB.Collection("developers").InsertOne(context.Background(), newDev)
+		if err != nil {
+			c.JSON(400, gin.H{
+				"response": "Unable to create developer",
+			})
+			return
+		}
+	}
+
+	fmt.Println("made it here bruh 2")
+
+	developer = DBManager.DB.Collection("developers").FindOne(context.Background(), bson.M{"email": email})
+	if developer.Err() != nil {
+		c.JSON(400, gin.H{
+			"response": "Unable to login",
+		})
 		return
 	}
 
-	//save to file
-	err = os.WriteFile("user.json", jsonObject, 0644)
+	var result models.Developer
+	err = developer.Decode(&result)
 	if err != nil {
-
-		fmt.Println(err)
+		c.JSON(400, gin.H{
+			"response": "Unable to login",
+		})
 		return
 
 	}
+
+	_, err = SessionManager.Create_Developer_Session(result.ID.Hex(), c)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"response": "Unable to login",
+		})
+		return
+
+	}
+
+	//after this we want to create a session
 
 	//we need to implement the rest for web auth here we would create the user etc, etc
-	c.JSON(200, "have not yet implemented the rest of the web auth process")
+	//redirect to /dashboard should have access to all the developer endpoints
+	c.Redirect(http.StatusMovedPermanently, "/dashboard")
 
 }
