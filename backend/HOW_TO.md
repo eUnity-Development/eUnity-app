@@ -11,21 +11,30 @@
     Open Powershell as administrator
     Type "wsl --install"
 
-## 3-Run docker compose command
+## 3-Run dev.bat or dev.bash windows/mac or linux
 
-    docker compose up -d
+    Should work fine if you have issues let me know
 
-Docker compose will run both mongodb and valkey for you. It handles all dependencies.
+## 4-Download the dev-contaniners extension
 
-## If enviroment dependencies change run:
+    Then type ctrl+shift+p and type re-open in container
 
-    docker compose up --build -d
+## 5-Type "make run" once inside the container
 
-This command builds the images from scratch and it is slow, only run it if any dockerfile change.
+    The dev container serves like normal to
+        port 3200
 
-## Small Changes
+    Mongo is on 
+        localhost:27018
 
-If you want to make small changes in the backend you can edit the files and then restart the server container in the the docker gui.
-The files in this project sync up with the container files. Restarting the server recompiles and re-runs go.
 
-The docker container does not have air or swag so it's not good for development. We might consider using dev containers since they would basically solve all onboarding, and everyone would have the same dev enviroment, but it's not a priority.
+## Notes
+
+    The command "make run" will run swag init and the server with air.
+    This means the server will reload whenever there are file changes which is nice for dev.
+
+    
+## Improvements
+
+    This seems like the easiest and most reliable way to run the backend on all the different dev enviroments. We will also be doing rolling deployments to dev branch soon so devs might be able to use that for front-end if its easier. 
+
