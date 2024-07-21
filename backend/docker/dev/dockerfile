@@ -6,6 +6,9 @@ FROM desarso/eunity-dev:latest
 
 COPY .ssh/id_rsa /root/.ssh/id_rsa
 
+RUN chmod 600 /root/.ssh/id_rsa
+
+
 
 # Add Docker's official GPG key:
 # RUN apt-get update && \
