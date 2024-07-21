@@ -27,6 +27,8 @@
     Mongo is on 
         localhost:27018
 
+## Video Walkthrough : https://drive.google.com/file/d/1XEyDfmLhbX1dUCJkNNnWd4aCkV0iUYZR/view?usp=sharing
+
 
 ## Notes
 
