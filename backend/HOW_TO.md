@@ -35,8 +35,15 @@
     The command "make run" will run swag init and the server with air.
     This means the server will reload whenever there are file changes which is nice for dev.
 
+## For MAC or Linux
+
+    if you get this error: dev.bash: line 2: $'\r': command not found
+    It's a line break issue dues to windows run this
+    sed -i 's/\r$//' dev.bash
+    you gotta change all the line breaks from CRLF --> LF
+
+
     
 ## Improvements
 
     This seems like the easiest and most reliable way to run the backend on all the different dev enviroments. We will also be doing rolling deployments to dev branch soon so devs might be able to use that for front-end if its easier. 
-
