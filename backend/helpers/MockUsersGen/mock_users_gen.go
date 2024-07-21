@@ -60,16 +60,22 @@ func get_random_user() (models.User, error) {
 	}
 
 	resultUser := models.User{
-		ID:                &objectId,
-		Email:             data["results"].([]interface{})[0].(map[string]interface{})["email"].(string),
-		Verified_email:    true,
-		PhoneNumber:       data["results"].([]interface{})[0].(map[string]interface{})["phone"].(string),
-		FirstName:         data["results"].([]interface{})[0].(map[string]interface{})["name"].(map[string]interface{})["first"].(string),
-		LastName:          data["results"].([]interface{})[0].(map[string]interface{})["name"].(map[string]interface{})["last"].(string),
-		Gender:            data["results"].([]interface{})[0].(map[string]interface{})["gender"].(string),
-		Location:          data["results"].([]interface{})[0].(map[string]interface{})["location"].(map[string]interface{})["country"].(string),
-		RelationshipTypes: []string{"Friendship", "Dating", "Marriage"},
-		DateOfBirth:       &dob,
+		ID:             &objectId,
+		Email:          data["results"].([]interface{})[0].(map[string]interface{})["email"].(string),
+		Verified_email: true,
+		PhoneNumber:    data["results"].([]interface{})[0].(map[string]interface{})["phone"].(string),
+		FirstName:      data["results"].([]interface{})[0].(map[string]interface{})["name"].(map[string]interface{})["first"].(string),
+		LastName:       data["results"].([]interface{})[0].(map[string]interface{})["name"].(map[string]interface{})["last"].(string),
+		Gender:         data["results"].([]interface{})[0].(map[string]interface{})["gender"].(string),
+		Location:       data["results"].([]interface{})[0].(map[string]interface{})["location"].(map[string]interface{})["country"].(string),
+		MatchPreferences: models.MatchPreferences{
+			Genders:           []string{"Men", "Women"},
+			RelationshipTypes: []string{"Long Term Relationships"},
+			MinimumAge:        18,
+			MaximumAge:        39,
+			MaximumDistance:   40,
+		},
+		DateOfBirth: &dob,
 		Height: &models.Height{
 			Feet:   5,
 			Inches: 8,

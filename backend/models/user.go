@@ -10,7 +10,7 @@ type User struct {
 	Email                 string              `bson:"email" json:"email,omitempty" form:"email" validate:"required,email"`
 	Verified_email        bool                `bson:"verified_email" json:"verified_email,omitempty"`
 	Verified_phone_number bool                `bson:"verified_phone_number" json:"verified_phone_number,omitempty"`
-	IsProfileSetUp        bool                `bson:"is_profile_set_up" json:"is_profile_set_up"`
+	IsProfileSetUp        bool                `bson:"is_profile_set_up" json:"is_profile_set_up,omitempty"`
 	PhoneNumber           string              `bson:"phone_number" json:"phone_number,omitempty"`
 	Gender                string              `bson:"gender" json:"gender,omitempty"`
 	Location              string              `bson:"location" json:"location,omitempty"`

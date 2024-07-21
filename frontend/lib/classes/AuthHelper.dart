@@ -136,6 +136,7 @@ class AuthHelper {
   static Future<void> SendPhoneVerification() async {}
 
   static Future<void> signInWithGoogle() async {
+    print('a');
     try {
       await googleSignIn.signIn();
     } on Exception catch (e) {
