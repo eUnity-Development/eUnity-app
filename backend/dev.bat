@@ -46,6 +46,8 @@ set "TEMP_FILE=%ENV_FILE%.tmp"
 :: Replace the old .env file with the new one
 move /y "%TEMP_FILE%" "%ENV_FILE%"
 
+setx HOST_WORKING_DIR "%cd%"
+
 echo Updated HOST_WORKING_DIR in %ENV_FILE% to %CURRENT_DIR%
 
 

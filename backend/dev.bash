@@ -40,6 +40,9 @@ added_host_working_dir=false
 # Replace the old .env file with the new one
 mv "$TEMP_FILE" "$ENV_FILE"
 
+export HOST_WORKING_DIR="$(pwd)"
+
+
 echo "Updated HOST_WORKING_DIR in $ENV_FILE to $CURRENT_DIR"
 
 SOURCE="$HOME/.ssh/id_rsa"

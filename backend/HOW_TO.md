@@ -1,4 +1,4 @@
-# How to run the backend with Docker
+# How to run the backend
 
 ## 0-Make sure your .env is correct
 

@@ -1,6 +1,10 @@
 
 
-run: compose get_packages swag 
+
+include .env
+export
+
+run: load_env compose get_packages swag 
 	air
 
 serve: compile
@@ -19,6 +23,13 @@ swag:
 
 compose:
 	docker compose up -d
+
+
+load_env:
+	@eval $$(grep -v '^#' .env | sed 's/^/export /') && echo "Loaded environment variables"
+
+
+
 
 
  
