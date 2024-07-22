@@ -30,7 +30,7 @@ func main() {
 
 	//set default endpoint
 	docs.SwaggerInfo.BasePath = BASE_PATH
-	r := router.Group(BASE_PATH)
+	r := router
 	//ser up favicon route
 	router.GET("/favicon.ico", func(c *gin.Context) {
 		c.File("icons/favicon.ico")
