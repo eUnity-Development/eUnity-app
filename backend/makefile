@@ -28,6 +28,12 @@ compose:
 load_env:
 	@eval $$(grep -v '^#' .env | sed 's/^/export /') && echo "Loaded environment variables"
 
+git_reset_dev:
+	git reset --hard origin/development
+
+git_reset_main:
+	git reset --hard origin/main
+
 
 
 
