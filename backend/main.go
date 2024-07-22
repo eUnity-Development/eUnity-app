@@ -58,10 +58,10 @@ func main() {
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Serve Swagger UI at /docs
-	router.GET("/docs", func(c *gin.Context) {
+	r.GET("/docs", func(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "/docs/index.html")
 	})
-	router.GET("/docs/*any", ginSwagger.WrapHandler(
+	r.GET("/docs/*any", ginSwagger.WrapHandler(
 		swaggerfiles.Handler,
 	))
 	router.Run(PORT)
