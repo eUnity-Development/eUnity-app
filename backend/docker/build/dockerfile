@@ -98,3 +98,7 @@ RUN apt update && \
     ldconfig -p | grep gio && \
     ldconfig -p | grep gobject && \
     ldconfig -p | grep glib
+
+
+RUN echo 'export PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig:$PKG_CONFIG_PATH' | sudo tee -a /etc/profile && . /etc/profile
+

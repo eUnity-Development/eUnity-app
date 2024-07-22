@@ -4,11 +4,14 @@
 include .env
 export
 
-run: load_env compose get_packages swag 
+run: load_env compose get_packages swag prune
 	air
 
 serve: compile
 	./main
+
+prune:
+	docker image prune -f
 
 
 compile: get_packages
