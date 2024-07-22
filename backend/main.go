@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	docs "eunity.com/backend-main/docs"
 	"eunity.com/backend-main/helpers/DBManager"
@@ -10,6 +11,7 @@ import (
 	"eunity.com/backend-main/helpers/TwilioManager"
 	"eunity.com/backend-main/routes"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -18,12 +20,16 @@ func main() {
 
 	fmt.Println("Starting server...")
 
+	//load .env
+	godotenv.Load()
+	BASE_PATH := os.Getenv("BASE_PATH")
+
 	//init server
 	router := gin.Default()
 
 	//set default endpoint
-	docs.SwaggerInfo.BasePath = "/api/v1"
-	r := router.Group("/api/v1")
+	docs.SwaggerInfo.BasePath = BASE_PATH
+	r := router.Group(BASE_PATH)
 	//ser up favicon route
 	router.GET("/favicon.ico", func(c *gin.Context) {
 		c.File("icons/favicon.ico")
