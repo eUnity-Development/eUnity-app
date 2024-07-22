@@ -1,7 +1,7 @@
 FROM debian:latest
 
 
-#Add Docker's official GPG key:
+#This builds our dev environment don't edit this ever unless you know what you are doing
 
 
 RUN apt-get update && \
