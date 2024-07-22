@@ -23,14 +23,15 @@ func main() {
 	//load .env
 	godotenv.Load()
 	BASE_PATH := os.Getenv("BASE_PATH")
+	SWAGGER_BASE_PATH := os.Getenv("SWAGGER_BASE_PATH")
 	PORT := os.Getenv("PORT")
 
 	//init server
 	router := gin.Default()
 
 	//set default endpoint
-	docs.SwaggerInfo.BasePath = BASE_PATH
-	r := router
+	docs.SwaggerInfo.BasePath = SWAGGER_BASE_PATH
+	r := router.Group(BASE_PATH)
 	//ser up favicon route
 	router.GET("/favicon.ico", func(c *gin.Context) {
 		c.File("icons/favicon.ico")
