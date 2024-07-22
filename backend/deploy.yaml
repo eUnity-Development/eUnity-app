@@ -9,8 +9,6 @@ services:
       context: .  # Set context to the root of the application directory
       dockerfile: docker/app/dockerfile
     container_name: go_app
-    volumes:
-      - .:/app/
     ports:
       - "8259:3200"
     depends_on:
