@@ -23,6 +23,7 @@ func main() {
 	//load .env
 	godotenv.Load()
 	BASE_PATH := os.Getenv("BASE_PATH")
+	PORT := os.Getenv("PORT")
 
 	//init server
 	router := gin.Default()
@@ -63,7 +64,7 @@ func main() {
 	router.GET("/docs/*any", ginSwagger.WrapHandler(
 		swaggerfiles.Handler,
 	))
-	router.Run(":3200")
+	router.Run(PORT)
 	defer DBManager.Disconnect()
 	defer TwilioManager.Disconnect()
 }
