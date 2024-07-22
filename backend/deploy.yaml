@@ -1,17 +1,9 @@
 
 services:
-  mongodb:
-    image: mongo:latest
-    container_name: mongodb
-    volumes:
-      - mongo-data:/data/db
 
   valkey:
     build: ./docker/valkey/
     container_name: valkey
-    depends_on:
-      - mongodb
-
   go_app:
     build:
       context: .  # Set context to the root of the application directory
@@ -22,12 +14,7 @@ services:
     ports:
       - "8259:3200"
     depends_on:
-      - mongodb
       - valkey
-
-volumes:
-  mongo-data:
-
 networks:
   app-network:
     driver: bridge
