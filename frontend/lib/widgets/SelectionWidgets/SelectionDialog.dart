@@ -1,4 +1,5 @@
 import 'package:eunity/classes/UserInfoHelper.dart';
+import 'package:eunity/widgets/SelectionWidgets/SelectionDialogEnterText.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -53,9 +54,14 @@ class _SelectionDialogState extends State<SelectionDialog> {
 
     bool isLongList = widget.isListLong ?? false;
 
-    double maxHeight = MediaQuery.of(context).size.height - 40;
+    double maxHeight = MediaQuery.of(context).size.height - (40 * DesignVariables.heightConversion);
     double minHeight = 400;
     double height = (isLongList ? 32.0 : 80.0) * widget.options.length;
+
+    // both job and height require user input, so make room for keyboard
+    if (widget.cacheKey == 'job' || widget.cacheKey == 'height') {
+      height = maxHeight / 1.25;
+    }
     
     if (widget.question.length > 25) {
       height += 100.0;
@@ -130,8 +136,9 @@ class _SelectionDialogState extends State<SelectionDialog> {
               SizedBox(
                 height: height - 150,
                 width: double.infinity,
-
-                  child: Wrap(
+                  child: (widget.cacheKey == 'job') ? 
+                    SelectionDialogEnterText(cacheKey: widget.cacheKey, labelString: 'Job Title (Optional)',) :      
+                  Wrap(
                     spacing: 6.0,
                     alignment: WrapAlignment.center,
                     children: List<Widget>.generate(widget.options.length, (index) {

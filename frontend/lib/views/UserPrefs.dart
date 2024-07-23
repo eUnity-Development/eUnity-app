@@ -37,6 +37,7 @@ class UserPrefsState extends State<UserPrefs> {
     }
 
     return (Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: PushedScreenTopBar(hasSkip: true, onSkip: onSkip),
         body: Padding(
             padding: EdgeInsets.symmetric(
