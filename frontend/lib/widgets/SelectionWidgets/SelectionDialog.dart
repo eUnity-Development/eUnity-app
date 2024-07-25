@@ -28,6 +28,8 @@ class SelectionDialog extends StatefulWidget {
 }
 
 class _SelectionDialogState extends State<SelectionDialog> {
+  int maxInterests = 7;
+
   @override
   Widget build(BuildContext context) {
     const TextStyle questionStyle = TextStyle(
@@ -50,7 +52,7 @@ class _SelectionDialogState extends State<SelectionDialog> {
         fontSize: 16,
         color: DesignVariables.primaryRed);
 
-    TextStyle unselectedText = TextStyle(
+    TextStyle unselectedText = const TextStyle(
         fontWeight: FontWeight.w500, fontSize: 16, color: Colors.black);
 
     bool isLongList = widget.isListLong ?? false;
@@ -84,7 +86,7 @@ class _SelectionDialogState extends State<SelectionDialog> {
             color: Colors.white,
             border: Border.all(color: DesignVariables.greyLines, width: 2)),
         child: Padding(
-          padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+          padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
           child: Column(
             children: [
               Align(
@@ -188,7 +190,7 @@ class _SelectionDialogState extends State<SelectionDialog> {
     return GestureDetector(
       child: (!isLongList)
           ? Padding(
-              padding: EdgeInsets.only(top: 15, left: 40, right: 40),
+              padding: const EdgeInsets.only(top: 15, left: 40, right: 40),
               child: Container(
                 width: double.infinity,
                 height: 42,
@@ -226,7 +228,11 @@ class _SelectionDialogState extends State<SelectionDialog> {
             if (cacheValue.contains(widget.options[index])) {
               cacheValue.remove(widget.options[index]);
             } else {
-              cacheValue.add(widget.options[index]);
+              // cap the number of interests
+              if (widget.cacheKey == 'interests' &&
+                  UserInfoHelper.userInfoCache[widget.cacheKey].length < maxInterests) {
+                cacheValue.add(widget.options[index]);
+              }
             }
             UserInfoHelper.updateCacheVariable(widget.cacheKey, cacheValue);
           } else {
