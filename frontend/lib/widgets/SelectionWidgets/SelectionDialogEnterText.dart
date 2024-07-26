@@ -19,7 +19,7 @@ class _SelectionDialogEnterTextState extends State<SelectionDialogEnterText> {
   @override
   Widget build(BuildContext context) {
     _textController.text =
-        UserInfoHelper.userInfoCache[widget.cacheKey] == 'Enter'
+        UserInfoHelper.userInfoCache[widget.cacheKey] == 'Add'
             ? ''
             : UserInfoHelper.userInfoCache[widget.cacheKey];
 
@@ -28,7 +28,7 @@ class _SelectionDialogEnterTextState extends State<SelectionDialogEnterText> {
         if (value != '') {
           UserInfoHelper.userInfoCache[widget.cacheKey] = value;
         } else {
-          UserInfoHelper.userInfoCache[widget.cacheKey] = 'Enter';
+          UserInfoHelper.userInfoCache[widget.cacheKey] = 'Add';
         }
       });
     }

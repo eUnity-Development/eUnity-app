@@ -35,7 +35,7 @@ class UserPrefsButton extends StatefulWidget {
 
 class UserPrefsButtonState extends State<UserPrefsButton> {
   String action = '';
-  String staticText = 'Select';
+  String staticText = 'Add';
 
   void update() {
     setState(() {

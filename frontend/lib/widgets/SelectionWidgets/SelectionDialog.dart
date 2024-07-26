@@ -62,7 +62,7 @@ class _SelectionDialogState extends State<SelectionDialog> {
     double minHeight = 400;
     double height = (isLongList ? 32.0 : 80.0) * widget.options.length;
 
-    // both job and height require user input, so make room for keyboard
+    // job requires user input, so make room for keyboard
     if (widget.cacheKey == 'job') {
       height = maxHeight / 1.25;
     }
@@ -230,7 +230,9 @@ class _SelectionDialogState extends State<SelectionDialog> {
             } else {
               // cap the number of interests
               if (widget.cacheKey == 'interests' &&
-                  UserInfoHelper.userInfoCache[widget.cacheKey].length < maxInterests) {
+                      UserInfoHelper.userInfoCache[widget.cacheKey].length <
+                          maxInterests ||
+                  widget.cacheKey != 'interests') {
                 cacheValue.add(widget.options[index]);
               }
             }

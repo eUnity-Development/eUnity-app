@@ -14,7 +14,7 @@ class UserInfoHelper {
 
     userInfoCache['pronouns'] = 'Add';
     userInfoCache['education'] = 'Add';
-    userInfoCache['job'] = 'Enter';
+    userInfoCache['job'] = 'Add';
     userInfoCache['interests'] = [];
     userInfoCache['ethnicity'] = [];
     userInfoCache['politics'] = 'Add';
@@ -24,7 +24,7 @@ class UserInfoHelper {
     userInfoCache['exercise'] = 'Add';
     userInfoCache['drinking'] = 'Add';
     userInfoCache['cannabis'] = 'Add';
-    userInfoCache['height'] = 'Enter';
+    userInfoCache['height'] = 'Add';
     userInfoCache['social-media'] = 'Add';
     userInfoCache['pets'] = 'Add';
     userInfoCache['diet'] = [];
