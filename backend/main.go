@@ -2,8 +2,12 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	docs "eunity.com/backend-main/docs"
 	"eunity.com/backend-main/helpers/DBManager"
@@ -60,12 +64,40 @@ func main() {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Serve Swagger UI at /docs
 	r.GET("/docs", func(c *gin.Context) {
-		c.Redirect(http.StatusMovedPermanently, "/docs/index.html")
+		c.Redirect(http.StatusMovedPermanently, "/api/v1/docs/index.html")
+	})
+
+	//redirect might not work cause chrome caches the redirect
+	router.GET("/docs", func(c *gin.Context) {
+		c.Redirect(http.StatusMovedPermanently, "/api/v1/docs/index.html")
 	})
 	r.GET("/docs/*any", ginSwagger.WrapHandler(
 		swaggerfiles.Handler,
 	))
-	router.Run(PORT)
+
+	// Start the server in a separate goroutine
+	go func() {
+		if err := router.Run(PORT); err != nil {
+			log.Fatalf("Server could not start: %v\n", err)
+		}
+	}()
+
+	//wait a second for the server to start
+	time.Sleep(1 * time.Second)
+
+	// Print message after server starts
+	fmt.Println("Go to http://localhost:3200/api/v1/docs/index.html to view the Swagger documentation.")
+
+	// Handle graceful shutdown
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+
+	// Block until a signal is received
+	<-quit
+
+	// Perform cleanup
+	fmt.Println("Shutting down server...")
+
 	defer DBManager.Disconnect()
 	defer TwilioManager.Disconnect()
 }

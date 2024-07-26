@@ -86,7 +86,7 @@ RUN apt update && \
     go install github.com/air-verse/air@latest && \
     rm go1.22.5.linux-386.tar.gz
 
-    RUN apt-get update && \
+RUN apt-get update && \
     apt-get install -y sudo && \
     dpkg --add-architecture i386 && \
     apt-get update && \
