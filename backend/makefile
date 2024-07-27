@@ -25,8 +25,12 @@ compose:
 	docker compose up -d
 
 
+
 load_env:
-	@eval $$(grep -v '^#' .env | sed 's/^/export /') && echo "Loaded environment variables"
+	@echo "Loading environment variables from .env"
+	@bash -c 'set -a && . .env && set +a && echo "HOST_WORKING_DIR=$$HOST_WORKING_DIR"'
+
+
 
 
 

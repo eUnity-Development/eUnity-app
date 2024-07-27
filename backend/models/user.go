@@ -57,6 +57,13 @@ type MatchPreferences struct {
 
 func FromGooglePayload(payload *idtoken.Payload) *User {
 	objectID := primitive.NewObjectID()
+	match_preferences := &MatchPreferences{
+		Genders:           []string{},
+		RelationshipTypes: []string{},
+		MinimumAge:        18,
+		MaximumAge:        40,
+		MaximumDistance:   20,
+	}
 	user := &User{
 		ID:             &objectID,
 		Email:          payload.Claims["email"].(string),
@@ -71,7 +78,8 @@ func FromGooglePayload(payload *idtoken.Payload) *User {
 				Sub:            payload.Claims["sub"].(string),
 			},
 		},
-		MediaFiles: []string{},
+		MediaFiles:       []string{},
+		MatchPreferences: *match_preferences,
 	}
 
 	return user

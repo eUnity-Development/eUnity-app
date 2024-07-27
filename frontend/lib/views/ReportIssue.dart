@@ -60,9 +60,11 @@ class _ReportIssueState extends State<ReportIssue> {
           'email': emailController.text,
         };
         await ReportHelper.updateIssueReport(newData);
-        setState(() {
-          hasOpenReport = true;
-        });
+        if (mounted) {
+          setState(() {
+            hasOpenReport = true;
+          });
+        }
       }
     }
   }
