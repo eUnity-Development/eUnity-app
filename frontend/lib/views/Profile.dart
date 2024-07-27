@@ -1,13 +1,13 @@
-import 'dart:io';
-
-import 'package:eunity/classes/UserInfoHelper.dart';
-import 'package:eunity/widgets/ProfileWidgets/EditImageSquare.dart';
-import 'package:eunity/widgets/ProfileWidgets/NewImageSquare.dart';
+import 'package:eunity/classes/AuthHelper.dart';
+import 'package:eunity/views/EditProfile.dart';
+import 'package:eunity/views/LoginSignup.dart';
+import 'package:eunity/views/ReportIssue.dart';
+import 'package:eunity/views/Settings.dart';
 import 'package:flutter/material.dart';
 import 'package:eunity/classes/DesignVariables.dart';
 import 'package:eunity/views/FeedbackScreen.dart';
+import 'package:eunity/classes/UserInfoHelper.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:image_picker/image_picker.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -19,11 +19,14 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   List imageArray = [];
   int selectedImageGrid = 0;
+  bool signingOut = false;
+  late String bioText;
 
   @override
   void initState() {
     super.initState();
     updateData();
+    bioText = UserInfoHelper.userInfoCache['bio'];
   }
 
   Future<void> updateData() async {
@@ -45,167 +48,200 @@ class _ProfileState extends State<Profile> {
     );
   }
 
+  void navigateToEditProfile() async {
+    print("clicked edit profile");
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => EditProfile()),
+    );
+    if (mounted) {
+      setState(() {
+        bioText = UserInfoHelper.userInfoCache['bio'];
+        print(bioText);
+      });
+    }
+  }
+
+  void navigateToReportIssue() async {
+    print('clicked report issue');
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ReportIssue()),
+    );
+  }
+
+  void navigateToSettings() async {
+    print('clicked settings');
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Settings()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    Future<void> handleNewImage(File imagePath) async {
-      if (imageArray.length >= selectedImageGrid + 1) {
-        await UserInfoHelper.deleteImage(imageArray[selectedImageGrid]);
-        await UserInfoHelper.uploadNewImage(imagePath);
-      } else {
-        await UserInfoHelper.uploadNewImage(imagePath);
-      }
-      setState(() {
-        updateData();
-      });
-      Navigator.pop(context);
+    void navigateBackToLogin() {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => const LoginSignup()),
+          (route) => false);
     }
 
-    Future<void> deleteImage() async {
-      if (imageArray.length >= selectedImageGrid + 1) {
-        await UserInfoHelper.deleteImage(imageArray[selectedImageGrid]);
-      } else {
-        print("No image to delete!");
-      }
-      setState(() {
-        updateData();
-      });
-      Navigator.pop(context);
+    void handleSignOut() async {
+      await AuthHelper.signOut();
+      navigateBackToLogin();
     }
 
-    Future<void> openCamera() async {
-      final image = await ImagePicker().pickImage(
-        source: ImageSource.camera,
-        imageQuality: 50,
-      );
-      if (image == null) return;
-      await handleNewImage(File(image.path));
-    }
-
-    Future<void> openGallery() async {
-      final image = await ImagePicker().pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 50,
-      );
-      if (image == null) return;
-      await handleNewImage(File(image.path));
-    }
-
-    void openCameraDialog(BuildContext context) {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return Theme(
-              data: Theme.of(context)
-                  .copyWith(dialogBackgroundColor: DesignVariables.offWhite),
-              child: SimpleDialog(
-                title: Text("Image Source"),
-                children: [
-                  SimpleDialogOption(
-                    child: Row(children: [
-                      SvgPicture.asset(
-                        "assets/MiscIcons/icon-camera.svg",
-                        height: 20,
-                        width: 20,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text("Open Camera")
-                    ]),
-                    onPressed: () async {
-                      await openCamera();
-                    },
-                  ),
-                  SimpleDialogOption(
-                    child: Row(children: [
-                      SvgPicture.asset(
-                        "assets/MiscIcons/icon-photo.svg",
-                        height: 20,
-                        width: 20,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text("From Gallery")
-                    ]),
-                    onPressed: () async {
-                      await openGallery();
-                    },
-                  ),
-                  SimpleDialogOption(
-                    child: Text("Test Delete"),
-                    onPressed: () async {
-                      await deleteImage();
-                    },
-                  ),
-                  SimpleDialogOption(
-                    child: Row(children: [
-                      SvgPicture.asset(
-                        "assets/MiscIcons/icon-x.svg",
-                        height: 20,
-                        width: 20,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text("Close")
-                    ]),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
+    Widget menuButton(String assetPath, String buttonLabel, double iconHeight) {
+      return Container(
+        height: 34,
+        width: 162,
+        decoration: BoxDecoration(
+            border: Border.all(color: DesignVariables.greyLines, width: 1),
+            borderRadius: BorderRadius.circular(25)),
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                assetPath,
+                height: iconHeight,
               ),
-            );
-          });
-    }
-
-    Widget gridOption(int index) {
-      if (imageArray.length < index + 1) {
-        return NewImageSquare();
-      } else {
-        return EditImageSquare(
-            imageURL: UserInfoHelper.getPublicImageURL(imageArray[index]));
-      }
+              SizedBox(
+                width: 5,
+              ),
+              Text(
+                buttonLabel,
+                style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 18,
+                    color: Colors.black),
+              ),
+            ],
+          ),
+        ),
+      );
     }
 
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
-      body: Center(
+      backgroundColor: Colors.white,
+      body: Padding(
+        padding: const EdgeInsets.only(top: 50, bottom: 100),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            GestureDetector(
-              child: Container(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(
-                          width: 1, color: DesignVariables.greyLines),
-                      color: DesignVariables.primaryRed),
-                  height: 51,
-                  width: 207,
-                  child: Center(
-                    child: Text(
-                      "Test Feedback Button",
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.black, width: 1),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color.fromARGB(64, 0, 0, 0),
+                          spreadRadius: 0,
+                          blurRadius: 4 * DesignVariables.widthConversion,
+                          offset:
+                              Offset(0, 4 * DesignVariables.heightConversion),
+                        ),
+                      ]),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    backgroundImage: NetworkImage(
+                        UserInfoHelper.getPublicImageURL(
+                            UserInfoHelper.userInfoCache['media_files'][0])),
+                    radius: 69 * DesignVariables.widthConversion,
+                  ),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Column(
+                  children: [
+                    Text(
+                      UserInfoHelper.userInfoCache['first_name'],
                       style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600),
+                          fontWeight: FontWeight.w700,
+                          fontSize: 18,
+                          color: Colors.black),
                     ),
-                  )),
-              onTap: navigateToFeedback,
+                    SizedBox(
+                      height: 5,
+                    ),
+                    GestureDetector(
+                      child: menuButton(
+                          "assets/MiscIcons/icon-pencil-square.svg",
+                          'Edit Profile',
+                          24),
+                      onTap: navigateToEditProfile,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    GestureDetector(
+                      child: menuButton(
+                          "assets/MiscIcons/icon-gear.svg", 'Settings', 18),
+                      onTap: navigateToSettings,
+                    ),
+                  ],
+                )
+              ],
             ),
-            const SizedBox(
-              height: 15,
+            Padding(
+                padding: EdgeInsets.symmetric(horizontal: 50),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          'Bio',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 24),
+                        ),
+                      ],
+                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        bioText,
+                        textAlign: TextAlign.left,
+                        maxLines: null,
+                        style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12,
+                            color: Colors.black),
+                      ),
+                    ),
+                  ],
+                )),
+            Spacer(),
+            Text(
+              "Share your Feedback",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 24),
             ),
-            GestureDetector(
-              child: gridOption(0),
-              onTap: () {
-                setState(() {
-                  selectedImageGrid = 0;
-                  openCameraDialog(context);
-                });
-              },
+            SizedBox(
+              height: 6,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                GestureDetector(
+                  child: menuButton(
+                      "assets/MiscIcons/icon-thumbsup.svg", 'Feedback', 18),
+                  onTap: navigateToFeedback,
+                ),
+                GestureDetector(
+                  child: menuButton("assets/MiscIcons/icon-megaphone.svg",
+                      'Report Issue', 24),
+                  onTap: navigateToReportIssue,
+                ),
+              ],
             ),
           ],
         ),

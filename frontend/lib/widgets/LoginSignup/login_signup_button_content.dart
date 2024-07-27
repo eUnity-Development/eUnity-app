@@ -8,6 +8,8 @@ class LoginSignupButtonContent extends StatelessWidget {
   final String text;
   final double fontSize;
   final Color fontColor;
+  final bool? isRight;
+  final FontWeight? fontWeight;
 
   const LoginSignupButtonContent({
     super.key,
@@ -17,21 +19,33 @@ class LoginSignupButtonContent extends StatelessWidget {
     required this.text,
     required this.fontSize,
     required this.fontColor,
+    this.isRight,
+    this.fontWeight
   });
 
   @override
   Widget build(BuildContext context) {
+
+    bool isSVGRight = isRight ?? false;
+    FontWeight finalFontWeight = fontWeight ?? FontWeight.w700;
+
     return Row(
       children: [
+        isSVGRight ? 
+        const SizedBox() :
         SizedBox(
             width: svgOffset
         ),
-
+      isSVGRight ?
+        SizedBox(
+          width: svgOffset + svgDimensions,
+        ) :
         SvgPicture.asset(
           svgPath,
           width: svgDimensions,
           height: svgDimensions,
         ),
+
 
         Expanded(
           child:Center(
@@ -40,15 +54,27 @@ class LoginSignupButtonContent extends StatelessWidget {
               style: TextStyle(
                 color: fontColor,
                 fontSize: fontSize,
-                fontWeight: FontWeight.w700,
+                fontWeight: finalFontWeight,
               ),
             ),
           )
         ),
 
-        SizedBox(
-          width: svgOffset + svgDimensions,
-        ),    
+        isSVGRight ?
+          SvgPicture.asset(
+            svgPath,
+            width: svgDimensions,
+            height: svgDimensions,
+          ) :
+          SizedBox(
+            width: svgOffset + svgDimensions,
+          ),  
+
+        isSVGRight ? 
+          SizedBox(
+            width: svgOffset,
+          ) :
+          const SizedBox()
       ],
     ); 
   }

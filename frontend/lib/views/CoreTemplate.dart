@@ -1,4 +1,5 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:eunity/classes/AuthHelper.dart';
 import 'package:eunity/classes/DesignVariables.dart';
 import 'package:eunity/views/Messages.dart';
 import 'package:eunity/views/PremiumFeatures.dart';
@@ -19,6 +20,17 @@ class _CoreTemplateState extends State<CoreTemplate> {
   int selectedIndex = 0;
   Color unselectedColor = DesignVariables.greyLines;
   Color selectedColor = DesignVariables.primaryRed;
+
+  @override
+ void initState() {
+    super.initState();
+    AuthHelper.isLoggedIn().then((value) {
+      if (value) {
+        AuthHelper.setLoggedIn(true);
+      }
+    });
+ }
+  
 
   final screens = [
     const Swiping(),
@@ -48,32 +60,32 @@ class _CoreTemplateState extends State<CoreTemplate> {
         items: <Widget>[
           SvgPicture.asset(
             selectedIndex == 0
-              ? 'assets/NavBarUI/icon-filled-heart.svg'
-              : 'assets/NavBarUI/icon-heart.svg',
+                ? 'assets/NavBarUI/icon-filled-heart.svg'
+                : 'assets/NavBarUI/icon-heart.svg',
             color: selectedIndex == 0 ? selectedColor : unselectedColor,
             width: 30,
             height: 30,
           ),
           SvgPicture.asset(
             selectedIndex == 1
-              ? 'assets/NavBarUI/icon-filled-sparkles.svg'
-              : 'assets/NavBarUI/icon-sparkles.svg',
+                ? 'assets/NavBarUI/icon-filled-sparkles.svg'
+                : 'assets/NavBarUI/icon-sparkles.svg',
             color: selectedIndex == 1 ? selectedColor : unselectedColor,
             width: 30,
             height: 30,
           ),
           SvgPicture.asset(
             selectedIndex == 2
-              ? 'assets/NavBarUI/icon-filled-chat-bubbles.svg'
-              : 'assets/NavBarUI/icon-chat-bubbles.svg',
+                ? 'assets/NavBarUI/icon-filled-chat-bubbles.svg'
+                : 'assets/NavBarUI/icon-chat-bubbles.svg',
             color: selectedIndex == 2 ? selectedColor : unselectedColor,
             width: 30,
             height: 30,
           ),
           SvgPicture.asset(
             selectedIndex == 3
-              ? 'assets/NavBarUI/icon-filled-shadow.svg'
-              : 'assets/NavBarUI/icon-shadow.svg',
+                ? 'assets/NavBarUI/icon-filled-shadow.svg'
+                : 'assets/NavBarUI/icon-shadow.svg',
             color: selectedIndex == 3 ? selectedColor : unselectedColor,
             width: 30,
             height: 30,

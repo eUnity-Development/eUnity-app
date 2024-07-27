@@ -16,8 +16,8 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/auth/google": {
-            "get": {
-                "description": "Begins the google auth process",
+            "post": {
+                "description": "Accepts jwt idToken from flutter and sets session cookies",
                 "consumes": [
                     "application/json"
                 ],
@@ -27,7 +27,16 @@ const docTemplate = `{
                 "tags": [
                     "Auth"
                 ],
-                "summary": "Begin Google Auth",
+                "summary": "Google Auth",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "idToken",
+                        "name": "idToken",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Google Auth Started",
@@ -38,9 +47,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/google/callback": {
+        "/dev/force_login": {
             "get": {
-                "description": "Callback for google auth",
+                "description": "Creates a session for a user by email",
                 "consumes": [
                     "application/json"
                 ],
@@ -48,12 +57,272 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Auth"
+                    "Dev"
                 ],
-                "summary": "Google OAuth Callback",
+                "summary": "Force Login",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "email",
+                        "name": "email",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Google Auth Callback",
+                        "description": "Session created, user logged in",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/dev/generate_mock_users": {
+            "get": {
+                "description": "Creates mock users for development purposes",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Dev"
+                ],
+                "summary": "Create Mock Users",
+                "responses": {
+                    "200": {
+                        "description": "Mock users created",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/feedback/add": {
+            "post": {
+                "description": "Add feedback from a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Feedback"
+                ],
+                "summary": "Add Feedback",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Stars",
+                        "name": "stars",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Positive Text",
+                        "name": "positive_text",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Negative Text",
+                        "name": "negative_text",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Feedback added successfully!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/feedback/get": {
+            "get": {
+                "description": "Get all feedback",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Feedback"
+                ],
+                "summary": "Get Feedback",
+                "responses": {
+                    "200": {
+                        "description": "Feedback retrieved successfully!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/feedback/getall": {
+            "get": {
+                "description": "Get all feedback",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Feedback"
+                ],
+                "summary": "Get All Feedback",
+                "responses": {
+                    "200": {
+                        "description": "Feedback retrieved successfully!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/media/report_image": {
+            "post": {
+                "consumes": [
+                    "image/jpeg"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Media"
+                ],
+                "summary": "Adds Report image",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "Image",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/media/report_image/{image_id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "image/jpeg"
+                ],
+                "tags": [
+                    "Media"
+                ],
+                "summary": "Gets report image",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Image ID",
+                        "name": "image_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Media"
+                ],
+                "summary": "Deletes issue report image",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Image ID",
+                        "name": "image_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/media/reports/{report_id}/{image_id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "image/jpeg"
+                ],
+                "tags": [
+                    "Public Media"
+                ],
+                "summary": "Gets image -\u003e unprotected route",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Report ID",
+                        "name": "report_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Image ID",
+                        "name": "image_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
                         "schema": {
                             "type": "string"
                         }
@@ -190,9 +459,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/login": {
+        "/report_issue/add_report": {
             "post": {
-                "description": "logs in a user",
+                "description": "Adds a new Issue Report to the database",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -200,22 +469,322 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Public User"
+                    "Report Issue"
                 ],
-                "summary": "User login route",
+                "summary": "Add Report Issue",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Email",
+                        "description": "Issue Description",
+                        "name": "description",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Contact Email",
                         "name": "email",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Media Files",
+                        "name": "media_files",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/report_issue/get_report": {
+            "get": {
+                "description": "If the user has an unsubmitted report for an app issue, returns it.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Report Issue"
+                ],
+                "summary": "Get Unsubmitted Report Issue",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/report_issue/submit_report": {
+            "patch": {
+                "description": "If the user has an unsubmitted report for an app issue, submits it.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Report Issue"
+                ],
+                "summary": "Submit Report Issue",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/report_issue/update_report": {
+            "patch": {
+                "description": "If the user has an unsubmitted report for an app issue, patches it with the new information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Report Issue"
+                ],
+                "summary": "Patch Unsubmitted Issue Report",
+                "parameters": [
+                    {
+                        "description": "Data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/report_user/add_report": {
+            "post": {
+                "description": "Adds a new User Report to the database",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Report User"
+                ],
+                "summary": "Add Report User",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Reported User",
+                        "name": "reported_user",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Rule Violations",
+                        "name": "rule_violations",
                         "in": "formData",
                         "required": true
                     },
                     {
                         "type": "string",
-                        "description": "Password",
-                        "name": "password",
-                        "in": "formData",
+                        "description": "Additional comments that explain why the user was reported",
+                        "name": "report_comments",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/twilio/send-sms": {
+            "post": {
+                "description": "Send an SMS message",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Twilio"
+                ],
+                "summary": "Send SMS",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Recipient phone number",
+                        "name": "to",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Message body",
+                        "name": "body",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "SMS sent successfully!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/twilio/verify-phone": {
+            "post": {
+                "description": "Verify a phone number",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Twilio"
+                ],
+                "summary": "Verify Phone Number",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Recipient phone number",
+                        "name": "to",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Verification code",
+                        "name": "code",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Phone number verified successfully!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/Testing_Context": {
+            "get": {
+                "description": "returns a string from user routes",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "User test route",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/get_user/{user_id}": {
+            "get": {
+                "description": "Takes a User ID as a route parameter and uses that ID to find and return the requested user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get User Route",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "path",
                         "required": true
                     }
                 ],
@@ -325,44 +894,45 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/signup": {
-            "post": {
-                "description": "creates a new user",
+        "/webAuth/google": {
+            "get": {
+                "description": "Begins the google auth process",
                 "consumes": [
-                    "multipart/form-data"
+                    "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Public User"
+                    "Web Auth"
                 ],
-                "summary": "User signup route",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Email",
-                        "name": "email",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Password",
-                        "name": "password",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
+                "summary": "Begin Google Auth",
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "Google Auth Started",
                         "schema": {
                             "type": "string"
                         }
-                    },
-                    "400": {
-                        "description": "Bad Request",
+                    }
+                }
+            }
+        },
+        "/webAuth/google/callback": {
+            "get": {
+                "description": "Callback for google auth",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Web Auth"
+                ],
+                "summary": "Google OAuth Callback",
+                "responses": {
+                    "200": {
+                        "description": "Google Auth Callback",
                         "schema": {
                             "type": "string"
                         }

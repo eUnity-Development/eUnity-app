@@ -1,3 +1,4 @@
+import 'package:eunity/classes/DesignVariables.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -9,29 +10,30 @@ class NewImageSquare extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 140,
-      width: 140,
+      height: 140 * DesignVariables.heightConversion,
+      width: 140 * DesignVariables.widthConversion,
       child: Stack(children: [
         Align(
           alignment: Alignment.center,
           child: DottedBorder(
-            radius: Radius.circular(25),
+            radius: Radius.circular(25 * DesignVariables.heightConversion),
             strokeWidth: 1,
             color: Colors.black,
             borderType: BorderType.RRect,
             child: Container(
-              height: 119,
-              width: 116,
+              height: 119 * DesignVariables.heightConversion,
+              width: 116 * DesignVariables.widthConversion,
               decoration: BoxDecoration(
                   color: Color.fromARGB(255, 243, 243, 243),
-                  borderRadius: BorderRadius.circular(21)),
+                  borderRadius: BorderRadius.circular(
+                      21 * DesignVariables.heightConversion)),
             ),
           ),
         ),
         Positioned(
           child: Container(
-            width: 41,
-            height: 41,
+            width: 41 * DesignVariables.widthConversion,
+            height: 41 * DesignVariables.heightConversion,
             decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(color: Colors.black, width: 1),
@@ -39,8 +41,8 @@ class NewImageSquare extends StatelessWidget {
             child: Center(
               child: SvgPicture.asset(
                 'assets/MiscIcons/icon-plus.svg',
-                height: 24,
-                width: 24,
+                height: 24 * DesignVariables.heightConversion,
+                width: 24 * DesignVariables.widthConversion,
               ),
             ),
           ),

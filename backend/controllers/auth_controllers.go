@@ -1,144 +1,147 @@
 package controllers
 
 import (
-	//"fmt" // for debugging
-	"encoding/json"
+	"context"
 	"fmt"
-	"net/http"
-	"os" // to access .env file
-	"time"
+	"os"
 
+	"eunity.com/backend-main/helpers/DBManager"
+	"eunity.com/backend-main/helpers/SessionManager"
+	"eunity.com/backend-main/models"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv" // to load .env file
-	"github.com/markbates/goth"
-	"github.com/markbates/goth/gothic"
-	"github.com/markbates/goth/providers/google"
-	//"go.mongodb.org/mongo-driver/bson"
-	//"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/bson"
+	"google.golang.org/api/idtoken"
 )
 
 type Auth_controllers struct{}
 
-// required google env variables
-var GoogleClientID string
-var GoogleClientSecret string
-var GoogleRedirectURI string = "http://localhost:3200/api/v1/auth/google/callback"
-
-//this other url will redirect to the app under the schema eunity://open.my.app.com -> we can change this later
-//then we can call the correct callback url from withing the app. using 10.0.2.2
-
-//var GoogleRedirectURI string = "https://eunityusa.com/api/v1/redirect_google_auth_app"
+var client_id string
 
 func init() {
-
-	godotenv.Load() //loads the .env file
-	Google_key := os.Getenv("GOOGLE_KEY")
-	Google_secret := os.Getenv("GOOGLE_SECRET")
-	fmt.Println(Google_key)
-	fmt.Println(Google_secret)
-
-	scopes := []string{
-		"email",
-		"profile",
-	}
-
-	goth.UseProviders(
-		google.New(Google_key, Google_secret, GoogleRedirectURI, scopes...),
-	)
+	client_id = os.Getenv("GOOGLE_CLIENT_ID")
 }
 
-// @Summary Begin Google Auth
-// @Description Begins the google auth process
+// @Summary Google Auth
+// @Description Accepts jwt idToken from flutter and sets session cookies
 // @Tags Auth
 // @Accept json
 // @Produce json
+// @Param idToken query string true "idToken"
 // @Success 200 {string} string "Google Auth Started"
-// @Router /auth/google [get]
-func (ac *Auth_controllers) GET_BeginGoogleAuth(c *gin.Context) {
+// @Router /auth/google [post]
+func (ac *Auth_controllers) POST_GoogleAuth(c *gin.Context) {
 
-	//request quert handler object
-	q := c.Request.URL.Query()
+	idToken := c.Query("idToken")
+	//verify the token
+	payload, err := verifyToken(idToken)
+	if err != nil {
+		c.JSON(400, err.Error())
+		return
+	}
 
-	//add this to the query
-	q.Add("provider", "google")
+	email := payload.Claims["email"].(string)
 
-	//encode the query
-	c.Request.URL.RawQuery = q.Encode()
+	//search if user exists in db by email
+	user := DBManager.DB.Collection("users").FindOne(context.Background(), bson.M{"email": email})
 
-	//begin the auth handler with gothic
-	gothic.BeginAuthHandler(c.Writer, c.Request)
+	//if user exists set cookies and return
+	if user.Err() == nil {
+		session_id, err := c.Cookie("session_id")
+		if err == nil {
+			session := DBManager.DB.Collection("session_ids").FindOne(context.Background(), bson.M{session_id: bson.M{"$exists": true}})
+			if session.Err() == nil {
+				c.JSON(400, gin.H{
+					"response": "Already logged in",
+				})
+				return
+
+			}
+		}
+
+		var result models.User
+		err = user.Decode(&result)
+		if err != nil {
+			c.JSON(400, gin.H{
+				"response": "Unable to login",
+			})
+			return
+		}
+
+		//make sure cookie has google as provider and it matches the tokenid aud
+		//need to modify this part, say the user does not have google as provider
+		//we need to add google as a provider and if the email is not confirmed we need to update it
+		//we need to check if the emails are the same
+		if result.Providers["google"].Sub != payload.Claims["sub"].(string) {
+			//check if google provider exists
+			if _, ok := result.Providers["google"]; !ok {
+				result.Providers["google"] = models.Provider{
+					Name:           payload.Claims["name"].(string),
+					Email:          payload.Claims["email"].(string),
+					Email_verified: payload.Claims["email_verified"].(bool),
+					Sub:            payload.Claims["sub"].(string),
+				}
+				result.Verified_email = payload.Claims["email_verified"].(bool)
+				_, err = DBManager.DB.Collection("users").UpdateOne(context.Background(), bson.M{"email": email}, bson.M{"$set": result})
+				if err != nil {
+					c.JSON(400, gin.H{
+						"response": "Unable to add google provider",
+					})
+					return
+				}
+			} else {
+				c.JSON(400, gin.H{
+					"response": "Unable to login",
+				})
+				return
+			}
+
+		}
+
+		_, err = SessionManager.Create_Session(result.ID.Hex(), c)
+		if err != nil {
+			c.JSON(400, gin.H{
+				"response": "Unable to login",
+			})
+			return
+		}
+
+		c.JSON(200, gin.H{
+			"response": "Login Successful",
+		})
+		return
+	}
+
+	//if user does not exist create user from payload
+
+	new_user := models.FromGooglePayload(payload)
+	_, err = DBManager.DB.Collection("users").InsertOne(context.Background(), new_user)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"response": "Error creating user",
+		})
+		return
+	}
+
+	_, err = SessionManager.Create_Session(new_user.ID.Hex(), c)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"response": "Unable to login",
+		})
+		return
+	}
+
+	c.JSON(200, "Google Auth Started")
+
 }
 
-// @Summary Google OAuth Callback
-// @Description Callback for google auth
-// @Tags Auth
-// @Accept json
-// @Produce json
-// @Success 200 {string} string "Google Auth Callback"
-// @Router /auth/google/callback [get]
-func (ac *Auth_controllers) GET_GoogleOAuthCallback(c *gin.Context) { // #TODO clean this up - @AggressiveGas
-	q := c.Request.URL.Query()
-	q.Add("provider", "google")
-	c.Request.URL.RawQuery = q.Encode()
-	//view entire query data
+func verifyToken(token string) (*idtoken.Payload, error) {
+	// Create a new ID token verifier.
 
-	fmt.Println(c.Request.URL.Query())
-
-	user, err := gothic.CompleteUserAuth(c.Writer, c.Request)
+	payload, err := idtoken.Validate(context.Background(), token, client_id)
 	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
-		return
+		fmt.Println("Error validating token", err)
+		return nil, err
 	}
 
-	fmt.Println("right here")
-	// print the user as pretty json and save to file
-	jsonObject, err := json.MarshalIndent(user, "", "    ")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	//save to file
-	err = os.WriteFile("user.json", jsonObject, 0644)
-	if err != nil {
-
-		fmt.Println(err)
-		return
-
-	}
-
-	//print the user
-	fmt.Println(string(jsonObject))
-
-	//@TODO make the cookie here
-	cookie := generate_secure_cookie_third_party(user)
-	fmt.Println(cookie)
-	fmt.Println("Provider: ", cookie["provider"])
-	fmt.Println("Third Party ID: ", cookie["third_party_id"])
-	fmt.Println("Expires: ", cookie["expires_at"])
-
-	c.SetCookie("thirdParty_provider", cookie["provider"].(string), 3600, "/", Cookie_Host, HTTPS_only, true)
-	c.SetCookie("thirdParty_id", cookie["third_party_id"].(string), 3600, "/", Cookie_Host, HTTPS_only, true)
-	c.SetCookie("thirdparty_expires", cookie["expires_at"].(string), 3600, "/", Cookie_Host, HTTPS_only, true)
-
-	//fmt.Println(user.UserID)
-	//fmt.Println(user.Provider)
-
-}
-
-// generating a secure cookie for third party signup
-// - this can be reused for other third party signups
-func generate_secure_cookie_third_party(gothUser goth.User) gin.H {
-	now := time.Now()
-	expires := now.Add(time.Minute * 30) // expires in 30 minutes
-
-	expires_string := expires.Format(time.RFC1123)
-
-	cookie := gin.H{
-		"provider":       gothUser.Provider,
-		"third_party_id": gothUser.UserID,
-		"expires_at":     expires_string,
-	}
-
-	return cookie
+	return payload, nil
 }

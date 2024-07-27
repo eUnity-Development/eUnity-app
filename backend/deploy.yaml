@@ -1,0 +1,37 @@
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  valkey:
+    build: ./docker/valkey/
+    container_name: valkey
+    ports:
+      - "6379:6379"
+    depends_on:
+      - mongodb
+
+  go_app:
+    build:
+      context: .  # Set context to the root of the application directory
+      dockerfile: docker/app/dockerfile
+    container_name: go_app
+    volumes:
+      - /home/eunity-app/backend:/app/
+    ports:
+      - "8259:3200"
+    depends_on:
+      - mongodb
+      - valkey
+
+volumes:
+  mongo-data:
+
+networks:
+  app-network:
+    driver: bridge

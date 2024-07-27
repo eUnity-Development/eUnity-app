@@ -1,0 +1,32 @@
+## Todo's
+
+
+-Finish Image conversions
+-Add 15 second clips convert all video to a standard format
+-Prevent Clips over a certain length being uploaded
+-Add twilio sign-up/login/
+-Facebook OAuth
+-Apple Oauth
+-Report classes and endpoints
+-Elevated permissions stuff
+-Push notifications 
+-Messaging
+-THE ALGORITHM
+-Locations
+-Translations possibly
+-Load Testing
+-Fledge out Docker compose and deployment workflow
+
+
+
+
+#Top 3 hardest things
+    -THE ALGORITHM: no idea
+    -Messaging: when in app we want things like typing indicators, we can implement from scratch
+    with websockets or use some existing solution.
+    -Load testing(zero experience)
+
+
+#Other Features:
+    -Voice and video calls
+    -

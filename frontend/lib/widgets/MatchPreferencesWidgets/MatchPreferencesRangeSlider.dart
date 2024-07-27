@@ -1,3 +1,4 @@
+import 'package:eunity/classes/UserInfoHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:eunity/classes/DesignVariables.dart';
 
@@ -49,7 +50,13 @@ class _MatchPreferencesRangeSliderState
             ),
             child: RangeSlider(
               values: RangeValues(sliderMinimum, sliderMaximum),
-              onChanged: (RangeValues newValues) {
+              onChanged: (RangeValues newValues) async {
+                Map<dynamic, dynamic> matchPreferences =
+                    UserInfoHelper.userInfoCache['match_preferences'];
+                matchPreferences['maximum_age'] = newValues.end.toInt();
+                matchPreferences['minimum_age'] = newValues.start.toInt();
+                await UserInfoHelper.updateCacheVariable(
+                    'match_preferences', '', matchPreferences);
                 setState(() {
                   sliderMinimum = newValues.start;
                   sliderMaximum = newValues.end;

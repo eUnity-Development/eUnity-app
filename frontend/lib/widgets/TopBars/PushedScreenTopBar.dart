@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class PushedScreenTopBar extends StatefulWidget implements PreferredSizeWidget {
-  const PushedScreenTopBar({super.key});
+  final bool? hasArrow;
+  const PushedScreenTopBar({super.key, this.hasArrow});
 
   @override
   State<PushedScreenTopBar> createState() => _PushedScreenTopBarState();
@@ -14,9 +15,12 @@ class PushedScreenTopBar extends StatefulWidget implements PreferredSizeWidget {
 class _PushedScreenTopBarState extends State<PushedScreenTopBar> {
   @override
   Widget build(BuildContext context) {
+    bool hasArrow = widget.hasArrow ?? true;
+
     return AppBar(
       title: Stack(
         children: [
+          if (hasArrow)
           Positioned(
               left: 0,
               top: 0,

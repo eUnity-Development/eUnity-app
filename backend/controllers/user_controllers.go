@@ -2,19 +2,12 @@ package controllers
 
 import (
 	"context"
-	"crypto/rand"
-	"encoding/hex"
-	"fmt"
-	"os"
 	"reflect"
-	"regexp"
-	"time"
 
 	"eunity.com/backend-main/helpers/DBManager"
-	"eunity.com/backend-main/helpers/PasswordHasher"
+	"eunity.com/backend-main/helpers/SessionManager"
 	"eunity.com/backend-main/models"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -23,19 +16,6 @@ import (
 
 // create empty struct to attach methods touser
 type User_controllers struct {
-}
-
-// https only must be true in production
-var HTTPS_only bool
-
-// must be set to eunityusa.com in production
-var Cookie_Host string
-
-// multiple init functions are execute alphabetically based on file name
-func init() {
-	godotenv.Load()
-	HTTPS_only = os.Getenv("HTTPS_ONLY") == "true"
-	Cookie_Host = os.Getenv("COOKIE_ACCEPT_HOST")
 }
 
 // @Summary User test route
@@ -48,13 +28,7 @@ func init() {
 // @Router /users/me [get]
 func (u *User_controllers) GET_me(c *gin.Context) {
 
-	user_id, err := c.Cookie("user_id")
-	if err != nil {
-		c.JSON(400, gin.H{
-			"response": "No user found",
-		})
-		return
-	}
+	user_id := c.Keys["user_id"].(string)
 
 	//turn string id into bson object id
 	bson_user_id, err := primitive.ObjectIDFromHex(user_id)
@@ -107,13 +81,7 @@ func (u *User_controllers) PATCH_me(c *gin.Context) {
 	}
 
 	//get user id
-	user_id, err := c.Cookie("user_id")
-	if err != nil {
-		c.JSON(400, gin.H{
-			"response": "No user found",
-		})
-		return
-	}
+	user_id := c.Keys["user_id"].(string)
 
 	// //turn string id into bson object id
 	bson_user_id, err := primitive.ObjectIDFromHex(user_id)
@@ -171,6 +139,50 @@ func (u *User_controllers) PATCH_me(c *gin.Context) {
 
 }
 
+// @Summary Get User Route
+// @Schemes
+// @Description Takes a User ID as a route parameter and uses that ID to find and return the requested user
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param user_id path string true "User ID"
+// @Success 200 {string} Returned User
+// @Success 400 {string} Unable return User
+// @Router /users/get_user/{user_id} [get]
+func (u *User_controllers) GET_user(c *gin.Context) {
+	//Get the user id parameter
+	user_id := c.Param("user_id")
+
+	//turn string id into bson object id
+	bson_user_id, err := primitive.ObjectIDFromHex(user_id)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"response": "Invalid user ID",
+		})
+		return
+	}
+
+	user := DBManager.DB.Collection("users").FindOne(context.Background(), bson.M{"_id": bson_user_id})
+	if user.Err() != nil {
+		c.JSON(400, gin.H{
+			"response": "No user found",
+		})
+		return
+	}
+
+	result := models.RestrictedUser{}
+	err = user.Decode(&result)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"response": "No user found",
+		})
+		return
+	}
+
+	c.JSON(200, result)
+
+}
+
 // @Summary User logout route
 // @Schemes
 // @Description logs out a user
@@ -198,271 +210,30 @@ func (u *User_controllers) POST_logout(c *gin.Context) {
 	}
 
 	//remove cookies
-	c.SetCookie("session_id", "", -1, "/", Cookie_Host, HTTPS_only, true)
-	c.SetCookie("user_id", "", -1, "/", Cookie_Host, HTTPS_only, true)
-	c.SetCookie("expires_at", "", -1, "/", Cookie_Host, HTTPS_only, true)
+	c.SetCookie("session_id", "", -1, "/", SessionManager.Cookie_Host, SessionManager.HTTPS_only, true)
 
 	c.JSON(200, gin.H{
 		"response": "Logged out",
 	})
 }
 
-// @Summary User signup route
+// @Summary User test route
 // @Schemes
-// @Description creates a new user
-// @Tags Public User
-// @Accept mpfd
+// @Description returns a string from user routes
+// @Tags User
+// @Accept json
 // @Produce json
-// @Param email formData string true "Email"
-// @Param password formData string true "Password"
-// @Success 200 {string} Please verify your email
-// @Success 400 {string} Unable to create account
-// @Success 400 {string} Account with this email, already exists
-// @Router /users/signup [post]
-func (u *User_controllers) POST_signup(c *gin.Context) {
-	var credentials models.User
-	err := c.Bind(&credentials)
-	if err != nil {
-		fmt.Println(err)
-		c.JSON(400, gin.H{
-			"response": "Unable to create account",
-		})
-		return
-
-	}
-
-	//check password against regex
-	uppercase := "[A-Z]"
-	lowercase := "[a-z]"
-	number := "\\d"
-	minLength := ".{8,}"
-	matchUpper, _ := regexp.MatchString(uppercase, credentials.Password)
-	matchLower, _ := regexp.MatchString(lowercase, credentials.Password)
-	matchNumber, _ := regexp.MatchString(number, credentials.Password)
-	matchLength, _ := regexp.MatchString(minLength, credentials.Password)
-	if !matchUpper || !matchLower || !matchNumber || !matchLength {
-		fmt.Println(matchLength, matchLower, matchNumber, matchUpper, credentials.Password)
-		c.JSON(400, gin.H{
-			"response": "Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number and be at least 8 characters long",
-		})
-		return
-	}
-
-	//check if the user already exists
-	user := DBManager.DB.Collection("users").FindOne(context.Background(), bson.M{"email": credentials.Email})
-	fmt.Println(user)
-	if user.Err() == nil {
-		// check if password is correct
-		var result models.User
-		err := user.Decode(&result)
-		if err != nil {
-			c.JSON(400, gin.H{
-				"response": err.Error(),
-			})
-			return
-		}
-		passwordHash := result.PasswordHash
-		if PasswordHasher.CheckPassword(credentials.Password, passwordHash) {
-			c.JSON(400, gin.H{
-				"response": "Account with this email, already exists",
-			})
-			return
-		}
-		c.JSON(400, gin.H{
-			"response": "Unable to create account 2",
-		})
-	}
-
-	//hash the password
-	password_hash, err := PasswordHasher.HashPassword(credentials.Password)
-	if err != nil {
-		c.JSON(400, gin.H{
-			"response": "Unable to create account 3",
-		})
-		return
-	}
-
-	//we do not store the users password in the database
-	objectID := primitive.NewObjectID()
-	new_user := models.User{
-		ID:                    &objectID,
-		Email:                 credentials.Email,
-		PasswordHash:          password_hash,
-		Verified:              false,
-		MediaFiles:            []string{},
-		ThirdPartyConnections: make(map[string]string),
-	}
-
-	third_party_provider, err := c.Cookie("thirdParty_provider")
-	if err == nil { // if there is a provider check for a third party id
-		third_party_expire, err := c.Cookie("thirdparty_expires")
-		if err == nil {
-			if cookie_expirey_check(third_party_expire) { //if the cookie has expired then we remove the cookies
-				fmt.Println("Third party cookie has expired")
-				c.SetCookie("thirdParty_provider", "", -1, "/", "localhost", false, true) //remove the cookies
-				c.SetCookie("thirdParty_id", "", -1, "/", "localhost", false, true)
-				c.SetCookie("thirdparty_expires", "", -1, "/", "localhost", false, true)
-			} else {
-				third_party_id, err := c.Cookie("thirdParty_id")
-				if err != nil { //if there is none print a message
-					fmt.Println("No third party id found")
-				} else { // if there is one then we push the two to the map
-					new_user.ThirdPartyConnections = map[string]string{"provider": third_party_provider, "third_party_id": third_party_id}
-				}
-			}
-		}
-	}
-
-	_, err = DBManager.DB.Collection("users").InsertOne(context.Background(), new_user)
-	if err != nil {
-		fmt.Println(err)
-		c.JSON(400, gin.H{
-			"response": "Unable to create user",
-		})
-		return
-	}
+// @Success 200 {string} Hello from user routes
+// @Router /users/Testing_Context [get]
+func (u *User_controllers) Testing_Context(c *gin.Context) {
+	session_id := c.Keys["session_id"]
+	user_id := c.Keys["user_id"]
 
 	c.JSON(200, gin.H{
-		"response": "Successfully created account, please verify email",
+		"session_id":  session_id,
+		"user_id":     user_id,
+		"expires_at":  c.Keys["expires_at"],
+		"created_at":  c.Keys["created_at"],
+		"permissions": c.Keys["permissions"],
 	})
-}
-
-// @Summary User login route
-// @Schemes
-// @Description logs in a user
-// @Tags Public User
-// @Accept mpfd
-// @Produce json
-// @Param email formData string true "Email"
-// @Param password formData string true "Password"
-// @Success 200 {string} Logged in
-// @Success 400 {string} Unable to login
-// @Success 400 {string} Account not found
-// @Success 400 {string} Incorrect password
-// @Router /users/login [post]
-func (u *User_controllers) POST_login(c *gin.Context) {
-	var credentials models.User
-	err := c.Bind(&credentials)
-	if err != nil {
-		fmt.Println(err)
-		c.JSON(400, gin.H{
-			"response": "Unable to login",
-		})
-		return
-
-	}
-
-	//check if the user exists
-	user := DBManager.DB.Collection("users").FindOne(context.Background(), bson.M{"email": credentials.Email})
-	if user.Err() != nil {
-		c.JSON(400, gin.H{
-			"response": "Account not found",
-		})
-		return
-	}
-	// check if password is correct
-	var result models.User
-	err = user.Decode(&result)
-
-	if err != nil {
-		c.JSON(400, gin.H{
-			"response": err.Error(),
-		})
-		return
-	}
-
-	passwordHash := result.PasswordHash
-	if !PasswordHasher.CheckPassword(credentials.Password, passwordHash) {
-		c.JSON(400, gin.H{
-			"response": "Incorrect password",
-		})
-		return
-	}
-
-	//check if account is verified/ email is verified
-	// if !result.Verified {
-	// 	c.JSON(400, gin.H{
-	// 		"response": "Account not verified",
-	// 	})
-	// 	return
-	// }
-
-	//check if the user is already logged in
-	session_id, err := c.Cookie("session_id")
-	if err == nil {
-		session := DBManager.DB.Collection("session_ids").FindOne(context.Background(), bson.M{session_id: bson.M{"$exists": true}})
-
-		if session.Err() == nil {
-			c.JSON(400, gin.H{
-				"response": "Already logged in",
-			})
-			return
-
-		}
-	}
-
-	cookie := generate_secure_cookie(result)
-
-	//set cookie
-	c.SetCookie("session_id", cookie["session_id"].(string), 3600, "/", "/", false, true)
-	c.SetCookie("user_id", cookie["user_id"].(string), 3600, "/", "/", false, true)
-	c.SetCookie("expires_at", cookie["expires_at"].(string), 3600, "/", "/", false, true)
-
-	//turn cookie into bson to store in database
-	session_bson := bson.M{
-		"session_id": cookie["session_id"].(string),
-		"user_id":    cookie["user_id"].(string),
-		"expires_at": cookie["expires_at"].(string),
-	}
-
-	//add session to session_ids collection
-	_, err = DBManager.DB.Collection("session_ids").InsertOne(context.Background(), bson.M{cookie["session_id"].(string): session_bson})
-
-	if err != nil {
-		c.JSON(400, gin.H{
-			"response": "Unable to login",
-		})
-		return
-
-	}
-
-	c.JSON(200, gin.H{
-		"response": "Logged in",
-	})
-}
-
-func generate_secure_cookie(user models.User) gin.H {
-	now := time.Now()
-	expires := now.AddDate(0, 0, 7)
-
-	expires_string := expires.Format(time.RFC1123)
-
-	cookie := gin.H{
-		"user_id":    user.ID.Hex(),
-		"session_id": generate_secure_token(32),
-		"expires_at": expires_string,
-	}
-
-	return cookie
-}
-
-func generate_secure_token(length int) string {
-	b := make([]byte, length)
-	if _, err := rand.Read(b); err != nil {
-		return ""
-	}
-	return hex.EncodeToString(b)
-}
-
-func cookie_expirey_check(expiry string) bool {
-	expiry_time, err := time.Parse(time.RFC1123, expiry)
-	if err != nil {
-		return true
-	}
-
-	if expiry_time.Before(time.Now()) {
-		return true
-	}
-
-	return false
 }
