@@ -10,7 +10,7 @@ type User struct {
 	Email                 string              `bson:"email" json:"email,omitempty" form:"email" validate:"required,email"`
 	Verified_email        bool                `bson:"verified_email" json:"verified_email,omitempty"`
 	Verified_phone_number bool                `bson:"verified_phone_number" json:"verified_phone_number,omitempty"`
-	IsProfileSetUp        bool                `bson:"is_profile_set_up" json:"is_profile_set_up,omitempty"`
+	IsProfileSetUp        bool                `bson:"is_profile_set_up" json:"is_profile_set_up"`
 	PhoneNumber           string              `bson:"phone_number" json:"phone_number,omitempty"`
 	Gender                string              `bson:"gender" json:"gender,omitempty"`
 	Location              string              `bson:"location" json:"location,omitempty"`
@@ -19,7 +19,7 @@ type User struct {
 	FirstName             string              `bson:"first_name" json:"first_name,omitempty"`
 	LastName              string              `bson:"last_name" json:"last_name,omitempty"`
 	Providers             map[string]Provider `bson:"providers" json:"providers,omitempty"`
-	MediaFiles            []string            `bson:"media_files" json:"media_files,omitempty"`
+	MediaFiles            []string            `bson:"media_files" json:"media_files"`
 	MatchPreferences      MatchPreferences    `bson:"match_preferences" json:"match_preferences,omitempty"`
 	Bio                   string              `bson:"bio" json:"bio,omitempty"`
 }
@@ -31,7 +31,7 @@ type RestrictedUser struct {
 	Height      *Height             `bson:"height" json:"height,omitempty"`
 	DateOfBirth *DateOfBirth        `bson:"dob" json:"dob,omitempty"`
 	FirstName   string              `bson:"first_name" json:"first_name,omitempty"`
-	MediaFiles  []string            `bson:"media_files" json:"media_files,omitempty"`
+	MediaFiles  []string            `bson:"media_files" json:"media_files"`
 	Bio         string              `bson:"bio" json:"bio,omitempty"`
 }
 
@@ -71,6 +71,7 @@ func FromGooglePayload(payload *idtoken.Payload) *User {
 				Sub:            payload.Claims["sub"].(string),
 			},
 		},
+		MediaFiles: []string{},
 	}
 
 	return user
