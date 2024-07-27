@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"mime/multipart"
+	"os"
 
 	// "github.com/h2non/bimg"
 	"github.com/h2non/bimg"
@@ -14,17 +15,11 @@ import (
 // it is a fast library for image processing
 
 func SaveToWebp(fileHeader *multipart.FileHeader, image_id string, user_id string) error {
-<<<<<<< HEAD
-	//convert image to webp
-
-=======
->>>>>>> development
 	err := saveToWebp(fileHeader, image_id, user_id)
 	if err != nil {
 		return err
 	}
 	return nil
-
 }
 
 // private save to webp function
@@ -69,8 +64,6 @@ func saveToWebp(fileHeader *multipart.FileHeader, image_id string, user_id strin
 
 	return nil
 }
-<<<<<<< HEAD
-=======
 
 // disabling for now
 // func DefaultSaveToWebp(fileHeader *multipart.FileHeader, image_id string, user_id string) error {
@@ -94,4 +87,3 @@ func saveToWebp(fileHeader *multipart.FileHeader, image_id string, user_id strin
 
 // 	return nil
 // }
->>>>>>> development
