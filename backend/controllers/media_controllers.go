@@ -40,6 +40,7 @@ func (m *Media_controllers) Add_user_image(c *gin.Context) {
 		c.JSON(500, gin.H{
 			"response": "Error Saving to Webp" + err.Error(),
 		})
+		fmt.Println(err.Error())
 		return
 	}
 
@@ -85,7 +86,7 @@ func (m *Media_controllers) Add_user_image(c *gin.Context) {
 		})
 	}
 
-	fmt.Print("images/" + user_id + "/" + image_id)
+	fmt.Println("images/" + user_id + "/" + image_id)
 
 	//save image
 

@@ -25,7 +25,9 @@ class _HomeState extends State<Home> {
     AuthHelper.loggedIn = value;
     AuthHelper.prefs!.setBool('loggedIn', value);
     if (value) {
-      UserInfoHelper.getUserInfo().then((onValue) {});
+      UserInfoHelper.getUserInfo().then((onValue) {
+        setState(() {});
+      });
     }
     setState(() {});
   }
