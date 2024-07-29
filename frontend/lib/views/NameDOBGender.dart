@@ -1,6 +1,7 @@
 import 'package:eunity/classes/DesignVariables.dart';
 import 'package:eunity/classes/UserInfoHelper.dart';
 import 'package:eunity/views/UserPrefs.dart';
+import 'package:eunity/views/AddPhotos.dart';
 import 'package:eunity/widgets/LoginSignup/login_signup_button_content.dart';
 import 'package:eunity/widgets/NameDOBGender/birthday_classes.dart';
 import 'package:eunity/widgets/SelectionWidgets/SelectionFunction.dart';
@@ -42,12 +43,65 @@ class _NameDOBGender extends State<NameDOBGender> {
   int activeButtonIndex = -1;
   String nonBinaryOption = 'Non-Binary';
   List<String> genderOptions = [];
+  List<String> nonBinaryOptions = ['Agender', 'Gender-Fluid', 'Non-Binary'];
+
+  @override
+  void initState() {
+    UserInfoHelper.loadDOBTempCache();
+    loadData();
+    if (UserInfoHelper.userInfoCache['first_name'] != '' &&
+        UserInfoHelper.userInfoCache['first_name'] != null) {
+      _nameController.text = UserInfoHelper.userInfoCache['first_name'];
+    }
+    if (UserInfoHelper.userInfoCache['dob'] != null) {
+      Map<dynamic, dynamic> dob = UserInfoHelper.userInfoCache['dob'];
+      if (dob['day'] < 10) {
+        _dobControllers[d1].text = '0';
+        _dobControllers[d2].text = dob['day'].toString();
+      } else {
+        _dobControllers[d1].text = (dob['day'] ~/ 10).toString();
+        _dobControllers[d2].text = (dob['day'] % 10).toString();
+      }
+      if (dob['month'] < 10) {
+        _dobControllers[m1].text = '0';
+        _dobControllers[m2].text = dob['month'].toString();
+      } else {
+        _dobControllers[m1].text = (dob['month'] ~/ 10).toString();
+        _dobControllers[m2].text = (dob['month'] % 10).toString();
+      }
+      String year = dob['year'].toString();
+      _dobControllers[y1].text = year[0];
+      _dobControllers[y2].text = year[1];
+      _dobControllers[y3].text = year[2];
+      _dobControllers[y4].text = year[3];
+    }
+    if (UserInfoHelper.userInfoCache['gender'] != '' &&
+        UserInfoHelper.userInfoCache['gender'] != null) {
+      if (nonBinaryOptions.contains(UserInfoHelper.userInfoCache['gender'])) {
+        nonBinaryOption = UserInfoHelper.userInfoCache['gender'];
+        activeButtonIndex = 2;
+      } else {
+        if (UserInfoHelper.userInfoCache['gender'] == 'Man') {
+          activeButtonIndex = 0;
+        } else {
+          activeButtonIndex = 1;
+        }
+      }
+      UserInfoHelper.tempCache['userGender'] =
+          UserInfoHelper.userInfoCache['gender'];
+    }
+    super.initState();
+  }
+
+  Future<void> loadData() async {
+    await UserInfoHelper.getUserInfo();
+  }
 
   // Button that the user selects is the 'active' button
   void setActiveButtonIndex(int index) {
     setState(() {
       activeButtonIndex = index;
-      UserInfoHelper.userInfoCache['userGender'] = genderOptions[index];
+      UserInfoHelper.tempCache['userGender'] = genderOptions[index];
     });
   }
 
@@ -55,7 +109,7 @@ class _NameDOBGender extends State<NameDOBGender> {
   void updateNonBinaryGender() {
     setState(() {
       nonBinaryOption =
-          UserInfoHelper.userInfoCache['userGenderOptions'] ?? 'Non-Binary';
+          UserInfoHelper.tempCache['userGenderOptions'] ?? 'Non-Binary';
     });
   }
 
@@ -64,18 +118,16 @@ class _NameDOBGender extends State<NameDOBGender> {
     showSelectDialog(
       reRender: updateNonBinaryGender,
       context: context,
-      options: [
-        'Agender',
-        'Gender Fluid',
-        'Non-Binary'
-      ], // Add more genders here
+      options: nonBinaryOptions, // Add more genders here
       cacheKey: 'userGenderOptions',
+      cacheObject: '',
       question: 'Select your gender',
       assetPath: 'None',
       multiSelect: false,
+      allowNull: true,
     );
-    UserInfoHelper.userInfoCache['userGender'] =
-        UserInfoHelper.userInfoCache['userGenderOptions'];
+    UserInfoHelper.tempCache['userGender'] =
+        UserInfoHelper.tempCache['userGenderOptions'];
     setActiveButtonIndex(2);
   }
 
@@ -138,14 +190,22 @@ class _NameDOBGender extends State<NameDOBGender> {
     return age >= 18;
   }
 
-  void onNext() {
-    bool isValid = true;
+  bool dateControllersFilled() {
+    for (var controller in _dobControllers) {
+      if (controller.text == '') {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  void onNext() async {
     if (!isValidDate()) {
       setState(() {
         dobDesc = 'Please enter a valid date.';
         dobDescColor = Colors.red;
         dobBorder = Colors.red;
-        isValid = false;
+        // isValid = false;
       });
     } else {
       setState(() {
@@ -158,7 +218,7 @@ class _NameDOBGender extends State<NameDOBGender> {
     if (UserInfoHelper.userInfoCache['userGender'] == '') {
       setState(() {
         genderDescColor = Colors.red;
-        isValid = false;
+        // isValid = false;
       });
     } else {
       setState(() {
@@ -170,7 +230,7 @@ class _NameDOBGender extends State<NameDOBGender> {
       setState(() {
         nameBorder = Colors.red;
         nameDescColor = Colors.red;
-        isValid = false;
+        // isValid = false;
       });
     } else {
       setState(() {
@@ -179,11 +239,33 @@ class _NameDOBGender extends State<NameDOBGender> {
       });
     }
 
-    if (isValid) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const UserPrefs()),
-      );
+    if (isValidDate() &&
+        (_nameController.text.isEmpty == false) &&
+        UserInfoHelper.tempCache['userGender'] != '') {
+      String chosenGender = UserInfoHelper.tempCache['userGender'];
+      if (chosenGender == 'Non-Binary') {
+        chosenGender = nonBinaryOption;
+      }
+      UserInfoHelper.updateCacheVariable(
+          'first_name', '', _nameController.text);
+      UserInfoHelper.updateCacheVariable('gender', '', chosenGender);
+      int month = int.parse(_dobControllers[m1].text) * 10 +
+          int.parse(_dobControllers[m2].text);
+      int day = int.parse(_dobControllers[d1].text) * 10 +
+          int.parse(_dobControllers[d2].text);
+      int year = int.parse(_dobControllers[y1].text) * 1000 +
+          int.parse(_dobControllers[y2].text) * 100 +
+          int.parse(_dobControllers[y3].text) * 10 +
+          int.parse(_dobControllers[y4].text);
+      Map<dynamic, dynamic> dobMap = {'day': day, 'month': month, 'year': year};
+      UserInfoHelper.updateCacheVariable('dob', '', dobMap);
+      var response = await UserInfoHelper.patchUserInfo();
+      if (response.statusCode == 200) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AddPhotos()),
+        );
+      }
     }
   }
 
@@ -194,6 +276,7 @@ class _NameDOBGender extends State<NameDOBGender> {
       _dobFocusNodes[i].dispose();
     }
     _nameController.dispose();
+    UserInfoHelper.clearTempCache();
     super.dispose();
   }
 
@@ -207,6 +290,7 @@ class _NameDOBGender extends State<NameDOBGender> {
         break;
       }
     }
+    setState(() {});
   }
 
   // Used to prevent handleKeyPress from triggering twice
@@ -229,6 +313,8 @@ class _NameDOBGender extends State<NameDOBGender> {
         break;
       }
     }
+
+    setState(() {});
 
     // Updates text and then prevents extra handleKeyPress from running
     Future.delayed(const Duration(milliseconds: 10), () {
@@ -280,6 +366,9 @@ class _NameDOBGender extends State<NameDOBGender> {
                         height: 48 * DesignVariables.heightConversion,
                         width: 393 * DesignVariables.widthConversion,
                         child: TextField(
+                            onChanged: (String newText) {
+                              setState(() {});
+                            },
                             controller: _nameController,
                             style: const TextStyle(
                               fontSize: 14,
@@ -554,7 +643,11 @@ class _NameDOBGender extends State<NameDOBGender> {
                 const Spacer(),
 
                 LoginSignupButton(
-                    color: DesignVariables.primaryRed,
+                    color: (_nameController.text != '' &&
+                            dateControllersFilled() &&
+                            UserInfoHelper.userInfoCache['userGender'] != '')
+                        ? DesignVariables.primaryRed
+                        : DesignVariables.greyLines,
                     onTap: onNext,
                     borderColor: Colors.transparent,
                     height: 52 * DesignVariables.heightConversion,

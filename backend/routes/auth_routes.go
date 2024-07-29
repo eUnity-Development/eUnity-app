@@ -15,7 +15,7 @@ func Web_Auth_routes(r *gin.RouterGroup) {
 
 	r.GET("/google/callback", Web_Auth_controllers.GET_GoogleOAuthCallback)
 
-	//LOGOUT #TODO: make this work @AggressiveGas
+	//LOGOUT  # this doesnt work, never got around to it since deprecated
 	//r.GET("/google/logout", controller.POST_logout)
 }
 

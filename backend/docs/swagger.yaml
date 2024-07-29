@@ -22,6 +22,108 @@ paths:
       summary: Google Auth
       tags:
       - Auth
+  /dev/force_login:
+    get:
+      consumes:
+      - application/json
+      description: Creates a session for a user by email
+      parameters:
+      - description: email
+        in: query
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Session created, user logged in
+          schema:
+            type: string
+      summary: Force Login
+      tags:
+      - Dev
+  /dev/generate_mock_users:
+    get:
+      consumes:
+      - application/json
+      description: Creates mock users for development purposes
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Mock users created
+          schema:
+            type: string
+      summary: Create Mock Users
+      tags:
+      - Dev
+  /feedback/add:
+    post:
+      consumes:
+      - application/json
+      description: Add feedback from a user
+      parameters:
+      - description: User ID
+        in: query
+        name: user
+        required: true
+        type: string
+      - description: Stars
+        in: query
+        name: stars
+        required: true
+        type: integer
+      - description: Positive Text
+        in: query
+        name: positive_text
+        required: true
+        type: string
+      - description: Negative Text
+        in: query
+        name: negative_text
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Feedback added successfully!
+          schema:
+            type: string
+      summary: Add Feedback
+      tags:
+      - Feedback
+  /feedback/get:
+    get:
+      consumes:
+      - application/json
+      description: Get all feedback
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Feedback retrieved successfully!
+          schema:
+            type: string
+      summary: Get Feedback
+      tags:
+      - Feedback
+  /feedback/getall:
+    get:
+      consumes:
+      - application/json
+      description: Get all feedback
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Feedback retrieved successfully!
+          schema:
+            type: string
+      summary: Get All Feedback
+      tags:
+      - Feedback
   /media/{user_id}/{image_id}:
     get:
       consumes:
@@ -30,6 +132,90 @@ paths:
       - description: User ID
         in: path
         name: user_id
+        required: true
+        type: string
+      - description: Image ID
+        in: path
+        name: image_id
+        required: true
+        type: string
+      produces:
+      - image/jpeg
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Gets image -> unprotected route
+      tags:
+      - Public Media
+  /media/report_image:
+    post:
+      consumes:
+      - image/jpeg
+      parameters:
+      - description: Image
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Adds Report image
+      tags:
+      - Media
+  /media/report_image/{image_id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Image ID
+        in: path
+        name: image_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Deletes issue report image
+      tags:
+      - Media
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Image ID
+        in: path
+        name: image_id
+        required: true
+        type: string
+      produces:
+      - image/jpeg
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Gets report image
+      tags:
+      - Media
+  /media/reports/{report_id}/{image_id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Report ID
+        in: path
+        name: report_id
         required: true
         type: string
       - description: Image ID
@@ -106,6 +292,145 @@ paths:
       summary: Gets user image
       tags:
       - Media
+  /report_issue/add_report:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Adds a new Issue Report to the database
+      parameters:
+      - description: Issue Description
+        in: formData
+        name: description
+        type: string
+      - description: Contact Email
+        in: formData
+        name: email
+        type: string
+      - collectionFormat: csv
+        description: Media Files
+        in: formData
+        items:
+          type: string
+        name: media_files
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Add Report Issue
+      tags:
+      - Report Issue
+  /report_issue/get_report:
+    get:
+      consumes:
+      - application/json
+      description: If the user has an unsubmitted report for an app issue, returns
+        it.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get Unsubmitted Report Issue
+      tags:
+      - Report Issue
+  /report_issue/submit_report:
+    patch:
+      consumes:
+      - application/json
+      description: If the user has an unsubmitted report for an app issue, submits
+        it.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Submit Report Issue
+      tags:
+      - Report Issue
+  /report_issue/update_report:
+    patch:
+      consumes:
+      - application/json
+      description: If the user has an unsubmitted report for an app issue, patches
+        it with the new information
+      parameters:
+      - description: Data
+        in: body
+        name: data
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Patch Unsubmitted Issue Report
+      tags:
+      - Report Issue
+  /report_user/add_report:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Adds a new User Report to the database
+      parameters:
+      - description: Reported User
+        in: formData
+        name: reported_user
+        required: true
+        type: string
+      - collectionFormat: csv
+        description: Rule Violations
+        in: formData
+        items:
+          type: string
+        name: rule_violations
+        required: true
+        type: array
+      - description: Additional comments that explain why the user was reported
+        in: formData
+        name: report_comments
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Add Report User
+      tags:
+      - Report User
   /twilio/send-sms:
     post:
       consumes:
@@ -173,20 +498,16 @@ paths:
       summary: User test route
       tags:
       - User
-  /users/login:
-    post:
+  /users/get_user/{user_id}:
+    get:
       consumes:
-      - multipart/form-data
-      description: logs in a user
+      - application/json
+      description: Takes a User ID as a route parameter and uses that ID to find and
+        return the requested user
       parameters:
-      - description: Email
-        in: formData
-        name: email
-        required: true
-        type: string
-      - description: Password
-        in: formData
-        name: password
+      - description: User ID
+        in: path
+        name: user_id
         required: true
         type: string
       produces:
@@ -200,9 +521,9 @@ paths:
           description: Bad Request
           schema:
             type: string
-      summary: User login route
+      summary: Get User Route
       tags:
-      - Public User
+      - User
   /users/logout:
     post:
       consumes:
@@ -263,36 +584,6 @@ paths:
       summary: User update route
       tags:
       - User
-  /users/signup:
-    post:
-      consumes:
-      - multipart/form-data
-      description: creates a new user
-      parameters:
-      - description: Email
-        in: formData
-        name: email
-        required: true
-        type: string
-      - description: Password
-        in: formData
-        name: password
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-      summary: User signup route
-      tags:
-      - Public User
   /webAuth/google:
     get:
       consumes:

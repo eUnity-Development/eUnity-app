@@ -2,6 +2,10 @@
 .env
 main
 node_modules
-images
+images/
+images/reports/
 eunity-c2f8a-firebase-adminsdk-9j4kj-b21675c421.json
 node_modules
+/.ssh
+reset_dev.bash
+.env.temp

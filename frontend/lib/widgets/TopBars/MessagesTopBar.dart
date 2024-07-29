@@ -1,4 +1,4 @@
-import 'package:eunity/views/ReportScreen.dart';
+import 'package:eunity/views/ReportUser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -21,7 +21,7 @@ class _MessagesTopBarState extends State<MessagesTopBar> {
       print('clicked report');
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => ReportScreen()),
+        MaterialPageRoute(builder: (context) => ReportUser()),
       );
     }
 

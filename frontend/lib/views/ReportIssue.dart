@@ -1,7 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:eunity/classes/DesignVariables.dart';
-import 'package:eunity/classes/UserInfoHelper.dart';
-import 'package:eunity/widgets/ProfileWidgets/EditImageSquare.dart';
-import 'package:eunity/widgets/ProfileWidgets/NewImageSquare.dart';
+import 'package:eunity/classes/ReportHelper.dart';
+import 'package:eunity/classes/PhotoHelper.dart';
+import 'package:eunity/views/ConfirmationScreen.dart';
+import 'package:eunity/widgets/ImageWidgets/PhotoGridItem.dart';
 import 'package:eunity/widgets/TopBars/PushedScreenTopBar.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +17,123 @@ class ReportIssue extends StatefulWidget {
 class _ReportIssueState extends State<ReportIssue> {
   TextEditingController reportController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  late bool hasOpenReport;
+  List imageArray = [];
+
+  @override
+  void initState() {
+    loadReportData();
+    super.initState();
+  }
+
+  Future<void> loadReportData() async {
+    var response = await ReportHelper.getIssueReport();
+    if (response.statusCode == 200) {
+      hasOpenReport = true;
+      reportController.text = response.data['description'];
+      emailController.text = response.data['email'];
+      imageArray = response.data['media_files'];
+      setState(() {});
+    } else {
+      hasOpenReport = false;
+      imageArray = [];
+    }
+  }
+
+  Future<void> patchData(bool forceUpdate) async {
+    if (hasOpenReport) {
+      Map<dynamic, dynamic> newData = {
+        'description': reportController.text,
+        'email': emailController.text,
+        'media_files': imageArray,
+      };
+      await ReportHelper.updateIssueReport(newData);
+    } else {
+      if ((reportController.text != "" ||
+              emailController.text != "" ||
+              imageArray != []) ||
+          forceUpdate) {
+        await ReportHelper.AddIssueReport(
+            reportController.text, emailController.text, imageArray);
+        Map<dynamic, dynamic> newData = {
+          'description': reportController.text,
+          'email': emailController.text,
+        };
+        await ReportHelper.updateIssueReport(newData);
+        if (mounted) {
+          setState(() {
+            hasOpenReport = true;
+          });
+        }
+      }
+    }
+  }
+
+  Future<void> onSubmit() async {
+    Response response;
+    bool reportSwitch = hasOpenReport;
+
+    if (hasOpenReport) {
+      Map<dynamic, dynamic> newData = {
+        'description': reportController.text,
+        'email': emailController.text,
+      };
+      response = await ReportHelper.updateIssueReport(newData);
+    } else {
+      response = await ReportHelper.AddIssueReport(
+          reportController.text, emailController.text, imageArray);
+    }
+
+    if (response.statusCode == 200) {
+      reportSwitch = true;
+      Response submitResponse = await ReportHelper.submitIssueReport();
+      if (submitResponse.statusCode == 200) {
+        reportSwitch = false;
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (BuildContext context) {
+              return const Scaffold(
+                body: ConfirmationScreen(
+                  confirmationTitle: "Thank you for submitting your report!",
+                  confirmationBody:
+                      "At eUnity, our user's experiences are always important to us. Thank you for sharing yours with us. We will do our best to ensure it is heard and your concerns are addressed as quickly as possible.",
+                ),
+              );
+            },
+          ),
+        );
+      } else {
+        if (reportController.text == "") {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Please Describe the Issue!'),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        }
+        setState(() {
+          hasOpenReport = reportSwitch;
+        });
+      }
+    } else {
+      setState(() {
+        hasOpenReport = reportSwitch;
+      });
+    }
+  }
+
+  void updateState() async {
+    await loadReportData();
+    setState(() {});
+  }
+
+  Future<void> onItemClick(int index) async {
+    await patchData(true);
+    setState(() {
+      PhotoHelper.openCameraDialog(
+          imageArray, index, context, updateState, true);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,25 +151,33 @@ class _ReportIssueState extends State<ReportIssue> {
         fontSize: 13,
         color: Color.fromARGB(128, 0, 0, 0));
 
+    const TextStyle emailHintStyle = TextStyle(
+        fontWeight: FontWeight.w400,
+        fontSize: 16,
+        color: Color.fromARGB(128, 0, 0, 0));
+
     BoxDecoration textFieldDecorator = BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         border: Border.all(width: 1, color: DesignVariables.greyLines));
 
-    Widget gridOption(int index) {
-      return GestureDetector(
-        child: ((1 == 1)
-            ? NewImageSquare()
-            : EditImageSquare(imageURL: UserInfoHelper.getPublicImageURL("a"))),
-        onTap: () {
-          setState(() {
-            print('click');
-          });
-        },
-      );
-    }
-
     Widget ScreenShotRow = Row(
-      children: [gridOption(0), gridOption(1), gridOption(2)],
+      children: [
+        PhotoGridItem(
+            imageArray: imageArray,
+            index: 0,
+            onClick: onItemClick,
+            isReport: true),
+        PhotoGridItem(
+            imageArray: imageArray,
+            index: 1,
+            onClick: onItemClick,
+            isReport: true),
+        PhotoGridItem(
+            imageArray: imageArray,
+            index: 2,
+            onClick: onItemClick,
+            isReport: true)
+      ],
     );
 
     SizedBox largeSpacer = const SizedBox(
@@ -140,9 +267,9 @@ class _ReportIssueState extends State<ReportIssue> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                     decoration: textFieldDecorator,
-                    height: 40,
+                    height: 50,
                     width: double.infinity,
                     child: TextField(
                       controller: emailController,
@@ -150,8 +277,8 @@ class _ReportIssueState extends State<ReportIssue> {
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         hintText: "Enter email here.",
-                        hintStyle: hintStyle,
-                        hintMaxLines: 100,
+                        hintStyle: emailHintStyle,
+                        hintMaxLines: 1,
                         border: InputBorder.none,
                       ),
                     ),
@@ -184,12 +311,7 @@ class _ReportIssueState extends State<ReportIssue> {
                         ),
                       ),
                     ),
-                    onTap: () {
-                      print("Report Text");
-                      print(reportController.text);
-                      print("Email Text");
-                      print(emailController.text);
-                    },
+                    onTap: onSubmit,
                   ),
                 )
               ],
@@ -202,6 +324,7 @@ class _ReportIssueState extends State<ReportIssue> {
 
   @override
   void dispose() {
+    patchData(false);
     reportController.dispose();
     emailController.dispose();
     super.dispose();

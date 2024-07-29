@@ -13,6 +13,8 @@ class SelectionDialog extends StatefulWidget {
   final bool multiSelect;
   final String cacheKey;
   final bool? isListLong;
+  final String cacheObject;
+  final bool allowNull;
   const SelectionDialog({
     super.key,
     required this.options,
@@ -21,6 +23,8 @@ class SelectionDialog extends StatefulWidget {
     required this.multiSelect,
     required this.cacheKey,
     this.isListLong,
+    required this.cacheObject,
+    required this.allowNull,
   });
 
   @override
@@ -77,6 +81,64 @@ class _SelectionDialogState extends State<SelectionDialog> {
       height = maxHeight;
     }
 
+    bool checkIfSelected(var checkedVar) {
+      if (widget.cacheObject != '') {
+        if (widget.multiSelect) {
+          if (UserInfoHelper.userInfoCache[widget.cacheObject][widget.cacheKey]
+              .contains(checkedVar)) {
+            return true;
+          }
+        } else {
+          if (UserInfoHelper.userInfoCache[widget.cacheObject]
+                  [widget.cacheKey] ==
+              checkedVar) {
+            return true;
+          }
+        }
+      } else {
+        if (widget.multiSelect) {
+          if (UserInfoHelper.userInfoCache[widget.cacheKey]
+              .contains(checkedVar)) {
+            return true;
+          }
+        } else {
+          if (UserInfoHelper.userInfoCache[widget.cacheKey] == checkedVar) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
+    dynamic getNewCacheValue(var checkedVar) {
+      if (widget.cacheObject != '') {
+        if (widget.multiSelect) {
+          List cacheValue =
+              UserInfoHelper.userInfoCache[widget.cacheObject][widget.cacheKey];
+          if (cacheValue.contains(checkedVar)) {
+            if (cacheValue.length != 1) {
+              cacheValue.remove(checkedVar);
+            }
+          } else {
+            cacheValue.add(checkedVar);
+          }
+          return cacheValue;
+        }
+        return checkedVar;
+      } else {
+        if (widget.multiSelect) {
+          List cacheValue = UserInfoHelper.userInfoCache[widget.cacheKey];
+          if (cacheValue.contains(checkedVar)) {
+            cacheValue.remove(checkedVar);
+          } else {
+            cacheValue.add(checkedVar);
+          }
+          return cacheValue;
+        }
+        return checkedVar;
+      }
+    }
+
     return Container(
         height: height,
         width: MediaQuery.of(context).size.width,
@@ -123,6 +185,49 @@ class _SelectionDialogState extends State<SelectionDialog> {
                                 height: 31,
                                 width: 31,
                               ),
+              // Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              //   (widget.assetPath == 'None')
+              //       ? SizedBox()
+              //       : Row(
+              //           children: [
+              //             SvgPicture.asset(
+              //               widget.assetPath,
+              //               height: 31,
+              //               width: 31,
+              //             ),
+              //             SizedBox(width: 5)
+              //           ],
+              //         ),
+              //   Text(
+              //     widget.question,
+              //     style: questionSyle,
+              //   )
+              // ]),
+              // SizedBox(
+              //   height: 20,
+              // ),
+              // SizedBox(
+              //   height: 200,
+              //   child: ListView.builder(
+              //     itemBuilder: (BuildContext context, int index) {
+              //       if (index > (widget.options.length) - 1) {
+              //         return null;
+              //       }
+              //       return GestureDetector(
+              //         child: Padding(
+              //           padding: EdgeInsets.only(top: 15, left: 40, right: 40),
+              //           child: Container(
+              //             width: double.infinity,
+              //             height: 42,
+              //             decoration: (checkIfSelected(widget.options[index]))
+              //                 ? selectedBox
+              //                 : unselectedBox,
+              //             child: Center(
+              //               child: Text(
+              //                 widget.options[index],
+              //                 style: (checkIfSelected(widget.options[index]))
+              //                     ? selectedText
+              //                     : unselectedText,
                             ),
                           ),
                         ),
@@ -133,6 +238,15 @@ class _SelectionDialogState extends State<SelectionDialog> {
                       ),
                     ],
                   ),
+                  //     onTap: () async {
+                  //       dynamic newValue =
+                  //           getNewCacheValue(widget.options[index]);
+                  //       await UserInfoHelper.updateCacheVariable(
+                  //           widget.cacheKey, widget.cacheObject, newValue);
+                  //       setState(() {});
+                  //     },
+                  //   );
+                  // },
                 ),
               ),
               const SizedBox(
@@ -236,10 +350,10 @@ class _SelectionDialogState extends State<SelectionDialog> {
                 cacheValue.add(widget.options[index]);
               }
             }
-            UserInfoHelper.updateCacheVariable(widget.cacheKey, cacheValue);
+            UserInfoHelper.updateCacheVariable(widget.cacheKey, cacheValue as String, index);
           } else {
             UserInfoHelper.updateCacheVariable(
-                widget.cacheKey, widget.options[index]);
+                widget.cacheKey, widget.options[index], index);
           }
         });
       },

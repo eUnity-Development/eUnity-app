@@ -1,15 +1,17 @@
 import 'package:eunity/classes/DesignVariables.dart';
+import 'package:eunity/classes/ReportHelper.dart';
+import 'package:eunity/views/ConfirmationScreen.dart';
 import 'package:eunity/widgets/TopBars/PushedScreenTopBar.dart';
 import 'package:flutter/material.dart';
 
-class ReportScreen extends StatefulWidget {
-  const ReportScreen({super.key});
+class ReportUser extends StatefulWidget {
+  const ReportUser({super.key});
 
   @override
-  State<ReportScreen> createState() => _ReportScreenState();
+  State<ReportUser> createState() => _ReportUserState();
 }
 
-class _ReportScreenState extends State<ReportScreen> {
+class _ReportUserState extends State<ReportUser> {
   TextEditingController reportController = TextEditingController();
 
   List reportReasons = [
@@ -18,7 +20,37 @@ class _ReportScreenState extends State<ReportScreen> {
     'This profile is advertising/self promotion',
     'Concerned for the safety of the user'
   ];
-  List selectMatrix = [false, false, false, false];
+  List selectedReasons = [];
+
+  Future<void> onSubmit() async {
+    if (selectedReasons.length > 0) {
+      var response = await ReportHelper.AddUserReport(
+          "reportedUser", selectedReasons, reportController.text);
+      print(response);
+      if (response.statusCode == 200) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (BuildContext context) {
+              return const Scaffold(
+                body: ConfirmationScreen(
+                  confirmationTitle: "Thank you for submitting your report!",
+                  confirmationBody:
+                      "At eUnity, our user's experiences are always important to us. Thank you for sharing yours with us. We will do our best to ensure it is heard and your concerns are addressed as quickly as possible.",
+                ),
+              );
+            },
+          ),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please select some rule violations!'),
+          duration: Duration(seconds: 3),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,10 +93,14 @@ class _ReportScreenState extends State<ReportScreen> {
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: Container(
           child: CheckboxListTile(
-            value: selectMatrix[index],
+            value: selectedReasons.contains(reportReasons[index]),
             onChanged: (bool? value) {
               setState(() {
-                selectMatrix[index] = value;
+                if (selectedReasons.contains(reportReasons[index])) {
+                  selectedReasons.remove(reportReasons[index]);
+                } else {
+                  selectedReasons.add(reportReasons[index]);
+                }
               });
             },
             title: Text(
@@ -172,10 +208,7 @@ class _ReportScreenState extends State<ReportScreen> {
                         ),
                       ),
                     ),
-                    onTap: () {
-                      print("Report Text");
-                      print(reportController.text);
-                    },
+                    onTap: onSubmit,
                   ),
                 )
               ],

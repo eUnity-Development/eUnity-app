@@ -1,3 +1,4 @@
+import 'package:eunity/classes/UserInfoHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:eunity/classes/DesignVariables.dart';
 
@@ -43,7 +44,9 @@ class _MatchPreferencesSliderState extends State<MatchPreferencesSlider> {
             ),
             child: Slider(
               value: sliderValue,
-              onChanged: (double newValue) {
+              onChanged: (double newValue) async {
+                await UserInfoHelper.updateCacheVariable(
+                    'maximum_distance', 'match_preferences', newValue.toInt());
                 setState(() {
                   sliderValue = newValue;
                 });

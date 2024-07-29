@@ -7,21 +7,32 @@ import (
 
 type User struct {
 	ID                    *primitive.ObjectID `bson:"_id" json:"_id,omitempty"`
-	Password              string              `bson:"-" json:"-" form:"password"  validate:"required,min=8,max=100"`
 	Email                 string              `bson:"email" json:"email,omitempty" form:"email" validate:"required,email"`
-	PasswordHash          string              `bson:"passwordHash" json:"-"`
 	Verified_email        bool                `bson:"verified_email" json:"verified_email,omitempty"`
 	Verified_phone_number bool                `bson:"verified_phone_number" json:"verified_phone_number,omitempty"`
+	IsProfileSetUp        bool                `bson:"is_profile_set_up" json:"is_profile_set_up"`
 	PhoneNumber           string              `bson:"phone_number" json:"phone_number,omitempty"`
 	Gender                string              `bson:"gender" json:"gender,omitempty"`
 	Location              string              `bson:"location" json:"location,omitempty"`
 	Height                *Height             `bson:"height" json:"height,omitempty"`
-	RelationshipTypes     []string            `bson:"relationship_types" json:"relationship_types,omitempty"`
 	DateOfBirth           *DateOfBirth        `bson:"dob" json:"dob,omitempty"`
 	FirstName             string              `bson:"first_name" json:"first_name,omitempty"`
 	LastName              string              `bson:"last_name" json:"last_name,omitempty"`
 	Providers             map[string]Provider `bson:"providers" json:"providers,omitempty"`
-	MediaFiles            []string            `bson:"media_files" json:"media_files,omitempty"`
+	MediaFiles            []string            `bson:"media_files" json:"media_files"`
+	MatchPreferences      MatchPreferences    `bson:"match_preferences" json:"match_preferences,omitempty"`
+	Bio                   string              `bson:"bio" json:"bio,omitempty"`
+}
+
+type RestrictedUser struct {
+	ID          *primitive.ObjectID `bson:"_id" json:"_id,omitempty"`
+	Gender      string              `bson:"gender" json:"gender,omitempty"`
+	Location    string              `bson:"location" json:"location,omitempty"`
+	Height      *Height             `bson:"height" json:"height,omitempty"`
+	DateOfBirth *DateOfBirth        `bson:"dob" json:"dob,omitempty"`
+	FirstName   string              `bson:"first_name" json:"first_name,omitempty"`
+	MediaFiles  []string            `bson:"media_files" json:"media_files"`
+	Bio         string              `bson:"bio" json:"bio,omitempty"`
 }
 
 type DateOfBirth struct {
@@ -36,8 +47,23 @@ type Height struct {
 	Centimeters int `json:"centimeters,omitempty"`
 }
 
+type MatchPreferences struct {
+	Genders           []string `bson:"genders" json:"genders"`
+	RelationshipTypes []string `bson:"relationship_types" json:"relationship_types"`
+	MinimumAge        int      `bson:"minimum_age" json:"minimum_age"`
+	MaximumAge        int      `bson:"maximum_age" json:"maximum_age"`
+	MaximumDistance   int      `bson:"maximum_distance" json:"maximum_distance"`
+}
+
 func FromGooglePayload(payload *idtoken.Payload) *User {
 	objectID := primitive.NewObjectID()
+	match_preferences := &MatchPreferences{
+		Genders:           []string{},
+		RelationshipTypes: []string{},
+		MinimumAge:        18,
+		MaximumAge:        40,
+		MaximumDistance:   20,
+	}
 	user := &User{
 		ID:             &objectID,
 		Email:          payload.Claims["email"].(string),
@@ -52,6 +78,8 @@ func FromGooglePayload(payload *idtoken.Payload) *User {
 				Sub:            payload.Claims["sub"].(string),
 			},
 		},
+		MediaFiles:       []string{},
+		MatchPreferences: *match_preferences,
 	}
 
 	return user

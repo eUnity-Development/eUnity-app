@@ -1,7 +1,6 @@
 package TwilioManager
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -19,10 +18,6 @@ func init() {
 	username := os.Getenv("TWILIO_ACCOUNT_SID")
 	password := os.Getenv("TWILIO_AUTH_TOKEN")
 	service_SID = os.Getenv("TWILIO_SERVICE_SID")
-
-	fmt.Println("TWILIO_ACCOUNT_SID: ", username)
-	fmt.Println("TWILIO_AUTH_TOKEN: ", password)
-	fmt.Println("I am right here")
 
 	client = twilio.NewRestClientWithParams(twilio.ClientParams{
 		Username: username,

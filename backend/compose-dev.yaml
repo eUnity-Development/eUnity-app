@@ -1,0 +1,17 @@
+services:
+  development:
+    entrypoint:
+    - sleep
+    - infinity
+    build:
+      context: .
+      dockerfile: docker/dev/dockerfile
+    ports:
+     - "3200:3200"
+    environment:
+      - HOST_WORKING_DIR=${HOST_WORKING_DIR}
+    init: true
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock

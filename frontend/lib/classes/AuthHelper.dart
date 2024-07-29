@@ -27,11 +27,11 @@ class AuthHelper {
 
   static Future<bool> isLoggedIn() async {
     var sessionCookie = await readCookie('session_id');
-    UserInfoHelper.loadDefaultCache();
     print('COOKIES!');
     print(sessionCookie);
     if (sessionCookie == null) {
       setLoggedIn(false);
+      await UserInfoHelper.emptyUserCache();
       return false;
     }
 
@@ -45,17 +45,21 @@ class AuthHelper {
       );
       if (response.statusCode == 200) {
         setLoggedIn(true);
+        await UserInfoHelper.getUserInfo();
         return true;
       } else {
         setLoggedIn(false);
+        await UserInfoHelper.emptyUserCache();
         return false;
       }
     } on DioException catch (e) {
       if (e.response != null) {
         setLoggedIn(false);
+        await UserInfoHelper.emptyUserCache();
         return false;
       } else {
         setLoggedIn(false);
+        await UserInfoHelper.emptyUserCache();
         return false;
       }
     }
@@ -129,7 +133,10 @@ class AuthHelper {
     }
   }
 
+  static Future<void> SendPhoneVerification() async {}
+
   static Future<void> signInWithGoogle() async {
+    print('a');
     try {
       await googleSignIn.signIn();
     } on Exception catch (e) {
@@ -148,6 +155,8 @@ class AuthHelper {
       await RouteHandler.dio.post(
         url,
       );
+      await UserInfoHelper.emptyUserCache();
+      AuthHelper.loggedIn = false;
       return;
     } on DioException catch (e) {
       if (e.response != null) {

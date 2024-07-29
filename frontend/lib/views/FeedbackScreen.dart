@@ -1,3 +1,6 @@
+import 'package:dio/dio.dart';
+import 'package:eunity/classes/ReportHelper.dart';
+import 'package:eunity/views/ConfirmationScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:eunity/classes/DesignVariables.dart';
@@ -103,6 +106,29 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         borderRadius: BorderRadius.circular(25),
         border: Border.all(width: 1, color: DesignVariables.greyLines));
 
+    Future<void> submitFeedback(
+        int starRating, String positiveText, String negativeText) async {
+      Response response = await ReportHelper.submitFeedback(
+          starRating, positiveText, negativeText);
+      print(response);
+    }
+
+    void navigateToConfirmationScreen() {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (BuildContext context) {
+            return const Scaffold(
+              body: ConfirmationScreen(
+                confirmationTitle: "Thank you for submitting your feedback!",
+                confirmationBody:
+                    "At eUnity, our user's experiences are always important to us. Thank you for sharing yours with us. We will do our best to ensure it is heard and your concerns are addressed as quickly as possible.",
+              ),
+            );
+          },
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: PushedScreenTopBar(),
       body: SingleChildScrollView(
@@ -202,13 +228,20 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                       ),
                     ),
                   ),
-                  onTap: () {
-                    print("Star Rating");
-                    print(starRating);
-                    print("Positive Text");
-                    print(positiveController.text);
-                    print("Negative Text");
-                    print(negativeController.text);
+                  onTap: () async {
+                    if (starRating > 0) {
+                      await submitFeedback(starRating, positiveController.text,
+                          negativeController.text);
+                      navigateToConfirmationScreen();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              'Please add a star rating in order to submit your feedback!'),
+                          duration: Duration(seconds: 3),
+                        ),
+                      );
+                    }
                   },
                 ),
               )
