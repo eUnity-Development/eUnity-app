@@ -13,9 +13,9 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func get_random_user() (models.User, error) {
+func get_random_user(amount string) ([]models.User, error) {
 	// URL of the API endpoint
-	url := "https://randomuser.me/api/"
+	url := "https://randomuser.me/api/?results=" + fmt.Sprint(amount)
 
 	// Make a GET request to the endpoint
 	resp, err := http.Get(url)
@@ -30,89 +30,77 @@ func get_random_user() (models.User, error) {
 	}
 
 	// Decode the JSON response
-	var data map[string]interface{}
+	var data struct {
+		Results []map[string]interface{} `json:"results"`
+	}
 	err = json.NewDecoder(resp.Body).Decode(&data)
 	if err != nil {
 		log.Fatalf("Error decoding JSON: %v", err)
 	}
 
-	// Print out the results
-	fmt.Println("Random User API Response:")
-	fmt.Println("-------------------------")
-	fmt.Printf("Gender: %s\n", data["results"].([]interface{})[0].(map[string]interface{})["gender"])
-	fmt.Printf("Name: %s %s\n", data["results"].([]interface{})[0].(map[string]interface{})["name"].(map[string]interface{})["first"], data["results"].([]interface{})[0].(map[string]interface{})["name"].(map[string]interface{})["last"])
-	fmt.Printf("Location: %s, %s, %s\n", data["results"].([]interface{})[0].(map[string]interface{})["location"].(map[string]interface{})["street"], data["results"].([]interface{})[0].(map[string]interface{})["location"].(map[string]interface{})["city"], data["results"].([]interface{})[0].(map[string]interface{})["location"].(map[string]interface{})["country"])
-	fmt.Printf("Email: %s\n", data["results"].([]interface{})[0].(map[string]interface{})["email"])
+	var users []models.User
+	for _, userData := range data.Results {
+		objectId := primitive.NewObjectID()
 
-	objectId := primitive.NewObjectID()
-
-	//turn dob to date of birth
-	dateString := data["results"].([]interface{})[0].(map[string]interface{})["dob"].(map[string]interface{})["date"].(string)
-	parsedDate, err := time.Parse(time.RFC3339, dateString)
-	if err != nil {
-		fmt.Println("Error parsing date:", err)
-		return models.User{}, err
-	}
-	dob := models.DateOfBirth{
-		Day:   parsedDate.Day(),
-		Month: int(parsedDate.Month()),
-		Year:  parsedDate.Year(),
-	}
-
-	resultUser := models.User{
-		ID:             &objectId,
-		Email:          data["results"].([]interface{})[0].(map[string]interface{})["email"].(string),
-		Verified_email: true,
-		PhoneNumber:    data["results"].([]interface{})[0].(map[string]interface{})["phone"].(string),
-		FirstName:      data["results"].([]interface{})[0].(map[string]interface{})["name"].(map[string]interface{})["first"].(string),
-		LastName:       data["results"].([]interface{})[0].(map[string]interface{})["name"].(map[string]interface{})["last"].(string),
-		Gender:         data["results"].([]interface{})[0].(map[string]interface{})["gender"].(string),
-		Location:       data["results"].([]interface{})[0].(map[string]interface{})["location"].(map[string]interface{})["country"].(string),
-		MatchPreferences: models.MatchPreferences{
-			Genders:           []string{"Men", "Women"},
-			RelationshipTypes: []string{"Long Term Relationships"},
-			MinimumAge:        18,
-			MaximumAge:        39,
-			MaximumDistance:   40,
-		},
-		DateOfBirth: &dob,
-		Height: &models.Height{
-			Feet:   5,
-			Inches: 8,
-		},
-		Providers: map[string]models.Provider{
-			"google": {
-				Name:           data["results"].([]interface{})[0].(map[string]interface{})["name"].(map[string]interface{})["first"].(string) + " " + data["results"].([]interface{})[0].(map[string]interface{})["name"].(map[string]interface{})["last"].(string),
-				Email:          data["results"].([]interface{})[0].(map[string]interface{})["email"].(string),
-				Email_verified: true,
-				Sub:            "sub",
-			},
-		},
-		MediaFiles: []string{
-			data["results"].([]interface{})[0].(map[string]interface{})["picture"].(map[string]interface{})["large"].(string),
-		},
-	}
-
-	return resultUser, nil
-
-}
-
-func generate_100_Users() ([]models.User, error) {
-	users := make([]models.User, 100)
-	var err error
-	for i := 0; i < 100; i++ {
-		users[i], err = get_random_user()
+		// Parse date of birth
+		dateString := userData["dob"].(map[string]interface{})["date"].(string)
+		parsedDate, err := time.Parse(time.RFC3339, dateString)
 		if err != nil {
-			return users, err
+			fmt.Println("Error parsing date:", err)
+			return nil, err
 		}
+		dob := models.DateOfBirth{
+			Day:   parsedDate.Day(),
+			Month: int(parsedDate.Month()),
+			Year:  parsedDate.Year(),
+		}
+
+		user := models.User{
+			ID:             &objectId,
+			Email:          userData["email"].(string),
+			Verified_email: true,
+			PhoneNumber:    userData["phone"].(string),
+			FirstName:      userData["name"].(map[string]interface{})["first"].(string),
+			LastName:       userData["name"].(map[string]interface{})["last"].(string),
+			Gender:         userData["gender"].(string),
+			Location:       userData["location"].(map[string]interface{})["country"].(string),
+			MatchPreferences: models.MatchPreferences{
+				Genders:           []string{"Men", "Women"},
+				RelationshipTypes: []string{"Long Term Relationships"},
+				MinimumAge:        18,
+				MaximumAge:        39,
+				MaximumDistance:   40,
+			},
+			DateOfBirth: &dob,
+			Height: &models.Height{
+				Feet:   5,
+				Inches: 8,
+			},
+			Providers: map[string]models.Provider{
+				"google": {
+					Name:           userData["name"].(map[string]interface{})["first"].(string) + " " + userData["name"].(map[string]interface{})["last"].(string),
+					Email:          userData["email"].(string),
+					Email_verified: true,
+					Sub:            "sub",
+				},
+			},
+			MediaFiles: []string{
+				userData["picture"].(map[string]interface{})["large"].(string),
+			},
+		}
+		users = append(users, user)
 	}
 
 	return users, nil
 
 }
 
-func insert_Mock_Users() error {
-	users, err := generate_100_Users()
+func generate_x_Users(amount string) ([]models.User, error) {
+	return get_random_user(amount)
+}
+
+func insert_Mock_Users(amount string) error {
+	users, err := generate_x_Users(amount)
 	if err != nil {
 		return err
 	}
@@ -128,8 +116,8 @@ func insert_Mock_Users() error {
 	return nil
 }
 
-func Gen_Mock_Users() error {
-	err := insert_Mock_Users()
+func Gen_Mock_Users(amount string) error {
+	err := insert_Mock_Users(amount)
 	if err != nil {
 		fmt.Println("Error inserting mock users:", err)
 		return err

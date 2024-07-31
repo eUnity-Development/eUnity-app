@@ -48,6 +48,12 @@ paths:
       consumes:
       - application/json
       description: Creates mock users for development purposes
+      parameters:
+      - description: amount
+        in: query
+        name: amount
+        required: true
+        type: integer
       produces:
       - application/json
       responses:

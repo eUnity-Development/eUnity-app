@@ -92,6 +92,15 @@ const docTemplate = `{
                     "Dev"
                 ],
                 "summary": "Create Mock Users",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "amount",
+                        "name": "amount",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Mock users created",

@@ -61,11 +61,16 @@ func (d *Dev_Controllers) Force_Login(c *gin.Context) {
 // @Tags Dev
 // @Accept json
 // @Produce json
+// @Param amount query int true "amount"
 // @Success 200 {string} response "Mock users created"
 // @Router /dev/generate_mock_users [get]
 func (d *Dev_Controllers) Generate_Mock_Users(c *gin.Context) {
 	//create mock users for development purposes
-	err := MockUsersGen.Gen_Mock_Users()
+
+	//get amount from query
+	amount := c.Query("amount")
+
+	err := MockUsersGen.Gen_Mock_Users(amount)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"response": "Unable to create mock users" + err.Error(),
