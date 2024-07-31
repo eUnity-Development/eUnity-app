@@ -64,7 +64,7 @@ func main() {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// Serve Swagger UI at /docs
 	r.GET("/docs", func(c *gin.Context) {
-		c.Redirect(http.StatusMovedPermanently, "/api/v1/docs/index.html")
+		c.Redirect(http.StatusMovedPermanently, SWAGGER_BASE_PATH+"/docs/index.html")
 	})
 
 	r.GET("/docs/*any", ginSwagger.WrapHandler(
