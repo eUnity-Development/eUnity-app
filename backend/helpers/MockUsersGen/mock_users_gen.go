@@ -99,28 +99,28 @@ func generate_x_Users(amount string) ([]models.User, error) {
 	return get_random_user(amount)
 }
 
-func insert_Mock_Users(amount string) error {
+func insert_Mock_Users(amount string) (*models.User, error) {
 	users, err := generate_x_Users(amount)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	for _, user := range users {
 		//insert user into database
 		_, err := DBManager.DB.Collection("users").InsertOne(context.Background(), user)
 		if err != nil {
-			return err
+			return nil, err
 		}
 
 	}
-	return nil
+	return &users[0], nil
 }
 
-func Gen_Mock_Users(amount string) error {
-	err := insert_Mock_Users(amount)
+func Gen_Mock_Users(amount string) (*models.User, error) {
+	user, err := insert_Mock_Users(amount)
 	if err != nil {
 		fmt.Println("Error inserting mock users:", err)
-		return err
+		return nil, err
 	}
-	return nil
+	return user, nil
 }

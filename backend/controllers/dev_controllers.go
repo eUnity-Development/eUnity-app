@@ -70,7 +70,7 @@ func (d *Dev_Controllers) Generate_Mock_Users(c *gin.Context) {
 	//get amount from query
 	amount := c.Query("amount")
 
-	err := MockUsersGen.Gen_Mock_Users(amount)
+	user, err := MockUsersGen.Gen_Mock_Users(amount)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"response": "Unable to create mock users" + err.Error(),
@@ -78,7 +78,10 @@ func (d *Dev_Controllers) Generate_Mock_Users(c *gin.Context) {
 		return
 	}
 
+	//always return a random user email that I am able to login with
+
 	c.JSON(200, gin.H{
-		"response": "Mock users created",
+		"response":          "Mock users created",
+		"random_user_email": user.Email,
 	})
 }
