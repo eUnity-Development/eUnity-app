@@ -67,10 +67,6 @@ func main() {
 		c.Redirect(http.StatusMovedPermanently, "/api/v1/docs/index.html")
 	})
 
-	//redirect might not work cause chrome caches the redirect
-	router.GET("/docs", func(c *gin.Context) {
-		c.Redirect(http.StatusMovedPermanently, "/api/v1/docs/index.html")
-	})
 	r.GET("/docs/*any", ginSwagger.WrapHandler(
 		swaggerfiles.Handler,
 	))
