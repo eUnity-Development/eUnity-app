@@ -1,28 +1,48 @@
 
 
 # Use golang:1.23-alpine as the base image
-FROM golang:1.23-rc-alpine
-
-WORKDIR /app
-
-# Install necessary tools for debugging
-RUN apk add --no-cache bash curl
-
-# Copy application files into the container
-COPY ../../. .
+FROM golang:1.23-rc-alpine AS builder
 
 RUN apk add --no-cache \
     pkgconfig \
     vips-dev \
-    g++ \
-    make
+    g++ 
 
-RUN go mod tidy
+RUN apk add --no-cache bash curl
+
+WORKDIR /app
+
+COPY go.mod go.sum ./
+
+RUN go mod download
 
 
+COPY . .
+
+# Build the Go app
+RUN go build -o main .
+
+
+# Stage 2: Run the Go binary
+FROM alpine:latest
+
+# Install required libraries
+RUN apk add --no-cache \
+    libgcc \
+    pkgconfig \
+    vips-dev \
+    g++
+
+# Set the Current Working Directory inside the container
+WORKDIR /root/
+
+# Copy the Pre-built binary file from the previous stage
+COPY --from=builder /app/main .
+COPY --from=builder /app/.env .
+
+
+# Expose port 8080 to the outside world
 EXPOSE 3200
 
-# # Set the entrypoint to bash for debugging
-# ENTRYPOINT ["bash"]
-# CMD can be specified here if you want a default command
-CMD ["make","serve"]
+# Command to run the executable
+CMD ["./main"]
