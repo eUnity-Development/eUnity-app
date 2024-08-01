@@ -1,6 +1,5 @@
 import 'package:eunity/classes/DesignVariables.dart';
 import 'package:eunity/classes/UserInfoHelper.dart';
-import 'package:eunity/views/UserPrefs.dart';
 import 'package:eunity/views/AddPhotos.dart';
 import 'package:eunity/widgets/LoginSignup/login_signup_button_content.dart';
 import 'package:eunity/widgets/NameDOBGender/birthday_classes.dart';
@@ -105,11 +104,11 @@ class _NameDOBGender extends State<NameDOBGender> {
     });
   }
 
-  // Update Non-Binary button text after selection
+  // Update Non-Binary button text after non-binary selection
   void updateNonBinaryGender() {
     setState(() {
       nonBinaryOption =
-          UserInfoHelper.tempCache['userGenderOptions'] ?? 'Non-Binary';
+          UserInfoHelper.userInfoCache['userGenderOptions'];
     });
   }
 
@@ -205,7 +204,6 @@ class _NameDOBGender extends State<NameDOBGender> {
         dobDesc = 'Please enter a valid date.';
         dobDescColor = Colors.red;
         dobBorder = Colors.red;
-        // isValid = false;
       });
     } else {
       setState(() {
@@ -215,10 +213,9 @@ class _NameDOBGender extends State<NameDOBGender> {
       });
     }
 
-    if (UserInfoHelper.userInfoCache['userGender'] == '') {
+    if (UserInfoHelper.tempCache['userGender'] == '') {
       setState(() {
         genderDescColor = Colors.red;
-        // isValid = false;
       });
     } else {
       setState(() {
@@ -230,7 +227,6 @@ class _NameDOBGender extends State<NameDOBGender> {
       setState(() {
         nameBorder = Colors.red;
         nameDescColor = Colors.red;
-        // isValid = false;
       });
     } else {
       setState(() {
