@@ -1,4 +1,5 @@
 import 'package:eunity/classes/DesignVariables.dart';
+import 'package:eunity/classes/UserInfoHelper.dart';
 import 'package:eunity/widgets/TopBars/PushedScreenTopBar.dart';
 import 'package:eunity/widgets/UserPrefs/user_prefs_button.dart';
 import 'package:eunity/widgets/UserPrefs/user_prefs_list.dart';

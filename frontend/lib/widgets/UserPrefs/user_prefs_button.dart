@@ -34,6 +34,13 @@ class UserPrefsButton extends StatefulWidget {
 }
 
 class UserPrefsButtonState extends State<UserPrefsButton> {
+  @override
+  void initState() {
+    // Probably not the most efficient thing to do, but it does work
+    // to load default values and prevent errors
+    UserInfoHelper.loadDefaultUserPrefsCache();
+    super.initState();
+  }
   String action = '';
   String staticText = 'Add';
 
@@ -76,7 +83,9 @@ class UserPrefsButtonState extends State<UserPrefsButton> {
                 question: widget.question,
                 assetPath: widget.assetPath,
                 multiSelect: widget.multiSelect,
-                isListLong: widget.isLongList
+                isListLong: widget.isLongList,
+                cacheObject: '',
+                allowNull: true
               ),
 
               child: Row(

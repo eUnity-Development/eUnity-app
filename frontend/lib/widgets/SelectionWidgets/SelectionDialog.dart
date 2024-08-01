@@ -81,6 +81,8 @@ class _SelectionDialogState extends State<SelectionDialog> {
       height = maxHeight;
     }
 
+    int maxInterests = 7;
+
     bool checkIfSelected(var checkedVar) {
       if (widget.cacheObject != '') {
         if (widget.multiSelect) {
@@ -131,7 +133,11 @@ class _SelectionDialogState extends State<SelectionDialog> {
           if (cacheValue.contains(checkedVar)) {
             cacheValue.remove(checkedVar);
           } else {
-            cacheValue.add(checkedVar);
+            if (widget.cacheKey != 'interests' ||
+                (widget.cacheKey == 'interests' &&
+                    cacheValue.length <= maxInterests)) {
+              cacheValue.add(checkedVar);
+            }
           }
           return cacheValue;
         }
@@ -185,49 +191,6 @@ class _SelectionDialogState extends State<SelectionDialog> {
                                 height: 31,
                                 width: 31,
                               ),
-              // Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              //   (widget.assetPath == 'None')
-              //       ? SizedBox()
-              //       : Row(
-              //           children: [
-              //             SvgPicture.asset(
-              //               widget.assetPath,
-              //               height: 31,
-              //               width: 31,
-              //             ),
-              //             SizedBox(width: 5)
-              //           ],
-              //         ),
-              //   Text(
-              //     widget.question,
-              //     style: questionSyle,
-              //   )
-              // ]),
-              // SizedBox(
-              //   height: 20,
-              // ),
-              // SizedBox(
-              //   height: 200,
-              //   child: ListView.builder(
-              //     itemBuilder: (BuildContext context, int index) {
-              //       if (index > (widget.options.length) - 1) {
-              //         return null;
-              //       }
-              //       return GestureDetector(
-              //         child: Padding(
-              //           padding: EdgeInsets.only(top: 15, left: 40, right: 40),
-              //           child: Container(
-              //             width: double.infinity,
-              //             height: 42,
-              //             decoration: (checkIfSelected(widget.options[index]))
-              //                 ? selectedBox
-              //                 : unselectedBox,
-              //             child: Center(
-              //               child: Text(
-              //                 widget.options[index],
-              //                 style: (checkIfSelected(widget.options[index]))
-              //                     ? selectedText
-              //                     : unselectedText,
                             ),
                           ),
                         ),
@@ -238,15 +201,6 @@ class _SelectionDialogState extends State<SelectionDialog> {
                       ),
                     ],
                   ),
-                  //     onTap: () async {
-                  //       dynamic newValue =
-                  //           getNewCacheValue(widget.options[index]);
-                  //       await UserInfoHelper.updateCacheVariable(
-                  //           widget.cacheKey, widget.cacheObject, newValue);
-                  //       setState(() {});
-                  //     },
-                  //   );
-                  // },
                 ),
               ),
               const SizedBox(
@@ -270,93 +224,70 @@ class _SelectionDialogState extends State<SelectionDialog> {
                             alignment: WrapAlignment.center,
                             children: List<Widget>.generate(
                                 widget.options.length, (index) {
-                              return buildOptionButton(
-                                  index,
-                                  selectedBox,
-                                  unselectedBox,
-                                  selectedText,
-                                  unselectedText,
-                                  isLongList);
+                              return GestureDetector(
+                                child: (!isLongList)
+                                    ? Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 15, left: 40, right: 40),
+                                        child: Container(
+                                          width: double.infinity,
+                                          height: 42,
+                                          decoration: (checkIfSelected(
+                                                  widget.options[index]))
+                                              ? selectedBox
+                                              : unselectedBox,
+                                          child: Center(
+                                            child: Text(
+                                              widget.options[index],
+                                              style: (checkIfSelected(
+                                                      widget.options[index]))
+                                                  ? selectedText
+                                                  : unselectedText,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0, horizontal: 1.0),
+                                        child: Wrap(
+                                          alignment: WrapAlignment.center,
+                                          children: [
+                                            Container(
+                                              decoration: (checkIfSelected(
+                                                      widget.options[index]))
+                                                  ? selectedBox
+                                                  : unselectedBox,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 16.0,
+                                                      vertical: 3.5),
+                                              child: Text(
+                                                widget.options[index],
+                                                style: (checkIfSelected(
+                                                        widget.options[index]))
+                                                    ? selectedText
+                                                    : unselectedText,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                onTap: () async {
+                                  dynamic newValue =
+                                      getNewCacheValue(widget.options[index]);
+                                  await UserInfoHelper.updateCacheVariable(
+                                      widget.cacheKey,
+                                      widget.cacheObject,
+                                      newValue);
+                                  setState(() {});
+                                },
+                              );
                             }),
                           ),
               ),
             ],
           ),
         ));
-  }
-
-  Widget buildOptionButton(
-      int index,
-      BoxDecoration selectedBox,
-      BoxDecoration unselectedBox,
-      TextStyle selectedText,
-      TextStyle unselectedText,
-      bool isLongList) {
-    bool isSelected;
-    if (widget.multiSelect) {
-      isSelected = UserInfoHelper.userInfoCache[widget.cacheKey]
-          .contains(widget.options[index]);
-    } else {
-      isSelected = UserInfoHelper.userInfoCache[widget.cacheKey] ==
-          widget.options[index];
-    }
-
-    return GestureDetector(
-      child: (!isLongList)
-          ? Padding(
-              padding: const EdgeInsets.only(top: 15, left: 40, right: 40),
-              child: Container(
-                width: double.infinity,
-                height: 42,
-                decoration: isSelected ? selectedBox : unselectedBox,
-                child: Center(
-                  child: Text(
-                    widget.options[index],
-                    style: isSelected ? selectedText : unselectedText,
-                  ),
-                ),
-              ),
-            )
-          : Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 1.0),
-              child: Wrap(
-                alignment: WrapAlignment.center,
-                children: [
-                  Container(
-                    decoration: isSelected ? selectedBox : unselectedBox,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 3.5),
-                    child: Text(
-                      widget.options[index],
-                      style: isSelected ? selectedText : unselectedText,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-      onTap: () {
-        setState(() {
-          if (widget.multiSelect) {
-            List cacheValue = UserInfoHelper.userInfoCache[widget.cacheKey];
-            if (cacheValue.contains(widget.options[index])) {
-              cacheValue.remove(widget.options[index]);
-            } else {
-              // cap the number of interests
-              if (widget.cacheKey == 'interests' &&
-                      UserInfoHelper.userInfoCache[widget.cacheKey].length <
-                          maxInterests ||
-                  widget.cacheKey != 'interests') {
-                cacheValue.add(widget.options[index]);
-              }
-            }
-            UserInfoHelper.updateCacheVariable(widget.cacheKey, cacheValue as String, index);
-          } else {
-            UserInfoHelper.updateCacheVariable(
-                widget.cacheKey, widget.options[index], index);
-          }
-        });
-      },
-    );
   }
 }
