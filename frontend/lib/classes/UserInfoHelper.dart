@@ -19,10 +19,10 @@ class UserInfoHelper {
     userInfoCache['pronouns'] = 'Add';
     userInfoCache['education'] = 'Add';
     userInfoCache['job'] = 'Add';
-    userInfoCache['interests'] = [''];
-    userInfoCache['ethnicity'] = [''];
+    userInfoCache['interests'] = [];
+    userInfoCache['ethnicity'] = [];
     userInfoCache['politics'] = 'Add';
-    userInfoCache['religion'] = [''];
+    userInfoCache['religion'] = [];
     userInfoCache['city'] = 'Edit';
 
     userInfoCache['exercise'] = 'Add';
@@ -31,7 +31,7 @@ class UserInfoHelper {
     userInfoCache['height'] = 'Add';
     userInfoCache['social-media'] = 'Add';
     userInfoCache['pets'] = 'Add';
-    userInfoCache['diet'] = [''];
+    userInfoCache['diet'] = [];
   }
   
   static void clearTempCache() {

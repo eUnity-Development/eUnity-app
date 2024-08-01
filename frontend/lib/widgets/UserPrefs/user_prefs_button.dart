@@ -14,9 +14,10 @@ class UserPrefsButton extends StatefulWidget {
   final String cacheKey;
   final bool multiSelect;
   final bool isLongList;
+  final void Function() updateBtn;
 
-  const UserPrefsButton(
-    {super.key,
+  const UserPrefsButton({
+    super.key,
     required this.name,
     required this.context,
     required this.options,
@@ -25,7 +26,8 @@ class UserPrefsButton extends StatefulWidget {
     required this.cacheKey,
     required this.multiSelect,
     required this.isLongList,
-    });
+    required this.updateBtn,
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -41,41 +43,44 @@ class UserPrefsButtonState extends State<UserPrefsButton> {
     UserInfoHelper.loadDefaultUserPrefsCache();
     super.initState();
   }
+
   String action = '';
   String staticText = 'Add';
 
   void update() {
     setState(() {
-      if (widget.multiSelect && UserInfoHelper.userInfoCache[widget.cacheKey].length > 0) {
+      if (widget.multiSelect &&
+          UserInfoHelper.userInfoCache[widget.cacheKey].length > 0) {
         staticText = 'Edit';
       }
-      action = widget.multiSelect ? staticText : UserInfoHelper.userInfoCache[widget.cacheKey];
+      action = widget.multiSelect
+          ? staticText
+          : UserInfoHelper.userInfoCache[widget.cacheKey];
     });
+    widget.updateBtn();
   }
 
   @override
   Widget build(BuildContext context) {
-    action = widget.multiSelect ? staticText : UserInfoHelper.userInfoCache[widget.cacheKey];
+    action = widget.multiSelect
+        ? staticText
+        : UserInfoHelper.userInfoCache[widget.cacheKey];
     String buttonName = widget.name;
-    return(
-      Column(children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              widget.assetPath,
-              height: 20,
-              width: 20,
-            ),
-            BoxGap(width: 9 * DesignVariables.widthConversion, height: 0),
-
-            Text(buttonName, style: const TextStyle(fontSize: 18)),
-
-            const Spacer(),
-
-            GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: () => showSelectDialog(
+    return (Column(children: [
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SvgPicture.asset(
+            widget.assetPath,
+            height: 20,
+            width: 20,
+          ),
+          BoxGap(width: 9 * DesignVariables.widthConversion, height: 0),
+          Text(buttonName, style: const TextStyle(fontSize: 18)),
+          const Spacer(),
+          GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () => showSelectDialog(
                 reRender: update,
                 context: widget.context,
                 options: widget.options,
@@ -85,24 +90,24 @@ class UserPrefsButtonState extends State<UserPrefsButton> {
                 multiSelect: widget.multiSelect,
                 isListLong: widget.isLongList,
                 cacheObject: '',
-                allowNull: true
-              ),
-
-              child: Row(
-                children: [
-                  Text(action, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-                  BoxGap(width: 15 * DesignVariables.widthConversion, height: 0),
-                  SvgPicture.asset(
-                    'assets/preferences/arrow-right.svg',
-                    height: 20,
-                    width: 20,
-                  ),
-                ],),
+                allowNull: true),
+            child: Row(
+              children: [
+                Text(action,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.w700)),
+                BoxGap(width: 15 * DesignVariables.widthConversion, height: 0),
+                SvgPicture.asset(
+                  'assets/preferences/arrow-right.svg',
+                  height: 20,
+                  width: 20,
+                ),
+              ],
             ),
-          ],
-        ),
-        BoxGap(width: 0, height: 9 * DesignVariables.heightConversion),
-      ])
-    );
+          ),
+        ],
+      ),
+      BoxGap(width: 0, height: 5 * DesignVariables.heightConversion),
+    ]));
   }
 }
