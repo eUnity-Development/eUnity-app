@@ -24,14 +24,36 @@ class UserPrefsState extends State<UserPrefs> {
   @override
   void initState() {
     super.initState();
-    checkIfEntered();
+    getData().then(
+      (value) {
+        checkIfEntered();
+      },
+    );
   }
 
-  void onSkip() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const Home()),
-    );
+  @override
+  void dispose() {
+    updateData();
+    super.dispose();
+  }
+
+  Future<void> getData() async {
+    await UserInfoHelper.getUserInfo();
+  }
+
+  Future<void> updateData() async {
+    await UserInfoHelper.patchUserInfo();
+  }
+
+  void onSkip() async {
+    UserInfoHelper.userInfoCache['is_profile_set_up'] = true;
+    var response = await UserInfoHelper.patchUserInfo();
+    if (response.statusCode == 200) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => Home()),
+        (Route<dynamic> route) => false,
+      );
+    }
   }
 
   void checkIfEntered() {
@@ -55,9 +77,7 @@ class UserPrefsState extends State<UserPrefs> {
   }
 
   void onNext() {
-    if (isEntered) {
-      onSkip();
-    }
+    onSkip();
   }
 
   List<Widget> createAboutButtons(
@@ -70,6 +90,7 @@ class UserPrefsState extends State<UserPrefs> {
           question: prefs['question'],
           assetPath: prefs['assetPath'],
           cacheKey: prefs['cacheKey'],
+          cacheObject: prefs['cacheObject'],
           multiSelect: prefs['multiSelect'],
           isLongList: prefs['longList'],
           updateBtn: checkIfEntered);
@@ -95,9 +116,9 @@ class UserPrefsState extends State<UserPrefs> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-        
+
               const BoxGap(width: 0, height: 7),
-        
+
               // About description
               const Text(
                 "Matches will want to know more about you!",
@@ -107,14 +128,14 @@ class UserPrefsState extends State<UserPrefs> {
                   color: Colors.black,
                 ),
               ),
-        
+
               const BoxGap(width: 0, height: 7),
               Column(children: [
                 ...createAboutButtons(context, UserPrefsList.aboutList)
               ]),
               Divider(color: DesignVariables.greyLines),
               BoxGap(width: 0, height: 5 * DesignVariables.heightConversion),
-        
+
               // Lifestyle header
               const Text(
                 "Lifestyle",
@@ -123,9 +144,9 @@ class UserPrefsState extends State<UserPrefs> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-        
+
               const BoxGap(width: 0, height: 7),
-        
+
               // Lifestyle description
               const Text(
                 "Let your matches in on your lifestyle, habits, and preferences.",
@@ -141,7 +162,7 @@ class UserPrefsState extends State<UserPrefs> {
               ]),
 
               const BoxGap(width: 0, height: 50),
-        
+
               LoginSignupButton(
                   color: isEntered
                       ? DesignVariables.primaryRed

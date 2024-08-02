@@ -14,7 +14,6 @@ type User struct {
 	PhoneNumber           string              `bson:"phone_number" json:"phone_number,omitempty"`
 	Gender                string              `bson:"gender" json:"gender,omitempty"`
 	Location              string              `bson:"location" json:"location,omitempty"`
-	Height                *Height             `bson:"height" json:"height,omitempty"`
 	DateOfBirth           *DateOfBirth        `bson:"dob" json:"dob,omitempty"`
 	FirstName             string              `bson:"first_name" json:"first_name,omitempty"`
 	LastName              string              `bson:"last_name" json:"last_name,omitempty"`
@@ -22,17 +21,20 @@ type User struct {
 	MediaFiles            []string            `bson:"media_files" json:"media_files"`
 	MatchPreferences      MatchPreferences    `bson:"match_preferences" json:"match_preferences,omitempty"`
 	Bio                   string              `bson:"bio" json:"bio,omitempty"`
+	About                 About               `bson:"about" json:"about"`
+	Lifestyle             Lifestyle           `bson:"lifestyle" json:"lifestyle"`
 }
 
 type RestrictedUser struct {
 	ID          *primitive.ObjectID `bson:"_id" json:"_id,omitempty"`
 	Gender      string              `bson:"gender" json:"gender,omitempty"`
 	Location    string              `bson:"location" json:"location,omitempty"`
-	Height      *Height             `bson:"height" json:"height,omitempty"`
 	DateOfBirth *DateOfBirth        `bson:"dob" json:"dob,omitempty"`
 	FirstName   string              `bson:"first_name" json:"first_name,omitempty"`
 	MediaFiles  []string            `bson:"media_files" json:"media_files"`
 	Bio         string              `bson:"bio" json:"bio,omitempty"`
+	About       *About              `bson:"about" json:"about"`
+	Lifestyle   *Lifestyle          `bson:"lifestyle" json:"lifestyle"`
 }
 
 type DateOfBirth struct {
@@ -55,6 +57,27 @@ type MatchPreferences struct {
 	MaximumDistance   int      `bson:"maximum_distance" json:"maximum_distance"`
 }
 
+type About struct {
+	Pronouns  string   `bson:"pronouns" json:"pronouns"`
+	Education string   `bson:"education" json:"education"`
+	Job       string   `bson:"job" json:"job"`
+	Interests []string `bson:"interests" json:"interests"`
+	Ethnicity []string `bson:"ethnicity" json:"ethnicity"`
+	Politics  string   `bson:"politics" json:"politics"`
+	Religion  []string `bson:"religion" json:"religion"`
+	City      string   `bson:"city" json:"city"`
+	Height    Height   `bson:"height" json:"height"`
+}
+
+type Lifestyle struct {
+	Exercise    string   `bson:"exercise" json:"exercise"`
+	Drinking    string   `bson:"drinking" json:"drinking"`
+	Cannabis    string   `bson:"cannabis" json:"cannabis"`
+	SocialMedia string   `bson:"social_media" json:"social_media"`
+	Pets        string   `bson:"pets" json:"pets"`
+	Diet        []string `bson:"diet" json:"diet"`
+}
+
 func FromGooglePayload(payload *idtoken.Payload) *User {
 	objectID := primitive.NewObjectID()
 	match_preferences := &MatchPreferences{
@@ -63,6 +86,30 @@ func FromGooglePayload(payload *idtoken.Payload) *User {
 		MinimumAge:        18,
 		MaximumAge:        40,
 		MaximumDistance:   20,
+	}
+	height := &Height{
+		Feet:        5,
+		Inches:      6,
+		Centimeters: 168,
+	}
+	about := &About{
+		Pronouns:  "",
+		Education: "",
+		Job:       "",
+		Interests: []string{},
+		Ethnicity: []string{},
+		Politics:  "",
+		Religion:  []string{},
+		City:      "",
+		Height:    *height,
+	}
+	lifestyle := &Lifestyle{
+		Exercise:    "",
+		Drinking:    "",
+		Cannabis:    "",
+		SocialMedia: "",
+		Pets:        "",
+		Diet:        []string{},
 	}
 	user := &User{
 		ID:             &objectID,
@@ -80,6 +127,8 @@ func FromGooglePayload(payload *idtoken.Payload) *User {
 		},
 		MediaFiles:       []string{},
 		MatchPreferences: *match_preferences,
+		About:            *about,
+		Lifestyle:        *lifestyle,
 	}
 
 	return user

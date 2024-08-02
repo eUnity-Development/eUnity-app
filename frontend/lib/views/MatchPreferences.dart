@@ -63,12 +63,11 @@ class _MatchPreferencesState extends State<MatchPreferences> {
                   .userInfoCache['match_preferences']['relationship_types']
                   .length >
               0) {
-        UserInfoHelper.userInfoCache['is_profile_set_up'] = true;
         var response = await UserInfoHelper.patchUserInfo();
         if (response.statusCode == 200) {
-          Navigator.of(context).pushAndRemoveUntil(
+          Navigator.push(
+            context,
             MaterialPageRoute(builder: (context) => UserPrefs()),
-            (Route<dynamic> route) => false,
           );
         }
       }

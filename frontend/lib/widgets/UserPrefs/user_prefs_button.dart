@@ -12,6 +12,7 @@ class UserPrefsButton extends StatefulWidget {
   final String question;
   final String assetPath;
   final String cacheKey;
+  final String cacheObject;
   final bool multiSelect;
   final bool isLongList;
   final void Function() updateBtn;
@@ -24,6 +25,7 @@ class UserPrefsButton extends StatefulWidget {
     required this.question,
     required this.assetPath,
     required this.cacheKey,
+    required this.cacheObject,
     required this.multiSelect,
     required this.isLongList,
     required this.updateBtn,
@@ -38,9 +40,6 @@ class UserPrefsButton extends StatefulWidget {
 class UserPrefsButtonState extends State<UserPrefsButton> {
   @override
   void initState() {
-    // Probably not the most efficient thing to do, but it does work
-    // to load default values and prevent errors
-    UserInfoHelper.loadDefaultUserPrefsCache();
     super.initState();
   }
 
@@ -50,21 +49,47 @@ class UserPrefsButtonState extends State<UserPrefsButton> {
   void update() {
     setState(() {
       if (widget.multiSelect &&
-          UserInfoHelper.userInfoCache[widget.cacheKey].length > 0) {
+          UserInfoHelper
+                  .userInfoCache[widget.cacheObject][widget.cacheKey].length >
+              0) {
         staticText = 'Edit';
       }
-      action = widget.multiSelect
+      if (widget.cacheKey == 'height') {
+        staticText = getImperialHeightText();
+      }
+      action = widget.multiSelect || widget.cacheKey == 'height'
           ? staticText
-          : UserInfoHelper.userInfoCache[widget.cacheKey];
+          : (UserInfoHelper.userInfoCache[widget.cacheObject]
+                      [widget.cacheKey] ==
+                  "")
+              ? staticText
+              : UserInfoHelper.userInfoCache[widget.cacheObject]
+                  [widget.cacheKey];
     });
     widget.updateBtn();
   }
 
+  String getImperialHeightText() {
+    String returnedHeight =
+        "${UserInfoHelper.userInfoCache['about']['height']['feet']}'${UserInfoHelper.userInfoCache['about']['height']['inches']}\"";
+    return returnedHeight;
+  }
+
   @override
   Widget build(BuildContext context) {
-    action = widget.multiSelect
+    print("THE CACHE KEY IS ");
+    print(widget.cacheKey);
+    print("THE TRUE VALUE IS");
+    print(UserInfoHelper.userInfoCache[widget.cacheObject][widget.cacheKey]);
+    print("THE RUNTYPE IS");
+    print(UserInfoHelper
+        .userInfoCache[widget.cacheObject][widget.cacheKey].runtimeType);
+    action = widget.multiSelect || widget.cacheKey == 'height'
         ? staticText
-        : UserInfoHelper.userInfoCache[widget.cacheKey];
+        : (UserInfoHelper.userInfoCache[widget.cacheObject][widget.cacheKey] ==
+                "")
+            ? staticText
+            : UserInfoHelper.userInfoCache[widget.cacheObject][widget.cacheKey];
     String buttonName = widget.name;
     return (Column(children: [
       Row(
@@ -89,7 +114,7 @@ class UserPrefsButtonState extends State<UserPrefsButton> {
                 assetPath: widget.assetPath,
                 multiSelect: widget.multiSelect,
                 isListLong: widget.isLongList,
-                cacheObject: '',
+                cacheObject: widget.cacheObject,
                 allowNull: true),
             child: Row(
               children: [

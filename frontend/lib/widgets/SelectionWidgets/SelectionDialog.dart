@@ -99,12 +99,14 @@ class _SelectionDialogState extends State<SelectionDialog> {
         }
       } else {
         if (widget.multiSelect) {
-          if (UserInfoHelper.userInfoCache[widget.cacheKey]
+          if (UserInfoHelper.userInfoCache[widget.cacheObject][widget.cacheKey]
               .contains(checkedVar)) {
             return true;
           }
         } else {
-          if (UserInfoHelper.userInfoCache[widget.cacheKey] == checkedVar) {
+          if (UserInfoHelper.userInfoCache[widget.cacheObject]
+                  [widget.cacheKey] ==
+              checkedVar) {
             return true;
           }
         }
@@ -129,7 +131,8 @@ class _SelectionDialogState extends State<SelectionDialog> {
         return checkedVar;
       } else {
         if (widget.multiSelect) {
-          List cacheValue = UserInfoHelper.userInfoCache[widget.cacheKey];
+          List cacheValue =
+              UserInfoHelper.userInfoCache[widget.cacheObject][widget.cacheKey];
           if (cacheValue.contains(checkedVar)) {
             cacheValue.remove(checkedVar);
           } else {
@@ -212,6 +215,7 @@ class _SelectionDialogState extends State<SelectionDialog> {
                 child: (widget.cacheKey == 'job')
                     ? SelectionDialogEnterText(
                         cacheKey: widget.cacheKey,
+                        cacheObject: widget.cacheObject,
                         labelString: 'Job Title (Optional)',
                       )
                     : (widget.cacheKey == 'height')
