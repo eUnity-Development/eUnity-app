@@ -16,15 +16,22 @@ class SelectionDialogHeight extends StatefulWidget {
 }
 
 class _SelectionDialogHeightState extends State<SelectionDialogHeight> {
-  int currentFt = 5;
-  int currentIn = 6;
+  late int currentFt;
+  late int currentIn;
+
+  @override
+  void initState() {
+    currentFt = UserInfoHelper.userInfoCache['about']['height']['feet'];
+    currentIn = UserInfoHelper.userInfoCache['about']['height']['inches'];
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     void updateHeight() {
       setState(() {
-        UserInfoHelper.userInfoCache[widget.cacheKey] =
-            '$currentFt\' $currentIn"';
+        UserInfoHelper.userInfoCache['about']['height']['feet'] = currentFt;
+        UserInfoHelper.userInfoCache['about']['height']['inches'] = currentIn;
       });
       widget.exitFunction();
     }

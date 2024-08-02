@@ -55,6 +55,31 @@ func get_random_user(amount string) ([]models.User, error) {
 			Year:  parsedDate.Year(),
 		}
 
+		height := models.Height{
+			Feet:        5,
+			Inches:      6,
+			Centimeters: 168,
+		}
+		about := models.About{
+			Pronouns:  "",
+			Education: "",
+			Job:       "",
+			Interests: []string{},
+			Ethnicity: []string{},
+			Politics:  "",
+			Religion:  []string{},
+			City:      "",
+			Height:    height,
+		}
+		lifestyle := models.Lifestyle{
+			Exercise:    "",
+			Drinking:    "",
+			Cannabis:    "",
+			SocialMedia: "",
+			Pets:        "",
+			Diet:        []string{},
+		}
+
 		user := models.User{
 			ID:             &objectId,
 			Email:          userData["email"].(string),
@@ -71,11 +96,9 @@ func get_random_user(amount string) ([]models.User, error) {
 				MaximumAge:        39,
 				MaximumDistance:   40,
 			},
+			About:       about,
+			Lifestyle:   lifestyle,
 			DateOfBirth: &dob,
-			Height: &models.Height{
-				Feet:   5,
-				Inches: 8,
-			},
 			Providers: map[string]models.Provider{
 				"google": {
 					Name:           userData["name"].(map[string]interface{})["first"].(string) + " " + userData["name"].(map[string]interface{})["last"].(string),

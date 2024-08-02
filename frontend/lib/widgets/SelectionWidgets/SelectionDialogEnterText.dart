@@ -4,9 +4,13 @@ import 'package:eunity/classes/DesignVariables.dart';
 
 class SelectionDialogEnterText extends StatefulWidget {
   final String cacheKey;
+  final String cacheObject;
   final String labelString;
   const SelectionDialogEnterText(
-      {super.key, required this.cacheKey, required this.labelString});
+      {super.key,
+      required this.cacheKey,
+      required this.labelString,
+      required this.cacheObject});
 
   @override
   State<SelectionDialogEnterText> createState() =>
@@ -19,16 +23,18 @@ class _SelectionDialogEnterTextState extends State<SelectionDialogEnterText> {
   @override
   Widget build(BuildContext context) {
     _textController.text =
-        UserInfoHelper.userInfoCache[widget.cacheKey] == 'Add'
+        UserInfoHelper.userInfoCache[widget.cacheObject][widget.cacheKey] == ""
             ? ''
-            : UserInfoHelper.userInfoCache[widget.cacheKey];
+            : UserInfoHelper.userInfoCache[widget.cacheObject][widget.cacheKey];
 
     void updateCache(String value) {
       setState(() {
         if (value != '') {
-          UserInfoHelper.userInfoCache[widget.cacheKey] = value;
+          UserInfoHelper.userInfoCache[widget.cacheObject][widget.cacheKey] =
+              value;
         } else {
-          UserInfoHelper.userInfoCache[widget.cacheKey] = 'Add';
+          UserInfoHelper.userInfoCache[widget.cacheObject][widget.cacheKey] =
+              '';
         }
       });
     }
