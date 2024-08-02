@@ -1,6 +1,6 @@
 import 'package:eunity/classes/DesignVariables.dart';
 import 'package:eunity/classes/UserInfoHelper.dart';
-import 'package:eunity/home.dart';
+import 'package:eunity/views/UserPrefs.dart';
 import 'package:eunity/widgets/LoginSignup/login_signup_button.dart';
 import 'package:eunity/widgets/LoginSignup/login_signup_button_content.dart';
 import 'package:eunity/widgets/NameDOBGender/birthday_classes.dart';
@@ -67,7 +67,7 @@ class _MatchPreferencesState extends State<MatchPreferences> {
         var response = await UserInfoHelper.patchUserInfo();
         if (response.statusCode == 200) {
           Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => Home()),
+            MaterialPageRoute(builder: (context) => UserPrefs()),
             (Route<dynamic> route) => false,
           );
         }

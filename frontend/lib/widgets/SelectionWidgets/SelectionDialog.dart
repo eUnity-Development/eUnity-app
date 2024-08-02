@@ -1,4 +1,6 @@
 import 'package:eunity/classes/UserInfoHelper.dart';
+import 'package:eunity/widgets/SelectionWidgets/SelectionDialogEnterText.dart';
+import 'package:eunity/widgets/SelectionWidgets/SelectionDialogHeight.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,6 +12,7 @@ class SelectionDialog extends StatefulWidget {
   final String assetPath;
   final bool multiSelect;
   final String cacheKey;
+  final bool? isListLong;
   final String cacheObject;
   final bool allowNull;
   const SelectionDialog({
@@ -19,6 +22,7 @@ class SelectionDialog extends StatefulWidget {
     required this.assetPath,
     required this.multiSelect,
     required this.cacheKey,
+    this.isListLong,
     required this.cacheObject,
     required this.allowNull,
   });
@@ -28,9 +32,11 @@ class SelectionDialog extends StatefulWidget {
 }
 
 class _SelectionDialogState extends State<SelectionDialog> {
+  int maxInterests = 7;
+
   @override
   Widget build(BuildContext context) {
-    const TextStyle questionSyle = TextStyle(
+    const TextStyle questionStyle = TextStyle(
         color: Colors.black, fontWeight: FontWeight.w700, fontSize: 24);
 
     BoxDecoration selectedBox = BoxDecoration(
@@ -50,8 +56,32 @@ class _SelectionDialogState extends State<SelectionDialog> {
         fontSize: 16,
         color: DesignVariables.primaryRed);
 
-    TextStyle unselectedText = TextStyle(
+    TextStyle unselectedText = const TextStyle(
         fontWeight: FontWeight.w500, fontSize: 16, color: Colors.black);
+
+    bool isLongList = widget.isListLong ?? false;
+
+    double maxHeight = MediaQuery.of(context).size.height -
+        (40 * DesignVariables.heightConversion);
+    double minHeight = 400;
+    double height = (isLongList ? 32.0 : 80.0) * widget.options.length;
+
+    // job requires user input, so make room for keyboard
+    if (widget.cacheKey == 'job') {
+      height = maxHeight / 1.25;
+    }
+
+    if (widget.question.length > 25) {
+      height += 100.0;
+    }
+
+    if (height < minHeight) {
+      height = minHeight;
+    } else if (height > maxHeight) {
+      height = maxHeight;
+    }
+
+    int maxInterests = 7;
 
     bool checkIfSelected(var checkedVar) {
       if (widget.cacheObject != '') {
@@ -103,7 +133,11 @@ class _SelectionDialogState extends State<SelectionDialog> {
           if (cacheValue.contains(checkedVar)) {
             cacheValue.remove(checkedVar);
           } else {
-            cacheValue.add(checkedVar);
+            if (widget.cacheKey != 'interests' ||
+                (widget.cacheKey == 'interests' &&
+                    cacheValue.length <= maxInterests)) {
+              cacheValue.add(checkedVar);
+            }
           }
           return cacheValue;
         }
@@ -112,15 +146,15 @@ class _SelectionDialogState extends State<SelectionDialog> {
     }
 
     return Container(
-        height: 400,
+        height: height,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(25), topRight: Radius.circular(25)),
             color: Colors.white,
             border: Border.all(color: DesignVariables.greyLines, width: 2)),
         child: Padding(
-          padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+          padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
           child: Column(
             children: [
               Align(
@@ -136,66 +170,121 @@ class _SelectionDialogState extends State<SelectionDialog> {
                   },
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                (widget.assetPath == 'None')
-                    ? SizedBox()
-                    : Row(
-                        children: [
-                          SvgPicture.asset(
-                            widget.assetPath,
-                            height: 31,
-                            width: 31,
-                          ),
-                          SizedBox(width: 5)
-                        ],
-                      ),
-                Text(
-                  widget.question,
-                  style: questionSyle,
-                )
-              ]),
-              SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                height: 200,
-                child: ListView.builder(
-                  itemBuilder: (BuildContext context, int index) {
-                    if (index > (widget.options.length) - 1) {
-                      return null;
-                    }
-                    return GestureDetector(
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 15, left: 40, right: 40),
-                        child: Container(
-                          width: double.infinity,
-                          height: 42,
-                          decoration: (checkIfSelected(widget.options[index]))
-                              ? selectedBox
-                              : unselectedBox,
-                          child: Center(
-                            child: Text(
-                              widget.options[index],
-                              style: (checkIfSelected(widget.options[index]))
-                                  ? selectedText
-                                  : unselectedText,
+              Center(
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    children: [
+                      if (widget.assetPath != 'None') ...[
+                        WidgetSpan(
+                          child: Transform.translate(
+                            // manually center the svg
+                            offset: Offset(
+                                0, (questionStyle.fontSize ?? 24) * 0.16),
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 5.0),
+                              child: SvgPicture.asset(
+                                widget.assetPath,
+                                height: 31,
+                                width: 31,
+                              ),
                             ),
                           ),
                         ),
+                      ],
+                      TextSpan(
+                        text: widget.question,
+                        style: questionStyle,
                       ),
-                      onTap: () async {
-                        dynamic newValue =
-                            getNewCacheValue(widget.options[index]);
-                        await UserInfoHelper.updateCacheVariable(
-                            widget.cacheKey, widget.cacheObject, newValue);
-                        setState(() {});
-                      },
-                    );
-                  },
+                    ],
+                  ),
                 ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                height: height - 150,
+                width: double.infinity,
+                child: (widget.cacheKey == 'job')
+                    ? SelectionDialogEnterText(
+                        cacheKey: widget.cacheKey,
+                        labelString: 'Job Title (Optional)',
+                      )
+                    : (widget.cacheKey == 'height')
+                        ? SelectionDialogHeight(
+                            exitFunction: () => Navigator.pop(context),
+                            cacheKey: widget.cacheKey,
+                          )
+                        : Wrap(
+                            spacing: 6.0,
+                            alignment: WrapAlignment.center,
+                            children: List<Widget>.generate(
+                                widget.options.length, (index) {
+                              return GestureDetector(
+                                child: (!isLongList)
+                                    ? Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 15, left: 40, right: 40),
+                                        child: Container(
+                                          width: double.infinity,
+                                          height: 42,
+                                          decoration: (checkIfSelected(
+                                                  widget.options[index]))
+                                              ? selectedBox
+                                              : unselectedBox,
+                                          child: Center(
+                                            child: Text(
+                                              widget.options[index],
+                                              style: (checkIfSelected(
+                                                      widget.options[index]))
+                                                  ? selectedText
+                                                  : unselectedText,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0, horizontal: 1.0),
+                                        child: Wrap(
+                                          alignment: WrapAlignment.center,
+                                          children: [
+                                            Container(
+                                              decoration: (checkIfSelected(
+                                                      widget.options[index]))
+                                                  ? selectedBox
+                                                  : unselectedBox,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 16.0,
+                                                      vertical: 3.5),
+                                              child: Text(
+                                                widget.options[index],
+                                                style: (checkIfSelected(
+                                                        widget.options[index]))
+                                                    ? selectedText
+                                                    : unselectedText,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                onTap: () async {
+                                  dynamic newValue =
+                                      getNewCacheValue(widget.options[index]);
+                                  await UserInfoHelper.updateCacheVariable(
+                                      widget.cacheKey,
+                                      widget.cacheObject,
+                                      newValue);
+                                  setState(() {});
+                                },
+                              );
+                            }),
+                          ),
               ),
             ],
           ),

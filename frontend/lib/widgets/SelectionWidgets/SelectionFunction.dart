@@ -12,8 +12,10 @@ void showSelectDialog({
   required bool multiSelect,
   required bool allowNull,
   required reRender,
+  bool? isListLong
 }) {
   showModalBottomSheet(
+    isScrollControlled: true,
     context: context,
     backgroundColor: Colors.white,
     builder: (BuildContext context) {
@@ -24,6 +26,7 @@ void showSelectDialog({
         cacheKey: cacheKey,
         cacheObject: cacheObject,
         multiSelect: multiSelect,
+        isListLong: isListLong,
         allowNull: allowNull,
       );
     },

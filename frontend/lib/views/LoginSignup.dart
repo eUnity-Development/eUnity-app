@@ -81,21 +81,11 @@ class _LoginSignupState extends State<LoginSignup> {
 
   @override
   Widget build(BuildContext context) {
-    /*
-    Since we used an iPhone 15 pro max (size: 430x932) for Figma, it's important to
-    consider other screen sizes. This is why I've made a ratio of the sizes we have
-    on Figma divided by the iPhone's size, which ensures that ratio will be mantained
-    on other devices.
-    
-    TLDR: Makes things scale nicely on smaller screens, so it'll look closer to Figma.
-    */
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final double screenHeight = MediaQuery.of(context).size.height;
 
-    final double btnWidth = (334.67 / 430) * screenWidth;
-    final double btnHeight = (52 / 932) * screenHeight;
+    final double btnWidth = 334 * DesignVariables.widthConversion;
+    final double btnHeight = 52 * DesignVariables.heightConversion;
 
-    final double svgOffset = (20 / 430) * screenWidth;
+    final double svgOffset = 20 * DesignVariables.widthConversion;
     const double svgDimensions = 27;
     const double fontSize = 16.5;
     const Color fontColor = Color.fromRGBO(0, 0, 0, 0.5);
@@ -103,7 +93,7 @@ class _LoginSignupState extends State<LoginSignup> {
     final Color loginBorder = DesignVariables.greyLines;
     const Color loginBackground = Colors.transparent;
 
-    final double spaceBetweenLogin = ((31 / 932) * screenHeight);
+    final double spaceBetweenLogin = 31 * DesignVariables.heightConversion;
 
     return Scaffold(
       body: Column(
@@ -112,13 +102,13 @@ class _LoginSignupState extends State<LoginSignup> {
           Center(
             child: Image(
               image: const AssetImage('assets/e-unity-logo-and-name.png'),
-              width: ((330 / 430) * screenWidth),
-              height: ((118.75 / 932) * screenHeight),
+              width: 330 * DesignVariables.widthConversion,
+              height: 118.75 * DesignVariables.heightConversion,
             ),
           ),
 
           SizedBox(
-            height: ((45 / 932) * screenHeight),
+            height: 45 * DesignVariables.heightConversion,
           ),
 
           Center(
@@ -132,50 +122,7 @@ class _LoginSignupState extends State<LoginSignup> {
             ),
           ),
 
-          SizedBox(height: ((73 / 932) * screenHeight)),
-          /*
-          // Sign up
-          LoginSignupButton(
-            color: DesignVariables.primaryRed,
-            borderColor: Colors.transparent,
-            buttonContent: const Text(
-              "Sign Up Here!",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 21,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            height: btnHeight,
-            width: btnWidth,
-            onTap: testSignup,
-          ),
-          
-          SizedBox(
-            height: ((92/932) * screenHeight)
-          ),
-
-          // Email login
-          LoginSignupButton(
-            color: loginBackground,
-            borderColor: loginBorder,
-            buttonContent: LoginSignupButtonContent(
-              svgOffset: svgOffset, 
-              svgPath: 'assets/login/envelope.svg', 
-              svgDimensions: svgDimensions, 
-              text: 'Log in with email', 
-              fontSize: fontSize, 
-              fontColor: fontColor
-            ),
-            
-            height: btnHeight,
-            width: btnWidth,
-            onTap: testLogin,
-          ),
-
-          SizedBox(
-            height: spaceBetweenLogin
-          ),*/
+          SizedBox(height: 73 * DesignVariables.heightConversion),
 
           // Phone login
           LoginSignupButton(

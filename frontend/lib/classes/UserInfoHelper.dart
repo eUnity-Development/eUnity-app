@@ -8,6 +8,32 @@ class UserInfoHelper {
   static Map<dynamic, dynamic> tempCache = {};
   static Map<dynamic, dynamic> userInfoCache = {};
 
+  static void loadDefaultCache() {
+    userInfoCache['genderPreference'] = ['Women'];
+    userInfoCache['relationshipType'] = 'Long Term Relationships';
+    userInfoCache['userGender'] = '';
+    userInfoCache['userGenderOptions'] = 'Non-Binary';
+  }
+
+  static void loadDefaultUserPrefsCache() {
+    userInfoCache['pronouns'] = 'Add';
+    userInfoCache['education'] = 'Add';
+    userInfoCache['job'] = 'Add';
+    userInfoCache['interests'] = [];
+    userInfoCache['ethnicity'] = [];
+    userInfoCache['politics'] = 'Add';
+    userInfoCache['religion'] = [];
+    userInfoCache['city'] = 'Edit';
+
+    userInfoCache['exercise'] = 'Add';
+    userInfoCache['drinking'] = 'Add';
+    userInfoCache['cannabis'] = 'Add';
+    userInfoCache['height'] = 'Add';
+    userInfoCache['social-media'] = 'Add';
+    userInfoCache['pets'] = 'Add';
+    userInfoCache['diet'] = [];
+  }
+  
   static void clearTempCache() {
     tempCache = {};
   }

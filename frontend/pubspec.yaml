@@ -51,6 +51,7 @@ dependencies:
   flutter_swipe_detector: ^2.0.0
   shared_preferences: ^2.2.3
   rive: ^0.13.7
+  numberpicker: ^2.1.2
 
 dev_dependencies:
   flutter_test:
@@ -82,6 +83,7 @@ flutter:
     - assets/login/
     - assets/MiscIcons/
     - assets/icons/
+    - assets/preferences/
     - assets/icons/MatchingInterest4.riv
     - assets/icons/NonMatchingInterest.riv
 
