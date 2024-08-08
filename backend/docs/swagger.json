@@ -4,6 +4,64 @@
         "contact": {}
     },
     "paths": {
+        "/ai_analysis/create_analysis": {
+            "post": {
+                "description": "Creates an AI Analysis for the user profile",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AI Analysis"
+                ],
+                "summary": "Create an AI Analysis",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/ai_analysis/get_analysis": {
+            "get": {
+                "description": "Gets the most recent AI Analysis of the user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AI Analysis"
+                ],
+                "summary": "Gets the AI Analysis",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/google": {
             "post": {
                 "description": "Accepts jwt idToken from flutter and sets session cookies",

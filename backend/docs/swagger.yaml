@@ -1,6 +1,44 @@
 info:
   contact: {}
 paths:
+  /ai_analysis/create_analysis:
+    post:
+      consumes:
+      - application/json
+      description: Creates an AI Analysis for the user profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Create an AI Analysis
+      tags:
+      - AI Analysis
+  /ai_analysis/get_analysis:
+    get:
+      consumes:
+      - application/json
+      description: Gets the most recent AI Analysis of the user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Gets the AI Analysis
+      tags:
+      - AI Analysis
   /auth/google:
     post:
       consumes:

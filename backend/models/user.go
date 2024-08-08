@@ -78,21 +78,17 @@ type Lifestyle struct {
 	Diet        []string `bson:"diet" json:"diet"`
 }
 
-func FromGooglePayload(payload *idtoken.Payload) *User {
-	objectID := primitive.NewObjectID()
-	match_preferences := &MatchPreferences{
-		Genders:           []string{},
-		RelationshipTypes: []string{},
-		MinimumAge:        18,
-		MaximumAge:        40,
-		MaximumDistance:   20,
-	}
-	height := &Height{
+func getDefaultHeight() *Height {
+	return &Height{
 		Feet:        5,
 		Inches:      6,
 		Centimeters: 168,
 	}
-	about := &About{
+}
+
+func getDefaultAbout() *About {
+	height := getDefaultHeight()
+	return &About{
 		Pronouns:  "",
 		Education: "",
 		Job:       "",
@@ -103,7 +99,20 @@ func FromGooglePayload(payload *idtoken.Payload) *User {
 		City:      "",
 		Height:    *height,
 	}
-	lifestyle := &Lifestyle{
+}
+
+func getDefaultMatchPref() *MatchPreferences {
+	return &MatchPreferences{
+		Genders:           []string{},
+		RelationshipTypes: []string{},
+		MinimumAge:        18,
+		MaximumAge:        40,
+		MaximumDistance:   20,
+	}
+}
+
+func getDefaultLifestyle() *Lifestyle {
+	return &Lifestyle{
 		Exercise:    "",
 		Drinking:    "",
 		Cannabis:    "",
@@ -111,6 +120,13 @@ func FromGooglePayload(payload *idtoken.Payload) *User {
 		Pets:        "",
 		Diet:        []string{},
 	}
+}
+
+func FromGooglePayload(payload *idtoken.Payload) *User {
+	objectID := primitive.NewObjectID()
+	match_preferences := getDefaultMatchPref()
+	about := getDefaultAbout()
+	lifestyle := getDefaultLifestyle()
 	user := &User{
 		ID:             &objectID,
 		Email:          payload.Claims["email"].(string),

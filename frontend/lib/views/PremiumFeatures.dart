@@ -1,6 +1,6 @@
+import 'package:eunity/views/AIAnalysis.dart';
 import 'package:flutter/material.dart';
 import 'package:eunity/classes/DesignVariables.dart';
-import 'package:eunity/views/OtherPremiumFeatures.dart';
 import 'package:eunity/views/PeopleThatLikeYou.dart';
 
 class PremiumFeatures extends StatefulWidget {
@@ -15,7 +15,7 @@ class _PremiumFeaturesState extends State<PremiumFeatures> {
 
   final screens = [
     const PeopleThatLikeYou(),
-    const OtherPremiumFeatures(),
+    const AIAnalysis(),
   ];
 
   void changeScreen(int index) async {
@@ -64,7 +64,7 @@ class _PremiumFeaturesState extends State<PremiumFeatures> {
                   alignment: Alignment.center,
                   child: GestureDetector(
                     child: Text(
-                      "Other Premium Features",
+                      "AI Profile Analysis",
                       style: TextStyle(
                           color: (selectedIndex == 1)
                               ? DesignVariables.primaryRed

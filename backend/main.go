@@ -57,6 +57,7 @@ func main() {
 	routes.Twilio_routes(r.Group("/twilio"))
 	routes.Report_Issue_routes(r.Group("/report_issue", SessionManager.AuthRequired()))
 	routes.Report_User_routes(r.Group("/report_user", SessionManager.AuthRequired()))
+	routes.AI_Analysis_routes(r.Group("/ai_analysis", SessionManager.AuthRequired()))
 
 	//development only routes
 	routes.Dev_routes(r.Group("/dev"))

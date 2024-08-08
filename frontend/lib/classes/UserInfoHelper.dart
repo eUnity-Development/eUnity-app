@@ -149,4 +149,38 @@ class UserInfoHelper {
       );
     }
   }
+
+  static Future<Response> getAIAnalysis() async {
+    String endPoint = '/ai_analysis/get_analysis';
+    var url = '$defaultHost$endPoint';
+    try {
+      final response = await RouteHandler.dio.get(url);
+      return response;
+    } on DioException catch (e) {
+      print(e);
+      return Response(
+        requestOptions: RequestOptions(path: url),
+        data: {'message': 'Unable to connect to server'},
+        statusCode: 500,
+        statusMessage: 'Unable to connect to server',
+      );
+    }
+  }
+
+  static Future<Response> requestAIAnalysis() async {
+    String endPoint = '/ai_analysis/create_analysis';
+    var url = '$defaultHost$endPoint';
+    try {
+      final response = await RouteHandler.dio.post(url);
+      return response;
+    } on DioException catch (e) {
+      print(e);
+      return Response(
+        requestOptions: RequestOptions(path: url),
+        data: {'message': 'Unable to connect to server'},
+        statusCode: 500,
+        statusMessage: 'Unable to connect to server',
+      );
+    }
+  }
 }
