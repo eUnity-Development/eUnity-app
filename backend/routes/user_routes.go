@@ -21,6 +21,9 @@ func User_routes(r *gin.RouterGroup) {
 	//GET USER BY ID
 	r.GET("/get_user/:user_id", User_controllers.GET_user)
 
+	//GET LIST CONTAINING USERS
+	r.GET("/get_users", User_controllers.GET_users)
+
 	//LOGOUT
 	r.POST("/logout", Check_User_Permissions, User_controllers.POST_logout)
 

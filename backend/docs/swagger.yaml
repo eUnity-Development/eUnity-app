@@ -431,6 +431,36 @@ paths:
       summary: Add Report User
       tags:
       - Report User
+  /swipe/add_swipe:
+    post:
+      consumes:
+      - application/json
+      description: Adds a new Swipe record to the database
+      parameters:
+      - description: Swiped User
+        in: formData
+        name: swiped_user
+        required: true
+        type: string
+      - description: Swiped Direction (true for right, false for left)
+        in: formData
+        name: swiped_direction
+        required: true
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Add Swipe
+      tags:
+      - Swipe
   /twilio/send-sms:
     post:
       consumes:
@@ -522,6 +552,25 @@ paths:
           schema:
             type: string
       summary: Get User Route
+      tags:
+      - User
+  /users/get_users:
+    get:
+      consumes:
+      - application/json
+      description: Returns a list of users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Get Multiple Users
       tags:
       - User
   /users/logout:

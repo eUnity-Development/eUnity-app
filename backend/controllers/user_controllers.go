@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 	"reflect"
 
 	"eunity.com/backend-main/helpers/DBManager"
@@ -181,6 +182,57 @@ func (u *User_controllers) GET_user(c *gin.Context) {
 
 	c.JSON(200, result)
 
+}
+
+// @Summary Get Multiple Users
+// @Schemes
+// @Description Returns a list of users
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200 {string} Returned list of users
+// @Failure 400 {string} Unable to return users
+// @Router /users/get_users [get]
+func (u *User_controllers) GET_users(c *gin.Context) {
+	// Define a slice to hold the users
+	var restrictedUsers []models.RestrictedUser
+
+	// Find all users in the database
+	cursor, err := DBManager.DB.Collection("users").Find(context.Background(), bson.M{})
+	if err != nil {
+		c.JSON(400, gin.H{
+			"response": "Error fetching users",
+		})
+		return
+	}
+	defer cursor.Close(context.Background())
+
+	// Iterate through the cursor and decode each document into the users slice
+	for cursor.Next(context.Background()) {
+		result := models.RestrictedUser{}
+		if err = cursor.Decode(&result); err != nil {
+			c.JSON(400, gin.H{
+				"response": "Error decoding user",
+			})
+			return
+		}
+
+		restrictedUsers = append(restrictedUsers, result)
+	}
+
+	if err := cursor.Err(); err != nil {
+		c.JSON(400, gin.H{
+			"response": "Cursor error",
+		})
+		return
+	}
+
+	// Return the list of users
+	// Iterate through the array
+	for i := 0; i < len(restrictedUsers); i++ {
+		fmt.Println(restrictedUsers[i])
+	}
+	c.JSON(200, restrictedUsers)
 }
 
 // @Summary User logout route
