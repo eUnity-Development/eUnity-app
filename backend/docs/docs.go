@@ -674,6 +674,51 @@ const docTemplate = `{
                 }
             }
         },
+        "/swipe/add_swipe": {
+            "post": {
+                "description": "Adds a new Swipe record to the database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Swipe"
+                ],
+                "summary": "Add Swipe",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Swiped User",
+                        "name": "swiped_user",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Swiped Direction (true for right, false for left)",
+                        "name": "swiped_direction",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/twilio/send-sms": {
             "post": {
                 "description": "Send an SMS message",
@@ -797,6 +842,35 @@ const docTemplate = `{
                         "required": true
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/get_users": {
+            "get": {
+                "description": "Returns a list of users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get Multiple Users",
                 "responses": {
                     "200": {
                         "description": "OK",
