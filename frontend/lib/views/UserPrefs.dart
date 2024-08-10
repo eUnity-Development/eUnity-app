@@ -10,7 +10,8 @@ import 'package:flutter/material.dart';
 import '../widgets/NameDOBGender/birthday_classes.dart';
 
 class UserPrefs extends StatefulWidget {
-  const UserPrefs({super.key});
+  final bool inSetUp;
+  const UserPrefs({super.key, required this.inSetUp});
 
   @override
   State<StatefulWidget> createState() {
@@ -163,6 +164,7 @@ class UserPrefsState extends State<UserPrefs> {
 
               const BoxGap(width: 0, height: 50),
 
+              widget.inSetUp ?
               LoginSignupButton(
                   color: isEntered
                       ? DesignVariables.primaryRed
@@ -180,7 +182,7 @@ class UserPrefsState extends State<UserPrefs> {
                     fontColor: Colors.white,
                     isRight: true,
                     fontWeight: FontWeight.w700,
-                  )),
+                  )) : const SizedBox(),
               const BoxGap(width: 0, height: 36)
             ])),
       ),
