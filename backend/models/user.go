@@ -88,9 +88,9 @@ func FromGooglePayload(payload *idtoken.Payload) *User {
 		MaximumDistance:   20,
 	}
 	height := &Height{
-		Feet:        5,
-		Inches:      6,
-		Centimeters: 168,
+		Feet:        0,
+		Inches:      0,
+		Centimeters: 0,
 	}
 	about := &About{
 		Pronouns:  "",

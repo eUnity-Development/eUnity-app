@@ -38,13 +38,23 @@ class UserPrefsButton extends StatefulWidget {
 }
 
 class UserPrefsButtonState extends State<UserPrefsButton> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   String action = '';
   String staticText = 'Add';
+
+  void setHeight() {
+    if (widget.cacheKey == 'height' && 
+        UserInfoHelper.userInfoCache[widget.cacheObject][widget.cacheKey]['feet'] != null &&
+        UserInfoHelper.userInfoCache[widget.cacheObject][widget.cacheKey]['inches'] != null) {
+      staticText = getImperialHeightText();
+    }
+  }
+
+
+  @override
+  void initState() {
+    setHeight();
+    super.initState();
+  }
 
   void update() {
     setState(() {
@@ -54,9 +64,7 @@ class UserPrefsButtonState extends State<UserPrefsButton> {
               0) {
         staticText = 'Edit';
       }
-      if (widget.cacheKey == 'height') {
-        staticText = getImperialHeightText();
-      }
+      setHeight();
       action = widget.multiSelect || widget.cacheKey == 'height'
           ? staticText
           : (UserInfoHelper.userInfoCache[widget.cacheObject]
