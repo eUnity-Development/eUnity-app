@@ -81,7 +81,7 @@ func (d *Dev_Controllers) Generate_Mock_Users(c *gin.Context) {
 	//always return a random user email that I am able to login with
 
 	c.JSON(200, gin.H{
-		"response":          "Mock users created",
+		"response":          amount + " mock users created",
 		"random_user_email": user.Email,
 	})
 }

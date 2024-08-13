@@ -298,6 +298,32 @@ paths:
       summary: Gets user image
       tags:
       - Media
+  /messaging/send:
+    post:
+      consumes:
+      - application/json
+      description: Send a message
+      parameters:
+      - description: Message to send
+        in: query
+        name: message
+        required: true
+        type: string
+      - description: userId of the user
+        in: query
+        name: userID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Send a message
+      tags:
+      - Messaging
   /report_issue/add_report:
     post:
       consumes:
