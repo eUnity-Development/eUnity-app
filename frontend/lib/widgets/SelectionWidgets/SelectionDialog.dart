@@ -99,12 +99,12 @@ class _SelectionDialogState extends State<SelectionDialog> {
         }
       } else {
         if (widget.multiSelect) {
-          if (UserInfoHelper.userInfoCache[widget.cacheObject][widget.cacheKey]
+          if (UserInfoHelper.userInfoCache[widget.cacheKey]
               .contains(checkedVar)) {
             return true;
           }
         } else {
-          if (UserInfoHelper.userInfoCache[widget.cacheObject]
+          if (UserInfoHelper.userInfoCache
                   [widget.cacheKey] ==
               checkedVar) {
             return true;
@@ -132,7 +132,7 @@ class _SelectionDialogState extends State<SelectionDialog> {
       } else {
         if (widget.multiSelect) {
           List cacheValue =
-              UserInfoHelper.userInfoCache[widget.cacheObject][widget.cacheKey];
+              UserInfoHelper.userInfoCache[widget.cacheKey];
           if (cacheValue.contains(checkedVar)) {
             cacheValue.remove(checkedVar);
           } else {
