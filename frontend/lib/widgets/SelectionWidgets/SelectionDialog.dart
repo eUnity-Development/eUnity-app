@@ -104,6 +104,10 @@ class _SelectionDialogState extends State<SelectionDialog> {
             return true;
           }
         } else {
+          if (widget.cacheKey == 'userGenderOptions' &&
+            UserInfoHelper.tempCache['userGender'] == checkedVar) { 
+              return true;
+          }
           if (UserInfoHelper.userInfoCache
                   [widget.cacheKey] ==
               checkedVar) {
