@@ -25,6 +25,9 @@ class UserInfoHelper {
   static Future<void> updateCacheVariable(
       String variable, String object, var newValue) async {
     if (object == '') {
+      if (variable == 'userGenderOptions') {
+        tempCache['userGender'] = newValue;
+      } 
       userInfoCache[variable] = newValue;
     } else {
       userInfoCache[object][variable] = newValue;
