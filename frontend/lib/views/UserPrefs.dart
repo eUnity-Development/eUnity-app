@@ -3,6 +3,7 @@ import 'package:eunity/classes/UserInfoHelper.dart';
 import 'package:eunity/home.dart';
 import 'package:eunity/widgets/LoginSignup/login_signup_button.dart';
 import 'package:eunity/widgets/LoginSignup/login_signup_button_content.dart';
+import 'package:eunity/widgets/TopBars/NoLogoTopBar.dart';
 import 'package:eunity/widgets/TopBars/PushedScreenTopBar.dart';
 import 'package:eunity/widgets/UserPrefs/user_prefs_button.dart';
 import 'package:eunity/widgets/UserPrefs/user_prefs_list.dart';
@@ -100,9 +101,12 @@ class UserPrefsState extends State<UserPrefs> {
 
   @override
   Widget build(BuildContext context) {
+    dynamic appBar = widget.inSetUp
+        ? PushedScreenTopBar(hasSkip: true, onSkip: onSkip)
+        : const NoLogoTopBar(title: "My Info");
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: PushedScreenTopBar(hasSkip: true, onSkip: onSkip),
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Padding(
             padding: EdgeInsets.symmetric(
@@ -118,19 +122,19 @@ class UserPrefsState extends State<UserPrefs> {
                 ),
               ),
 
-              const BoxGap(width: 0, height: 7),
+              // const BoxGap(width: 0, height: 4),
 
               // About description
-              const Text(
+              widget.inSetUp ? const Text(
                 "Matches will want to know more about you!",
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                   color: Colors.black,
                 ),
-              ),
+              ) : const SizedBox(),
 
-              const BoxGap(width: 0, height: 7),
+              const BoxGap(width: 0, height: 10),
               Column(children: [
                 ...createAboutButtons(context, UserPrefsList.aboutList)
               ]),
@@ -146,18 +150,18 @@ class UserPrefsState extends State<UserPrefs> {
                 ),
               ),
 
-              const BoxGap(width: 0, height: 7),
+              // const BoxGap(width: 0, height: 4),
 
               // Lifestyle description
-              const Text(
+              widget.inSetUp ? const Text(
                 "Let your matches in on your lifestyle, habits, and preferences.",
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                   color: Colors.black,
                 ),
-              ),
-              const BoxGap(width: 0, height: 7),
+              ) : const SizedBox(),
+              const BoxGap(width: 0, height: 10),
               Column(children: [
                 ...createAboutButtons(context, UserPrefsList.lifestyleList)
               ]),

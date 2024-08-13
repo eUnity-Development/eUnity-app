@@ -44,12 +44,11 @@ class _EditProfileState extends State<EditProfile> {
     await UserInfoHelper.patchUserInfo();
   }
 
-  void temp() {
-      Navigator.push(
+  void editUserPrefs() {
+    Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => UserPrefs(inSetUp: false)),
+      MaterialPageRoute(builder: (context) => const UserPrefs(inSetUp: false)),
     );
-    print('hooooo');
   }
 
   void updateState() async {
@@ -137,12 +136,12 @@ class _EditProfileState extends State<EditProfile> {
             ),
             LoginSignupButton(
               color: DesignVariables.offWhite, 
-              onTap: temp, 
+              onTap: editUserPrefs, 
               borderColor: DesignVariables.greyLines, 
               height: 50, 
               width: double.infinity, 
               buttonContent: const Text(
-                'Edit User Preferences', 
+                'Edit My Info', 
                 style: TextStyle(
                   fontSize: 20, 
                   fontWeight: FontWeight.w700
