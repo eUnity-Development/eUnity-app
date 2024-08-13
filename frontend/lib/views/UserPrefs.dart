@@ -152,7 +152,7 @@ class UserPrefsState extends State<UserPrefs> {
 
               // const BoxGap(width: 0, height: 4),
 
-              // Lifestyle description
+              // Relationship description
               widget.inSetUp ? const Text(
                 "Let your matches in on your lifestyle, habits, and preferences.",
                 style: TextStyle(
@@ -165,6 +165,32 @@ class UserPrefsState extends State<UserPrefs> {
               Column(children: [
                 ...createAboutButtons(context, UserPrefsList.lifestyleList)
               ]),
+
+              widget.inSetUp
+                  ? const SizedBox()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                          Divider(color: DesignVariables.greyLines),
+                          BoxGap(
+                              width: 0,
+                              height: 5 * DesignVariables.heightConversion),
+
+                          // Relationship header
+                          const Text(
+                            "Relationship",
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+
+                          const BoxGap(width: 0, height: 10),
+                          Column(children: [
+                            ...createAboutButtons(
+                                context, UserPrefsList.relationshipList)
+                          ]),
+                        ]),
 
               const BoxGap(width: 0, height: 50),
 
