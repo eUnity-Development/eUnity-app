@@ -49,22 +49,25 @@ class UserPrefsButtonState extends State<UserPrefsButton> {
     }
   }
 
+  void setStaticText() {
+    if (widget.multiSelect &&
+        UserInfoHelper
+                .userInfoCache[widget.cacheObject][widget.cacheKey].length >
+            0) {
+      staticText = 'Edit';
+    }
+    setHeight();
+  }
 
   @override
   void initState() {
-    setHeight();
+    setStaticText();
     super.initState();
   }
 
   void update() {
     setState(() {
-      if (widget.multiSelect &&
-          UserInfoHelper
-                  .userInfoCache[widget.cacheObject][widget.cacheKey].length >
-              0) {
-        staticText = 'Edit';
-      }
-      setHeight();
+      setStaticText();
       action = widget.multiSelect || widget.cacheKey == 'height'
           ? staticText
           : (UserInfoHelper.userInfoCache[widget.cacheObject]
