@@ -128,7 +128,11 @@ class _SelectionDialogState extends State<SelectionDialog> {
               cacheValue.remove(checkedVar);
             }
           } else {
-            cacheValue.add(checkedVar);
+            if (widget.cacheKey != 'interests' ||
+                (widget.cacheKey == 'interests' &&
+                    cacheValue.length < maxInterests)) {
+              cacheValue.add(checkedVar);
+            }
           }
           return cacheValue;
         }
@@ -140,11 +144,7 @@ class _SelectionDialogState extends State<SelectionDialog> {
           if (cacheValue.contains(checkedVar)) {
             cacheValue.remove(checkedVar);
           } else {
-            if (widget.cacheKey != 'interests' ||
-                (widget.cacheKey == 'interests' &&
-                    cacheValue.length <= maxInterests)) {
-              cacheValue.add(checkedVar);
-            }
+            cacheValue.add(checkedVar);
           }
           return cacheValue;
         }
