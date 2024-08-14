@@ -5,8 +5,8 @@ import 'package:eunity/widgets/LoginSignup/login_signup_button.dart';
 import 'package:eunity/widgets/LoginSignup/login_signup_button_content.dart';
 import 'package:eunity/widgets/TopBars/NoLogoTopBar.dart';
 import 'package:eunity/widgets/TopBars/PushedScreenTopBar.dart';
-import 'package:eunity/widgets/UserPrefs/user_prefs_button.dart';
 import 'package:eunity/widgets/UserPrefs/user_prefs_list.dart';
+import 'package:eunity/widgets/UserPrefs/user_prefs_section.dart';
 import 'package:flutter/material.dart';
 import '../widgets/NameDOBGender/birthday_classes.dart';
 
@@ -64,7 +64,7 @@ class UserPrefsState extends State<UserPrefs> {
         UserPrefsList.aboutList + UserPrefsList.lifestyleList;
     for (int i = 0; i < buttonList.length; i++) {
       String key = buttonList[i]['cacheKey'];
-      print('${key} ${UserInfoHelper.userInfoCache[key]}');
+      // print('${key} ${UserInfoHelper.userInfoCache[key]}');
       if (key != 'city' && key != 'job') {
         if (UserInfoHelper.userInfoCache[key] == null ||
             UserInfoHelper.userInfoCache[key] == 'Add' ||
@@ -78,32 +78,11 @@ class UserPrefsState extends State<UserPrefs> {
     });
   }
 
-  void onNext() {
-    onSkip();
-  }
-
-  List<Widget> createAboutButtons(
-      BuildContext context, List<Map<String, dynamic>> prefList) {
-    return prefList.map((prefs) {
-      return UserPrefsButton(
-          name: prefs['name'],
-          context: context,
-          options: prefs['options'],
-          question: prefs['question'],
-          assetPath: prefs['assetPath'],
-          cacheKey: prefs['cacheKey'],
-          cacheObject: prefs['cacheObject'],
-          multiSelect: prefs['multiSelect'],
-          isLongList: prefs['longList'],
-          updateBtn: checkIfEntered);
-    }).toList();
-  }
-
   @override
   Widget build(BuildContext context) {
     dynamic appBar = widget.inSetUp
-        ? PushedScreenTopBar(hasSkip: true, onSkip: onSkip)
-        : const NoLogoTopBar(title: "My Info");
+        ? const PushedScreenTopBar()
+        : const NoLogoTopBar(title: "Edit My Info");
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: appBar,
@@ -113,107 +92,61 @@ class UserPrefsState extends State<UserPrefs> {
                 horizontal: 18.0 * DesignVariables.widthConversion),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              // About header
-              const Text(
-                "About",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
+              // About Section
+              UserPrefsSection(
+                  hasDivider: true,
+                  inSetUp: widget.inSetUp,
+                  header: "About",
+                  description: "Matches will want to know more about you!",
+                  prefList: UserPrefsList.aboutList),
 
-              // const BoxGap(width: 0, height: 4),
-
-              // About description
-              widget.inSetUp ? const Text(
-                "Matches will want to know more about you!",
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black,
-                ),
-              ) : const SizedBox(),
-
-              const BoxGap(width: 0, height: 10),
-              Column(children: [
-                ...createAboutButtons(context, UserPrefsList.aboutList)
-              ]),
-              Divider(color: DesignVariables.greyLines),
-              BoxGap(width: 0, height: 5 * DesignVariables.heightConversion),
-
-              // Lifestyle header
-              const Text(
-                "Lifestyle",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-
-              // const BoxGap(width: 0, height: 4),
-
-              // Relationship description
-              widget.inSetUp ? const Text(
-                "Let your matches in on your lifestyle, habits, and preferences.",
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black,
-                ),
-              ) : const SizedBox(),
-              const BoxGap(width: 0, height: 10),
-              Column(children: [
-                ...createAboutButtons(context, UserPrefsList.lifestyleList)
-              ]),
-
+              // Lifestyle Section
+              UserPrefsSection(
+                  hasDivider: !widget.inSetUp,
+                  inSetUp: widget.inSetUp,
+                  header: "Lifestyle",
+                  description:
+                      "Let your matches in on your lifestyle, habits, and preferences.",
+                  prefList: UserPrefsList.lifestyleList),
+              
               widget.inSetUp
-                  ? const SizedBox()
+                  // If in setup, display the finish button
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const BoxGap(width: 0, height: 35),
+                        LoginSignupButton(
+                            color: DesignVariables.primaryRed,
+                            onTap: onSkip,
+                            borderColor: Colors.transparent,
+                            height: 52 * DesignVariables.heightConversion,
+                            width: 334.67 * DesignVariables.widthConversion,
+                            buttonContent: LoginSignupButtonContent(
+                              svgOffset: 18 * DesignVariables.widthConversion,
+                              svgPath: 'assets/icons/arrow-long-left.svg',
+                              svgDimensions: 36,
+                              text: 'Finish',
+                              fontSize: 22,
+                              fontColor: Colors.white,
+                              isRight: true,
+                              fontWeight: FontWeight.w700,
+                            )),
+                      ],
+                    )
+                    
+                  // Otherwise, display the relationship section
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                          Divider(color: DesignVariables.greyLines),
-                          BoxGap(
-                              width: 0,
-                              height: 5 * DesignVariables.heightConversion),
-
-                          // Relationship header
-                          const Text(
-                            "Relationship",
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-
-                          const BoxGap(width: 0, height: 10),
-                          Column(children: [
-                            ...createAboutButtons(
-                                context, UserPrefsList.relationshipList)
-                          ]),
-                        ]),
-
-              widget.inSetUp ? const BoxGap(width: 0, height: 50) : const SizedBox(),
-
-              widget.inSetUp ?
-              LoginSignupButton(
-                  color: isEntered
-                      ? DesignVariables.primaryRed
-                      : DesignVariables.greyLines,
-                  onTap: onNext,
-                  borderColor: Colors.transparent,
-                  height: 52 * DesignVariables.heightConversion,
-                  width: 334.67 * DesignVariables.widthConversion,
-                  buttonContent: LoginSignupButtonContent(
-                    svgOffset: 18 * DesignVariables.widthConversion,
-                    svgPath: 'assets/icons/arrow-long-left.svg',
-                    svgDimensions: 36,
-                    text: 'Finish',
-                    fontSize: 22,
-                    fontColor: Colors.white,
-                    isRight: true,
-                    fontWeight: FontWeight.w700,
-                  )) : const SizedBox(),
-              const BoxGap(width: 0, height: 36)
+                        UserPrefsSection(
+                            hasDivider: false,
+                            inSetUp: false,
+                            header: "Relationship",
+                            description: "",
+                            prefList: UserPrefsList.relationshipList),
+                      ],
+                    ),
+              const BoxGap(width: 0, height: 35)
             ])),
       ),
     );

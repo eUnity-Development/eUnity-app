@@ -15,7 +15,7 @@ class UserPrefsButton extends StatefulWidget {
   final String cacheObject;
   final bool multiSelect;
   final bool isLongList;
-  final void Function() updateBtn;
+  // final void Function() updateBtn;
 
   const UserPrefsButton({
     super.key,
@@ -28,7 +28,7 @@ class UserPrefsButton extends StatefulWidget {
     required this.cacheObject,
     required this.multiSelect,
     required this.isLongList,
-    required this.updateBtn,
+    // required this.updateBtn,
   });
 
   @override
@@ -77,7 +77,7 @@ class UserPrefsButtonState extends State<UserPrefsButton> {
               : UserInfoHelper.userInfoCache[widget.cacheObject]
                   [widget.cacheKey];
     });
-    widget.updateBtn();
+    // widget.updateBtn();
   }
 
   String getImperialHeightText() {
