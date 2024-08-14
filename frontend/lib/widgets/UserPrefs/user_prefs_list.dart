@@ -238,6 +238,16 @@ class UserPrefsList {
       'longList': false,
     },
     {
+      'name': 'Have Kids',
+      'options': ['Yes', 'No', 'Prefer Not to Say'],
+      'question': 'Do you have any kids?',
+      'assetPath': 'assets/preferences/social-media.svg',
+      'cacheKey': 'have_kids',
+      'cacheObject': 'lifestyle',
+      'multiSelect': false,
+      'longList': false,
+    },
+    {
       'name': 'Dietary Preferences',
       'options': [
         'Dairy-free',
@@ -283,6 +293,17 @@ class UserPrefsList {
       'multiSelect': true,
       'longList': false,
     },
+    {
+      'name': 'Want Kids',
+      'options': ['Yes', 'No', 'Unsure', 'Prefer Not to Say'],
+      'question': 'Do you want kids?',
+      'assetPath': 'assets/preferences/social-media.svg',
+      'cacheKey': 'want_kids',
+      'cacheObject': 'about',
+      'multiSelect': false,
+      'longList': false,
+    },
+  
 
   ];
 }

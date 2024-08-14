@@ -67,6 +67,7 @@ type About struct {
 	Religion  []string `bson:"religion" json:"religion"`
 	City      string   `bson:"city" json:"city"`
 	Height    Height   `bson:"height" json:"height"`
+	WantKids  string   `bson:"want_kids" json:"want_kids"`
 }
 
 type Lifestyle struct {
@@ -76,6 +77,7 @@ type Lifestyle struct {
 	SocialMedia string   `bson:"social_media" json:"social_media"`
 	Pets        string   `bson:"pets" json:"pets"`
 	Diet        []string `bson:"diet" json:"diet"`
+	HaveKids    string   `bson:"have_kids" json:"have_kids"`
 }
 
 func FromGooglePayload(payload *idtoken.Payload) *User {
@@ -102,6 +104,7 @@ func FromGooglePayload(payload *idtoken.Payload) *User {
 		Religion:  []string{},
 		City:      "",
 		Height:    *height,
+		WantKids:  "",
 	}
 	lifestyle := &Lifestyle{
 		Exercise:    "",
@@ -110,6 +113,7 @@ func FromGooglePayload(payload *idtoken.Payload) *User {
 		SocialMedia: "",
 		Pets:        "",
 		Diet:        []string{},
+		HaveKids:    "",
 	}
 	user := &User{
 		ID:             &objectID,

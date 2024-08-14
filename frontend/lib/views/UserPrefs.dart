@@ -192,7 +192,7 @@ class UserPrefsState extends State<UserPrefs> {
                           ]),
                         ]),
 
-              const BoxGap(width: 0, height: 50),
+              widget.inSetUp ? const BoxGap(width: 0, height: 50) : const SizedBox(),
 
               widget.inSetUp ?
               LoginSignupButton(
