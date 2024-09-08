@@ -67,7 +67,7 @@ class _MatchPreferencesState extends State<MatchPreferences> {
         if (response.statusCode == 200) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => UserPrefs()),
+            MaterialPageRoute(builder: (context) => UserPrefs(inSetUp: true)),
           );
         }
       }

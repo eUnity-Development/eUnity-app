@@ -21,8 +21,14 @@ class _SelectionDialogHeightState extends State<SelectionDialogHeight> {
 
   @override
   void initState() {
-    currentFt = UserInfoHelper.userInfoCache['about']['height']['feet'];
-    currentIn = UserInfoHelper.userInfoCache['about']['height']['inches'];
+    if (UserInfoHelper.userInfoCache['about']['height']['feet'] != null
+      && UserInfoHelper.userInfoCache['about']['height']['inches'] != null) {
+        currentFt = UserInfoHelper.userInfoCache['about']['height']['feet'];
+        currentIn = UserInfoHelper.userInfoCache['about']['height']['inches'];
+    } else {
+      currentFt = 5;
+      currentIn = 6;
+    }
     super.initState();
   }
 

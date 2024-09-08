@@ -15,7 +15,7 @@ class UserPrefsButton extends StatefulWidget {
   final String cacheObject;
   final bool multiSelect;
   final bool isLongList;
-  final void Function() updateBtn;
+  // final void Function() updateBtn;
 
   const UserPrefsButton({
     super.key,
@@ -28,7 +28,7 @@ class UserPrefsButton extends StatefulWidget {
     required this.cacheObject,
     required this.multiSelect,
     required this.isLongList,
-    required this.updateBtn,
+    // required this.updateBtn,
   });
 
   @override
@@ -38,25 +38,36 @@ class UserPrefsButton extends StatefulWidget {
 }
 
 class UserPrefsButtonState extends State<UserPrefsButton> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   String action = '';
   String staticText = 'Add';
 
+  void setHeight() {
+    if (widget.cacheKey == 'height' && 
+        UserInfoHelper.userInfoCache[widget.cacheObject][widget.cacheKey]['feet'] != null &&
+        UserInfoHelper.userInfoCache[widget.cacheObject][widget.cacheKey]['inches'] != null) {
+      staticText = getImperialHeightText();
+    }
+  }
+
+  void setStaticText() {
+    if (widget.multiSelect &&
+        UserInfoHelper
+                .userInfoCache[widget.cacheObject][widget.cacheKey].length >
+            0) {
+      staticText = 'Edit';
+    }
+    setHeight();
+  }
+
+  @override
+  void initState() {
+    setStaticText();
+    super.initState();
+  }
+
   void update() {
     setState(() {
-      if (widget.multiSelect &&
-          UserInfoHelper
-                  .userInfoCache[widget.cacheObject][widget.cacheKey].length >
-              0) {
-        staticText = 'Edit';
-      }
-      if (widget.cacheKey == 'height') {
-        staticText = getImperialHeightText();
-      }
+      setStaticText();
       action = widget.multiSelect || widget.cacheKey == 'height'
           ? staticText
           : (UserInfoHelper.userInfoCache[widget.cacheObject]
@@ -66,7 +77,7 @@ class UserPrefsButtonState extends State<UserPrefsButton> {
               : UserInfoHelper.userInfoCache[widget.cacheObject]
                   [widget.cacheKey];
     });
-    widget.updateBtn();
+    // widget.updateBtn();
   }
 
   String getImperialHeightText() {

@@ -238,6 +238,16 @@ class UserPrefsList {
       'longList': false,
     },
     {
+      'name': 'Have Kids',
+      'options': ['Yes', 'No', 'Prefer Not to Say'],
+      'question': 'Do you have any kids?',
+      'assetPath': 'assets/preferences/have-kids.svg',
+      'cacheKey': 'have_kids',
+      'cacheObject': 'lifestyle',
+      'multiSelect': false,
+      'longList': false,
+    },
+    {
       'name': 'Dietary Preferences',
       'options': [
         'Dairy-free',
@@ -262,5 +272,38 @@ class UserPrefsList {
     },
   ];
 
-  static List<Map<String, dynamic>> relationshipList = [];
+  static List<Map<String, dynamic>> relationshipList = [
+    {
+      'name': 'Relationship Type',
+      'options': ['Long Term Relationships', 'Short Term Relationships'],
+      'question': 'What relationship types are you looking for?',
+      'assetPath': 'assets/preferences/relationship-type.svg',
+      'cacheKey': 'relationship_types',
+      'cacheObject': 'match_preferences',
+      'multiSelect': true,
+      'longList': false,
+    },
+    {
+      'name': 'Looking For',
+      'options': ['Men', 'Women'],
+      'question': 'Who are you looking for in a relationship?',
+      'assetPath': 'assets/preferences/looking-for.svg',
+      'cacheKey': 'genders',
+      'cacheObject': 'match_preferences',
+      'multiSelect': true,
+      'longList': false,
+    },
+    {
+      'name': 'Want Kids',
+      'options': ['Yes', 'No', 'Unsure', 'Prefer Not to Say'],
+      'question': 'Do you want kids?',
+      'assetPath': 'assets/preferences/want-kids.svg',
+      'cacheKey': 'want_kids',
+      'cacheObject': 'about',
+      'multiSelect': false,
+      'longList': false,
+    },
+  
+
+  ];
 }

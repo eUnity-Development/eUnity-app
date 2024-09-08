@@ -1,5 +1,7 @@
 import 'package:eunity/classes/PhotoHelper.dart';
+import 'package:eunity/views/UserPrefs.dart';
 import 'package:eunity/widgets/ImageWidgets/ImageGrid.dart';
+import 'package:eunity/widgets/LoginSignup/login_signup_button.dart';
 import 'package:eunity/widgets/TopBars/NoLogoTopBar.dart';
 import 'package:flutter/material.dart';
 import 'package:eunity/classes/UserInfoHelper.dart';
@@ -40,6 +42,13 @@ class _EditProfileState extends State<EditProfile> {
 
   Future<void> patchData() async {
     await UserInfoHelper.patchUserInfo();
+  }
+
+  void editUserPrefs() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const UserPrefs(inSetUp: false)),
+    );
   }
 
   void updateState() async {
@@ -122,6 +131,22 @@ class _EditProfileState extends State<EditProfile> {
                 ),
               ),
             ),
+            SizedBox(
+              height: 50 * DesignVariables.heightConversion,
+            ),
+            LoginSignupButton(
+              color: DesignVariables.offWhite, 
+              onTap: editUserPrefs, 
+              borderColor: DesignVariables.greyLines, 
+              height: 50, 
+              width: double.infinity, 
+              buttonContent: const Text(
+                'Edit My Info', 
+                style: TextStyle(
+                  fontSize: 20, 
+                  fontWeight: FontWeight.w700
+                ))
+            )
           ]),
         ),
       ),

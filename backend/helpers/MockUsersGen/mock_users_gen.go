@@ -70,6 +70,7 @@ func get_random_user(amount string) ([]models.User, error) {
 			Religion:  []string{},
 			City:      "",
 			Height:    height,
+			WantKids:  "",
 		}
 		lifestyle := models.Lifestyle{
 			Exercise:    "",
@@ -78,6 +79,7 @@ func get_random_user(amount string) ([]models.User, error) {
 			SocialMedia: "",
 			Pets:        "",
 			Diet:        []string{},
+			HaveKids:    "",
 		}
 
 		user := models.User{
