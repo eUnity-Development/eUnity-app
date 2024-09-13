@@ -19,7 +19,6 @@ type Feedback_controllers struct{}
 // @Tags Feedback
 // @Accept json
 // @Produce json
-// @Param user query string true "User ID"
 // @Param stars query int true "Stars"
 // @Param positive_text query string true "Positive Text"
 // @Param negative_text query string true "Negative Text"
@@ -38,8 +37,10 @@ func (fc *Feedback_controllers) Add_feedback(c *gin.Context) {
 	//currentTime := time.Now()
 	//formattedTime := currentTime.Format("2006-01-02 15:04:05")
 
+	//Get the user ID from the cookie so we know who is requesting to find their open report
+	user_id := c.Keys["user_id"].(string)
 
-	user := feedback.User
+	user := user_id
 	stars := feedback.Stars
 	positive_text := feedback.Positive_text
 	negative_text := feedback.Negative_text

@@ -1,6 +1,7 @@
 import 'package:eunity/classes/DesignVariables.dart';
 import 'package:eunity/classes/UserInfoHelper.dart';
 import 'package:eunity/widgets/ImageWidgets/DisplayImageGrid.dart';
+import 'package:eunity/widgets/MessageWidgets/MessageBubble.dart';
 import 'package:flutter/material.dart';
 
 class AIAnalysis extends StatefulWidget {
@@ -57,6 +58,46 @@ class _AIAnalysisState extends State<AIAnalysis> {
 
   @override
   Widget build(BuildContext context) {
+    Widget getWingmanWidget(String content) {
+      return Stack(
+        children: [
+          Positioned(
+            left: 5,
+            bottom: 0,
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.black, width: 2),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color.fromARGB(64, 0, 0, 0),
+                        spreadRadius: 0,
+                        blurRadius: 1,
+                        offset: Offset(0, 1),
+                      ),
+                    ]),
+                child: CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  backgroundImage: AssetImage("assets/images/happyrobot.png"),
+                  radius: 16,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 42),
+            child: MessageBubble(
+              messageContent: content,
+              sentByUser: false,
+              isTopStack: false,
+            ),
+          ),
+        ],
+      );
+    }
+
     TextStyle headerStyle = TextStyle(
         fontSize: 24, color: Colors.black, fontWeight: FontWeight.w700);
 
@@ -95,7 +136,7 @@ class _AIAnalysisState extends State<AIAnalysis> {
                 ]),
             child: Center(
               child: Text(
-                (isUpdate) ? "Update AI Analysis" : "Get AI Analysis",
+                (isUpdate) ? "Update Wingman Analysis" : "Get Wingman Analysis",
                 style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
@@ -134,7 +175,7 @@ class _AIAnalysisState extends State<AIAnalysis> {
     }
 
     Widget loadedColumn = Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+      padding: EdgeInsets.symmetric(vertical: 30),
       child: Column(
         children: [
           Container(
@@ -144,72 +185,80 @@ class _AIAnalysisState extends State<AIAnalysis> {
                 children: [
                   Text(
                     "Your Photos",
-                    style: headerStyle,
+                    style: mixedStyle,
                   ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Container(
+                      child: DisplayImageGrid(
+                        imageArray: imageArray,
+                      ),
+                      height: (400 / 3 * (((imageArray.length - 1) ~/ 3) + 1)),
+                    ),
+                  ),
+                  getWingmanWidget(analysis['photo_analysis'].toString()),
                   const SizedBox(
                     height: 10,
                   ),
                   Container(
-                    child: DisplayImageGrid(
-                      imageArray: imageArray,
-                    ),
-                    height: (400 / 3 * (((imageArray.length - 1) ~/ 3) + 1)),
+                    width: double.infinity,
+                    height: 1,
+                    color: DesignVariables.greyLines,
                   ),
-                  Text(
-                    "AI Photo Analysis",
-                    style: headerStyle,
-                  ),
-                  getTextBox(analysis['photo_analysis'].toString()),
                   const SizedBox(
                     height: 10,
                   ),
                   Text(
                     "Your Bio",
-                    style: headerStyle,
+                    style: mixedStyle,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: IntrinsicHeight(
+                      child: Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                          decoration: analysisDecorator,
+                          width: double.infinity,
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                UserInfoHelper.userInfoCache['bio'],
+                                style: footerStyle,
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              )
+                            ],
+                          )),
+                    ),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  IntrinsicHeight(
-                    child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                        decoration: analysisDecorator,
-                        width: double.infinity,
-                        child: Column(
-                          children: [
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              UserInfoHelper.userInfoCache['bio'],
-                              style: footerStyle,
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            )
-                          ],
-                        )),
-                  ),
+                  getWingmanWidget(analysis['bio_analysis'].toString()),
                   const SizedBox(
                     height: 10,
                   ),
-                  Text("AI Bio Analysis", style: headerStyle),
-                  const SizedBox(
-                    height: 10,
+                  Container(
+                    width: double.infinity,
+                    height: 1,
+                    color: DesignVariables.greyLines,
                   ),
-                  getTextBox(analysis['bio_analysis'].toString()),
                   const SizedBox(
                     height: 10,
                   ),
                   Text(
-                    "Overall Analysis",
-                    style: headerStyle,
+                    "Wingman's Overall Impressions",
+                    style: mixedStyle,
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  getTextBox(analysis['overall_analysis'].toString()),
+                  getWingmanWidget(analysis['overall_analysis'].toString()),
                 ],
               ),
             ),

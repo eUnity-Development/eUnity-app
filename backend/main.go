@@ -45,7 +45,7 @@ func main() {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//unprotected routes
 	routes.Pub_Media_routes(r.Group("/media"))
-	routes.Feedback_routes(r.Group("/feedback"))
+	
 
 	//change goth auth route names to web auth
 	routes.Web_Auth_routes(r.Group("/webAuth"))
@@ -55,6 +55,7 @@ func main() {
 	routes.User_routes(r.Group("/users", SessionManager.AuthRequired()))
 	routes.Media_routes(r.Group("/media", SessionManager.AuthRequired()))
 	routes.Twilio_routes(r.Group("/twilio"))
+	routes.Feedback_routes(r.Group("/feedback", SessionManager.AuthRequired()))
 	routes.Report_Issue_routes(r.Group("/report_issue", SessionManager.AuthRequired()))
 	routes.Report_User_routes(r.Group("/report_user", SessionManager.AuthRequired()))
 	routes.AI_Analysis_routes(r.Group("/ai_analysis", SessionManager.AuthRequired()))

@@ -64,7 +64,7 @@ class _PremiumFeaturesState extends State<PremiumFeatures> {
                   alignment: Alignment.center,
                   child: GestureDetector(
                     child: Text(
-                      "AI Profile Analysis",
+                      "Wingman Analysis",
                       style: TextStyle(
                           color: (selectedIndex == 1)
                               ? DesignVariables.primaryRed

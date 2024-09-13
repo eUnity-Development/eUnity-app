@@ -1,6 +1,7 @@
 import 'package:eunity/classes/AuthHelper.dart';
 import 'package:eunity/classes/DesignVariables.dart';
 import 'package:eunity/home.dart';
+import 'package:eunity/views/Preferences.dart';
 import 'package:eunity/widgets/TopBars/NoLogoTopBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -22,6 +23,13 @@ class _SettingsState extends State<Settings> {
         (Route<dynamic> route) => false,
       );
     }
+  }
+
+  void navigateToPreferences() async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Preferences()),
+    );
   }
 
   @override
@@ -104,7 +112,9 @@ class _SettingsState extends State<Settings> {
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     children: [
-                      settingsTile(false, "Preferences"),
+                      GestureDetector(
+                          child: settingsTile(false, "Preferences"),
+                          onTap: navigateToPreferences),
                       settingsTile(true, "Notifications"),
                       settingsTile(true, "Membership"),
                       settingsTile(true, "Terms and Conditions")
