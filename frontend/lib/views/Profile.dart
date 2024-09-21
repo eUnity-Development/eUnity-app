@@ -3,6 +3,7 @@ import 'package:eunity/views/EditProfile.dart';
 import 'package:eunity/views/LoginSignup.dart';
 import 'package:eunity/views/ReportIssue.dart';
 import 'package:eunity/views/Settings.dart';
+import 'package:eunity/widgets/PremiumWidget/PremiumAd.dart';
 import 'package:flutter/material.dart';
 import 'package:eunity/classes/DesignVariables.dart';
 import 'package:eunity/views/FeedbackScreen.dart';
@@ -125,7 +126,8 @@ class _ProfileState extends State<Profile> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Padding(
+      body: SingleChildScrollView( 
+        child: Padding(
         padding: const EdgeInsets.only(top: 50, bottom: 100),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -217,7 +219,10 @@ class _ProfileState extends State<Profile> {
                     ),
                   ],
                 )),
-            Spacer(),
+            SizedBox( height: 20 * DesignVariables.heightConversion),
+            PremiumAd(),
+            SizedBox( height: 20 * DesignVariables.heightConversion),
+
             Text(
               "Share your Feedback",
               style: TextStyle(
@@ -246,6 +251,6 @@ class _ProfileState extends State<Profile> {
           ],
         ),
       ),
-    );
+    ));
   }
 }
