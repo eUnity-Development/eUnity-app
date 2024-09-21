@@ -17,8 +17,8 @@ class PremiumAd extends StatelessWidget {
     Widget svg(String path) {
       return SvgPicture.asset(
         path,
-        height: 20,
-        width: 20,
+        height: 23.5,
+        width: 23.5,
       );
     }
 
@@ -30,15 +30,17 @@ class PremiumAd extends StatelessWidget {
             text,
             style: isHeader
                 ? TextStyle(
-                    fontWeight: FontWeight.w700, color: isGold ? DesignVariables.gold : Colors.black)
-                : const TextStyle()
+                    fontWeight: FontWeight.w700, color: isGold ? DesignVariables.gold : Colors.black, fontSize: 17)
+                : const TextStyle(fontSize: 17)
           );
     }
 
-    Widget tableEntry(dynamic content, [bool isLast = false, bool isHeader = false]) {
+    Widget tableEntry(dynamic content, [bool isSvg = false, bool isLast = false, bool isHeader = false]) {
       double boxHeight = 0;
       if (isHeader) {
         boxHeight = 4;
+      } else if (isSvg) {
+        boxHeight = 2;
       } else if (!isLast) {
         boxHeight = 2;
       }
@@ -75,36 +77,36 @@ class PremiumAd extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        tableEntry(tableText('Included', true), false, true),
+                        tableEntry(tableText('Included', true), false, false, true),
                         tableEntry(tableText('Feature 1')),
                         tableEntry(tableText('Feature 2')),
                         tableEntry(tableText('Feature 3')),
                         tableEntry(tableText('Feature 4')),
-                        tableEntry(tableText('Feature 5'), true),
+                        tableEntry(tableText('Feature 5'), false, true),
                       ],
                     ),
 
                     // Free
                     Column(
                       children: [
-                        tableEntry(tableText('Free', true), false, true),
-                        tableEntry(x),
-                        tableEntry(x),
-                        tableEntry(x),
-                        tableEntry(x),
+                        tableEntry(tableText('Free', true), false, false, true),
                         tableEntry(x, true),
+                        tableEntry(x, true),
+                        tableEntry(x, true),
+                        tableEntry(x, true),
+                        tableEntry(x, true, true),
                       ],
                     ),
 
                     // Premium
                     Column(
                       children: [
-                        tableEntry(tableText('Premium', true, true), false, true),
-                        tableEntry(checkmark),
-                        tableEntry(checkmark),
-                        tableEntry(checkmark),
-                        tableEntry(checkmark),
+                        tableEntry(tableText('Premium', true, true), false, false, true),
                         tableEntry(checkmark, true),
+                        tableEntry(checkmark, true),
+                        tableEntry(checkmark, true),
+                        tableEntry(checkmark, true),
+                        tableEntry(checkmark, true, true),
                       ],
                     )
                   ]),
@@ -115,7 +117,7 @@ class PremiumAd extends StatelessWidget {
             color: DesignVariables.gold, 
             onTap: purchase, 
             borderColor: Colors.transparent, 
-            height: 53, 
+            height: 45, 
             width: 189, 
             buttonContent: 
               const Text(
