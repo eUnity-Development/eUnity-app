@@ -22,3 +22,5 @@ class Message(BaseModel):
             delivered=False,
             read=False
         )
+    
+    

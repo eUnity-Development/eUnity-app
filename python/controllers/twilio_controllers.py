@@ -7,12 +7,10 @@ router = APIRouter()
 
 @router.post("/twilio/send-sms")
 async def send_ver_sms(to: str = Query(...), body: str = Query(...)):
-    print("to:", to)
-    print("body:", body)
     try:
         # err = TwilioManager.SendMessage(to, "+17162721672", body)
-        err = TwilioManager.Send_Verification_Code(to)
-        if err:
+        _, err = await TwilioManager.send_verification_code(to)
+        if err != None:
             raise HTTPException(status_code=500, detail={"error": str(err)})
     except Exception as e:
         raise HTTPException(status_code=500, detail={"error": str(e)})
@@ -20,11 +18,9 @@ async def send_ver_sms(to: str = Query(...), body: str = Query(...)):
 
 @router.post("/twilio/verify-phone")
 async def verify_phone(to: str = Query(...), code: str = Query(...)):
-    print("to:", to)
-    print("code:", code)
     try:
-        valid, err = TwilioManager.Verify_Code(to, code)
-        if err:
+        valid, err = await TwilioManager.verify_code(to, code)
+        if err != None:
             raise HTTPException(status_code=500, detail={"error": str(err), "message": "make sure to add +1 to the phone number format --> +1xxxxxxxxxx"})
         if not valid:
             raise HTTPException(status_code=400, detail={"message": "Invalid verification code!"})

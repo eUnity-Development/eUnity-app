@@ -24,10 +24,11 @@ def favicon():
 
 # Protected routes
 app.include_router(user_routes.router, prefix="/users", dependencies=[Depends(SessionManager.auth_required)])
-# app.api_router.include_router(media_routes.router, prefix="/media", dependencies=[Depends(SessionManager.auth_required)])
-# app.api_router.include_router(twilio_routes.router, prefix="/twilio")
-# app.api_router.include_router(report_issue_routes.router, prefix="/report_issue", dependencies=[Depends(SessionManager.auth_required)])
-# app.api_router.include_router(report_user_routes.router, prefix="/report_user", dependencies=[Depends(SessionManager.auth_required)])
+app.include_router(twilio_routes.router, prefix="/twilio")
+app.include_router(media_routes.router, prefix="/media", dependencies=[Depends(SessionManager.auth_required)])
+
+app.include_router(report_issue_routes.router, prefix="/report_issue", dependencies=[Depends(SessionManager.auth_required)])
+app.include_router(report_user_routes.router, prefix="/report_user", dependencies=[Depends(SessionManager.auth_required)])
 
 # Development only routes
 app.include_router(dev_routes.router, prefix="/dev")

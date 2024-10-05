@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 class Feedback(BaseModel):
-    user: str
+    user_id: str
     stars: int
     positive_text: str
     negative_text: str

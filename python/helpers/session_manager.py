@@ -34,7 +34,7 @@ else:
     rdb = None
 
 # MongoDB client
-db = DBManager.client
+db = DBManager.db
 
 
 
@@ -51,7 +51,7 @@ async def get_session(session_id: str) -> Optional[Session]:
             return Session(**session)
     return None
 
-async def create_session(user_id: str, request: Request) -> Session:
+async def create_session(user_id: str) -> JSONResponse:
     session_id = str(uuid.uuid4())
     session = Session(
         session_id=session_id,
@@ -64,10 +64,13 @@ async def create_session(user_id: str, request: Request) -> Session:
         await rdb.set(session_id, json.dumps(session.dict()))
     else:
         collection = db["session_ids"]
-        collection.insert_one(session.dict())
+        result = collection.insert_one(session.model_dump())
+        ## check if the session was created with success
+        if not result.acknowledged:
+            return JSONResponse(status_code=500, content={"response": "Error creating session"})
     response = JSONResponse(status_code=200, content={"response": "Session created"})
     response.set_cookie("session_id", session_id, max_age=31536000, secure=HTTPS_ONLY, httponly=True)
-    return session
+    return response
 
 async def create_developer_session(user_id: str, request: Request) -> Session:
     session_id = str(uuid.uuid4())
@@ -114,6 +117,7 @@ async def auth_required(request: Request):
     request.state.created_at = session.created_at
     request.state.expires_at = session.expires_at
     request.state.user_id = session.user_id
-    request.state.permissions = session.permissions
 
-    return await call_next(request)
+    print(request.state.user_id)
+
+    request.state.permissions = session.permissions

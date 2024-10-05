@@ -22,13 +22,16 @@ async def get_random_user(amount: str):
     users = []
     for user_data in data["results"]:
         dob_string = user_data["dob"]["date"]
-        parsed_date = datetime.strptime(dob_string, "%Y-%m-%dT%H:%M:%SZ")
+        # Adjust the format to include milliseconds
+        parsed_date = datetime.strptime(dob_string, "%Y-%m-%dT%H:%M:%S.%fZ")
         dob = DateOfBirth(
             day=parsed_date.day,
             month=parsed_date.month,
             year=parsed_date.year,
         )
+        id = ObjectId()
         user = User(
+            id=id,
             email=user_data["email"],
             verified_email=True,
             phone_number=user_data["phone"],
@@ -42,15 +45,15 @@ async def get_random_user(amount: str):
                 minimum_age=18,
                 maximum_age=39,
                 maximum_distance=40,
-            ).dict(),
-            date_of_birth=dob.dict(),
-            height=Height(feet=5, inches=8).dict(),
+            ),
+            date_of_birth=dob,
+            height=Height(feet=5, inches=8),
             providers={"google": Provider(
                 name=f"{user_data['name']['first']} {user_data['name']['last']}",
                 email=user_data["email"],
                 email_verified=True,
                 sub="sub",
-            ).dict()},
+            )},
             media_files=[user_data["picture"]["large"]],
         )
         users.append(user)
@@ -61,20 +64,22 @@ async def generate_x_users(amount: str):
     return await get_random_user(amount)
 
 
-async def insert_mock_users(amount: str):
+async def insert_mock_users(amount: str) -> User:
     users = await generate_x_users(amount)
-    for user in users:
-        users_collection.insert_one(user.dict())
-    return users[0], None
+    try :
+        for user in users:
+            users_collection.insert_one(user.dict())
+        return users[0], None
+    except Exception as e:
+        return None, e
+
 
 
 async def gen_mock_users(amount: str):
     user, err = await insert_mock_users(amount)
-    if err:
-        raise HTTPException(status_code=500, detail="Error inserting mock users")
-    return user
+    return user, err
 
 
 async def generate_mock_users(amount: str):
-    user = await gen_mock_users(amount)
-    return user
+    user, err = await gen_mock_users(amount)
+    return user, err

@@ -1,8 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.requests import Request
 from controllers import user_controllers
-from fastapi import Cookie
-from typing import Optional
+from models.user import User
 
 
 router = APIRouter(tags=["User"])
@@ -10,20 +9,16 @@ router = APIRouter(tags=["User"])
 
 @router.get("/me")
 async def read_me(request: Request):
-    return user_controllers.get_me(request)
+    return await user_controllers.get_me(request)
 
 @router.patch("/me")
-async def update_me(user: dict):
-    return user_controllers.patch_me(user)
+async def update_me(request: Request, user: dict):
+    return await user_controllers.patch_me(request, user)
 
 @router.get("/get_user/{user_id}")
 async def read_user(user_id: int):
-    return user_controllers.get_user(user_id)
+    return await user_controllers.get_user(user_id)
 
 @router.post("/logout")
-async def logout(user: dict):
-    return user_controllers.post_logout(user)
-
-@router.get("/Testing_Context")
-async def testing_context(user: dict):
-    return user_controllers.testing_context(user)
+async def logout(request: Request):
+    return await user_controllers.logout(request=request)

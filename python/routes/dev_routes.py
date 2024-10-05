@@ -11,10 +11,10 @@ router = APIRouter(tags=["Development"])
 # Define the route for '/dev/force_login'
 @router.get("/force_login")
 async def force_login(email : str):
-    return dev_controllers.force_login(email=email)
+    return await dev_controllers.force_login(email=email)
 
 
 # Define the route for '/dev/generate_mock_users'
 @router.get("/generate_mock_users")
 async def generate_mock_users(amount: int):
-    return dev_controllers.generate_mock_users(amount=amount)
+    return await dev_controllers.generate_mock_users(amount=amount)

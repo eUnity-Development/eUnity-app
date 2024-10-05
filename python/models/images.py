@@ -1,30 +1,18 @@
-from pydantic import BaseModel
-from typing import Optional, Dict
-from provider import Provider
+from pydantic import BaseModel, Field, field_validator
 from bson import ObjectId
-from pydantic import field_validator, Field
 from typing import Any
 from datetime import datetime
 
 
 
-class Developer(BaseModel):
-    id: ObjectId = Field(default_factory=ObjectId, alias="_id", description="MongoDB ObjectID")
-    email: str
-    first_name: str
-    last_name: str
-    avatar_url: Optional[str] = None
-    providers: Dict[str, Provider]
+class Image(BaseModel):
+    id : ObjectId = Field(default_factory=ObjectId, alias="_id", description="MongoDB ObjectID")
+    image_id : str
+    folder : str
+    url : str
 
     class Config:
-        arbitrary_types_allowed = True  # Allow custom types
-
-    # You can add validators as needed, here’s an example:
-    @field_validator('email')
-    def validate_email(cls, value):
-        if not value.strip():
-            raise ValueError('Email cannot be empty')
-        return value
+        arbitrary_types_allowed = True
 
     @field_validator('id')
     def validate_id(cls, value):
@@ -32,17 +20,13 @@ class Developer(BaseModel):
             raise ValueError('Invalid ObjectId')
         return value
     
-    @field_validator('id')
-    def validate_id(cls, v):
-        if not isinstance(v, ObjectId):
-            raise ValueError("Invalid ObjectId")
-        return v
     
-    # Custom dict method to handle _id
+        # Custom dict method to handle _id
     def dict(self):
+        ##turn the objectID into a string
         data = self.model_dump(by_alias=True)  # Use by_alias to get the alias names
         return data
-
+    
     def to_json(self) -> dict:
         """Convert BSON object to a JSON-serializable dictionary."""
         bson_obj = self.dict()  # Assuming self.dict() returns a dictionary representation of the object
@@ -67,5 +51,6 @@ class Developer(BaseModel):
             return [self._convert_value_to_json(item) for item in value]
         else:
             return value
+    
     class Config:
         arbitrary_types_allowed = True
