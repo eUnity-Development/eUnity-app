@@ -1,11 +1,10 @@
 from fastapi import APIRouter
+from controllers import report_user_controllers 
 
 
 router = APIRouter()
 
-from controllers import Report_User_controllers
 
-report_user_controllers = Report_User_controllers()
 
 @router.post("/add_report")
 async def post_add_report():

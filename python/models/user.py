@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict
-from provider import Provider
+from models.provider import Provider
 
 class Height(BaseModel):
     feet: Optional[int] = Field(description="Height in feet")
@@ -22,7 +22,7 @@ class MatchPreferences(BaseModel):
     maximum_distance: int = Field(description="Maximum distance preference")
 
 class User(BaseModel):
-    id: str = Field(regex=r"[a-f0-9]{24}", description="MongoDB ObjectID")
+    id: str = Field(pattern=r"[a-f0-9]{24}", description="MongoDB ObjectID")  # Changed from regex to pattern
     email: str = Field(description="Email address")
     verified_email: bool = Field(description="Is email verified")
     verified_phone_number: bool = Field(description="Is phone number verified")
@@ -39,9 +39,8 @@ class User(BaseModel):
     match_preferences: MatchPreferences = Field(description="Match preferences")
     bio: Optional[str] = Field(description="Bio")
 
-
 class RestrictedUser(BaseModel):
-    id: str = Field(regex=r"[a-f0-9]{24}", description="MongoDB ObjectID")
+    id: str = Field(pattern=r"[a-f0-9]{24}", description="MongoDB ObjectID")  # Changed from regex to pattern
     gender: Optional[str] = Field(description="Gender")
     location: Optional[str] = Field(description="Location")
     height: Optional[Height] = Field(description="Height")

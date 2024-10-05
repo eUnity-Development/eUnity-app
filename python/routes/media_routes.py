@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends
-from controllers import MediaController
+from controllers import media_controllers as media_controller
 
-media_controller = MediaController()
 
 router = APIRouter(prefix="/media", tags=["Media"])
 

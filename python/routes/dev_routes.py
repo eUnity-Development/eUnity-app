@@ -1,21 +1,20 @@
 from fastapi import APIRouter, Depends
-from controllers.dev_controllers import DevControllers
+from controllers import dev_controllers
 
 
 # Create an instance of the DevControllers class
-dev_controllers = DevControllers()
 
 # Create a FastAPI router with a prefix of '/dev'
-router = APIRouter(prefix="/dev", dependencies=[Depends()])
+router = APIRouter(tags=["Development"])
 
 
 # Define the route for '/dev/force_login'
 @router.get("/force_login")
-async def force_login():
-    return dev_controllers.Force_Login()
+async def force_login(email : str):
+    return dev_controllers.force_login(email=email)
 
 
 # Define the route for '/dev/generate_mock_users'
 @router.get("/generate_mock_users")
-async def generate_mock_users():
-    return dev_controllers.Generate_Mock_Users()
+async def generate_mock_users(amount: int):
+    return dev_controllers.generate_mock_users(amount=amount)

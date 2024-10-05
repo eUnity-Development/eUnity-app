@@ -1,12 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.requests import Request
-from fastapi.security import OAuth2PasswordBearer
-from pydantic import BaseModel
 from helpers.db_manager import DBManager
 import bson
 from models.user import User, RestrictedUser
-from helpers.session_manager import SessionManager
+from helpers import session_manager as SessionManager
 
 
 # Initialize the router for the controller
@@ -15,8 +13,10 @@ db = DBManager.db
 
 
 @router.get("/users/me")
-async def get_me(user_id: str):
+async def get_me(request: Request):
     # turn string id into bson object id
+    user_id = request.cookies.get("user_id")
+
     bson_user_id = bson.ObjectId(user_id)
     user = await db["users"].find_one({"_id": bson_user_id})
     if user is None:
@@ -41,8 +41,10 @@ async def patch_me(user: User, user_id: str):
     return JSONResponse(status_code=200, content={"response": "User updated"})
 
 @router.get("/users/get_user/{user_id}")
-async def get_user(user_id: str):
+async def get_user(request : Request):
     # turn string id into bson object id
+    user_id = request.cookies.get("user_id")
+
     bson_user_id = bson.ObjectId(user_id)
     user = await db["users"].find_one({"_id": bson_user_id})
     if user is None:
@@ -52,6 +54,8 @@ async def get_user(user_id: str):
 @router.post("/users/logout")
 async def logout(request: Request):
     # remove session
+    session_id = request.cookies.get("session_id")
+
     await db["session_ids"].delete_one({"session_id": session_id})
     # remove cookies
     response = JSONResponse(status_code=200, content={"response": "Logged out"})

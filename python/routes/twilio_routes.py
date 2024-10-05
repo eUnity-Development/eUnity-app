@@ -1,9 +1,8 @@
 from fastapi import APIRouter
-from controllers.twilio_controllers import TwilioController
+from controllers import twilio_controllers as twilio_controller
 
 
 # Create an instance of the TwilioController
-twilio_controller = TwilioController()
 
 # Create an instance of the APIRouter with a prefix and tags
 router = APIRouter()

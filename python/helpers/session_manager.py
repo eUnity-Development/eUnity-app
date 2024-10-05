@@ -8,7 +8,7 @@ import uuid
 import json
 import os
 import time
-from db_manager import DBManager
+from helpers.db_manager import DBManager
 from redis import Redis, ConnectionPool
 from pymongo import MongoClient
 from models.session import Session
@@ -95,7 +95,7 @@ async def delete_session(session_id: str) -> None:
         collection.delete_one({"session_id": session_id})
 
 
-async def auth_required(request: Request, call_next):
+async def auth_required(request: Request):
     session_id = request.cookies.get("session_id")
     if not session_id:
         return JSONResponse(status_code=401, content={"response": "Unauthorized"})

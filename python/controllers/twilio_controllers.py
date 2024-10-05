@@ -1,13 +1,11 @@
-from fastapi import FastAPI, Query, HTTPException
+from fastapi import Query, HTTPException
+from fastapi import APIRouter
 from helpers.twilio_manager import TwilioManager
 
 
+router = APIRouter()
 
-class TwilioControllers:
-    def __init__(self):
-        pass
-
-@app.post("/twilio/send-sms")
+@router.post("/twilio/send-sms")
 async def send_ver_sms(to: str = Query(...), body: str = Query(...)):
     print("to:", to)
     print("body:", body)
@@ -20,7 +18,7 @@ async def send_ver_sms(to: str = Query(...), body: str = Query(...)):
         raise HTTPException(status_code=500, detail={"error": str(e)})
     return {"message": "SMS sent successfully!"}
 
-@app.post("/twilio/verify-phone")
+@router.post("/twilio/verify-phone")
 async def verify_phone(to: str = Query(...), code: str = Query(...)):
     print("to:", to)
     print("code:", code)

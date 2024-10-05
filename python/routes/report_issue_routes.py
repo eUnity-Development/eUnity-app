@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends
-from controllers import ReportIssueController
+from controllers import report_issue_controllers as report_issue_controller
 
 router = APIRouter(prefix="/report")
 
-report_issue_controller = ReportIssueController()
+
 
 @router.get("/get_report")
 async def get_report():

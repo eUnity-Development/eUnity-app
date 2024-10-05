@@ -4,52 +4,13 @@ import requests
 from datetime import datetime
 from pydantic import BaseModel, Field
 from bson import ObjectId
-from db_manager import DBManager
+from helpers.db_manager import DBManager
+from models.user import User, DateOfBirth, Height, MatchPreferences, Provider
 
 # get db from db_manager
 db = DBManager.db
 users_collection = db["users"]
 
-class User(BaseModel):
-    id: str = Field(default_factory=lambda: str(ObjectId()))
-    email: str
-    verified_email: bool
-    phone_number: str
-    first_name: str
-    last_name: str
-    gender: str
-    location: str
-    match_preferences: dict
-    date_of_birth: dict
-    height: dict
-    providers: dict
-    media_files: List[str]
-
-
-class DateOfBirth(BaseModel):
-    day: int
-    month: int
-    year: int
-
-
-class Height(BaseModel):
-    feet: int
-    inches: int
-
-
-class Provider(BaseModel):
-    name: str
-    email: str
-    email_verified: bool
-    sub: str
-
-
-class MatchPreferences(BaseModel):
-    genders: List[str]
-    relationship_types: List[str]
-    minimum_age: int
-    maximum_age: int
-    maximum_distance: int
 
 
 async def get_random_user(amount: str):
@@ -114,7 +75,6 @@ async def gen_mock_users(amount: str):
     return user
 
 
-@router.post("/gen-mock-users/{amount}")
 async def generate_mock_users(amount: str):
     user = await gen_mock_users(amount)
     return user

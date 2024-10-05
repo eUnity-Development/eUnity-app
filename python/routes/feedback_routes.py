@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends
-from controllers import FeedbackController
+from controllers import feedback_controllers as feedback_controller
 
-feedback_controller = FeedbackController()
 
 router = APIRouter()
 

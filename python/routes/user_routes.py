@@ -1,14 +1,16 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.requests import Request
 from controllers import user_controllers
+from fastapi import Cookie
+from typing import Optional
 
 
-router = APIRouter()
+router = APIRouter(tags=["User"])
 
 
 @router.get("/me")
-async def read_me(user: dict):
-    return user_controllers.get_me(user)
+async def read_me(request: Request):
+    return user_controllers.get_me(request)
 
 @router.patch("/me")
 async def update_me(user: dict):

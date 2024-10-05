@@ -1,7 +1,6 @@
 from fastapi import FastAPI, Depends
 from twilio.rest import Client
 from twilio.base.exceptions import TwilioRestException
-from pydantic import BaseSettings
 import os
 import logging
 from dotenv import load_dotenv
@@ -29,7 +28,9 @@ class TwilioManager():
     @staticmethod
     async def send_verification_code(to: str):
         try:
-            verification = client.verify.v2.services(TWILIO_SERVICE_SID).verifications.create(to=to, channel="sms")
+            verification = await client.verify.v2.services(TWILIO_SERVICE_SID).verifications.create(to=to, channel="sms")
+            ##check there was no error
+            logging.info(verification)
             return {"message": "Verification code sent successfully"}
         except TwilioRestException as e:
             return {"error": str(e)}, 500
