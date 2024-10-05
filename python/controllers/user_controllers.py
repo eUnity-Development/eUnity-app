@@ -9,17 +9,13 @@ from bson import ObjectId
 from typing import Any
 
 
-
-
 # Initialize the router for the controller
-router = APIRouter()
 db = DBManager.db
 
 
-@router.get("/users/me")
 async def get_me(request: Request):
-    #catch error in case user_id is not in state
-    if not hasattr(request.state, 'user_id'):
+    # catch error in case user_id is not in state
+    if not hasattr(request.state, "user_id"):
         raise HTTPException(status_code=400, detail="No user found")
     user_id = request.state.user_id
 
@@ -30,9 +26,9 @@ async def get_me(request: Request):
         raise HTTPException(status_code=400, detail="No user found")
     return JSONResponse(status_code=200, content=user.to_json())
 
-@router.patch("/users/me")
+
 async def patch_me(request: Request, user: dict):
-    if not hasattr(request.state, 'user_id'):
+    if not hasattr(request.state, "user_id"):
         raise HTTPException(status_code=400, detail="No user found")
     user_id = request.state.user_id
     # get user id
@@ -49,8 +45,8 @@ async def patch_me(request: Request, user: dict):
             raise HTTPException(status_code=400, detail="Unable to update user")
     return JSONResponse(status_code=200, content={"response": "User updated"})
 
-@router.get("/users/get_user/{user_id}")
-async def get_user(request : Request):
+
+async def get_user(request: Request):
     # turn string id into bson object id
     user_id = request.cookies.get("user_id")
 
@@ -60,7 +56,7 @@ async def get_user(request : Request):
         raise HTTPException(status_code=400, detail="No user found")
     return RestrictedUser(**user)
 
-@router.post("/users/logout")
+
 async def logout(request: Request):
     # remove session
     session_id = request.cookies.get("session_id")
@@ -68,6 +64,11 @@ async def logout(request: Request):
     db["session_ids"].delete_one({"session_id": session_id})
     # remove cookies
     response = JSONResponse(status_code=200, content={"response": "Logged out"})
-    response.set_cookie("session_id", "", expires=-1, domain=SessionManager.COOKIE_HOST, secure=SessionManager.HTTPS_ONLY)
+    response.set_cookie(
+        "session_id",
+        "",
+        expires=-1,
+        domain=SessionManager.COOKIE_HOST,
+        secure=SessionManager.HTTPS_ONLY,
+    )
     return response
-

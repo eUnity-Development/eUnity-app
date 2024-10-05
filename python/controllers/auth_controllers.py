@@ -8,6 +8,7 @@ from google.auth.transport.requests import Request
 from google.oauth2 import id_token
 import os
 from helpers.db_manager import DBManager
+
 app = FastAPI()
 
 client_id = os.environ.get("GOOGLE_CLIENT_ID")
@@ -22,12 +23,14 @@ class SessionManager:
         # implement session creation logic
         pass
 
+
 def verify_token(token: str):
     try:
         payload = id_token.verify_oauth2_token(token, Request(), client_id)
         return payload
     except ValueError as e:
         return JSONResponse(status_code=400, content={"error": str(e)})
+
 
 @app.post("/auth/google")
 async def google_auth(request: Request):
@@ -48,7 +51,9 @@ async def google_auth(request: Request):
         if session_id:
             session = sessions_collection.find_one({session_id: {"$exists": True}})
             if session:
-                return JSONResponse(status_code=400, content={"response": "Already logged in"})
+                return JSONResponse(
+                    status_code=400, content={"response": "Already logged in"}
+                )
 
         # update user provider
         userproviders = user.get("providers", {})
@@ -57,7 +62,7 @@ async def google_auth(request: Request):
                 name=payload["name"],
                 email=payload["email"],
                 email_verified=payload["email_verified"],
-                sub=payload["sub"]
+                sub=payload["sub"],
             )
             users_collection.update_one({"email": email}, {"$set": userproviders})
 
@@ -66,7 +71,13 @@ async def google_auth(request: Request):
         return JSONResponse(status_code=200, content={"response": "Login Successful"})
     else:
         # create new user
-        new_user = User(email=payload["email"], verified_email=payload["email_verified"], providers={"google": Provider(**payload)})
+        new_user = User(
+            email=payload["email"],
+            verified_email=payload["email_verified"],
+            providers={"google": Provider(**payload)},
+        )
         users_collection.insert_one(new_user.dict())
         SessionManager.create_session(new_user.id, request)
-        return JSONResponse(status_code=200, content={"response": "Google Auth Started"})
+        return JSONResponse(
+            status_code=200, content={"response": "Google Auth Started"}
+        )

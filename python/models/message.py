@@ -20,7 +20,5 @@ class Message(BaseModel):
             message=message,
             created_at=datetime.now().isoformat(),
             delivered=False,
-            read=False
+            read=False,
         )
-    
-    

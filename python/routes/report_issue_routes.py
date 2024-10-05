@@ -10,13 +10,16 @@ router = APIRouter(tags=["report_issue"])
 async def get_report(request: Request):
     return await report_issue_controller.get_report(request)
 
+
 @router.post("/add_report")
 async def add_report(request: Request, report: JsonIssueReport):
     return await report_issue_controller.add_report(request, report)
 
+
 @router.patch("/update_report")
 async def update_report(request: Request, report: dict):
     return await report_issue_controller.update_report(request, report)
+
 
 @router.patch("/submit_report")
 async def submit_report(request: Request):

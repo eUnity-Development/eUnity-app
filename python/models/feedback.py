@@ -8,4 +8,3 @@ class Feedback(BaseModel):
     positive_text: str
     negative_text: str
     submitted_at: datetime
-

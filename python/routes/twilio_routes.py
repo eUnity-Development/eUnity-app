@@ -10,11 +10,11 @@ router = APIRouter(tags=["Twilio"])
 
 # Define the route for sending a verification SMS
 @router.post("/send-sms")
-async def send_ver_sms(phone_number : str):
+async def send_ver_sms(phone_number: str):
     return await twilio_controller.send_ver_sms(phone_number)
 
 
 # Define the route for verifying a phone number
 @router.post("/verify-phone")
-async def verify_phone(phone_number: str, code : str):
+async def verify_phone(phone_number: str, code: str):
     return await twilio_controller.verify_phone(phone_number, code)

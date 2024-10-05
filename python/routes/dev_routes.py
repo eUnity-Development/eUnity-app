@@ -10,7 +10,7 @@ router = APIRouter(tags=["Development"])
 
 # Define the route for '/dev/force_login'
 @router.get("/force_login")
-async def force_login(email : str):
+async def force_login(email: str):
     return await dev_controllers.force_login(email=email)
 
 

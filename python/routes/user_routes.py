@@ -11,13 +11,16 @@ router = APIRouter(tags=["User"])
 async def read_me(request: Request):
     return await user_controllers.get_me(request)
 
+
 @router.patch("/me")
 async def update_me(request: Request, user: dict):
     return await user_controllers.patch_me(request, user)
 
+
 @router.get("/get_user/{user_id}")
 async def read_user(user_id: int):
     return await user_controllers.get_user(user_id)
+
 
 @router.post("/logout")
 async def logout(request: Request):

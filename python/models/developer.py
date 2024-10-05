@@ -7,9 +7,10 @@ from typing import Any
 from datetime import datetime
 
 
-
 class Developer(BaseModel):
-    id: ObjectId = Field(default_factory=ObjectId, alias="_id", description="MongoDB ObjectID")
+    id: ObjectId = Field(
+        default_factory=ObjectId, alias="_id", description="MongoDB ObjectID"
+    )
     email: str
     first_name: str
     last_name: str
@@ -20,24 +21,24 @@ class Developer(BaseModel):
         arbitrary_types_allowed = True  # Allow custom types
 
     # You can add validators as needed, here’s an example:
-    @field_validator('email')
+    @field_validator("email")
     def validate_email(cls, value):
         if not value.strip():
-            raise ValueError('Email cannot be empty')
+            raise ValueError("Email cannot be empty")
         return value
 
-    @field_validator('id')
+    @field_validator("id")
     def validate_id(cls, value):
         if not isinstance(value, ObjectId):
-            raise ValueError('Invalid ObjectId')
+            raise ValueError("Invalid ObjectId")
         return value
-    
-    @field_validator('id')
+
+    @field_validator("id")
     def validate_id(cls, v):
         if not isinstance(v, ObjectId):
             raise ValueError("Invalid ObjectId")
         return v
-    
+
     # Custom dict method to handle _id
     def dict(self):
         data = self.model_dump(by_alias=True)  # Use by_alias to get the alias names
@@ -45,11 +46,16 @@ class Developer(BaseModel):
 
     def to_json(self) -> dict:
         """Convert BSON object to a JSON-serializable dictionary."""
-        bson_obj = self.dict()  # Assuming self.dict() returns a dictionary representation of the object
+        bson_obj = (
+            self.dict()
+        )  # Assuming self.dict() returns a dictionary representation of the object
         if isinstance(bson_obj, ObjectId):
             return str(bson_obj)  # Convert ObjectId to string
         elif isinstance(bson_obj, dict):
-            return {key: self._convert_value_to_json(value) for key, value in bson_obj.items()}
+            return {
+                key: self._convert_value_to_json(value)
+                for key, value in bson_obj.items()
+            }
         elif isinstance(bson_obj, list):
             return [self._convert_value_to_json(item) for item in bson_obj]
         else:
@@ -67,5 +73,6 @@ class Developer(BaseModel):
             return [self._convert_value_to_json(item) for item in value]
         else:
             return value
+
     class Config:
         arbitrary_types_allowed = True

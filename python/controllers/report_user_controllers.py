@@ -9,23 +9,21 @@ from fastapi import HTTPException
 from helpers.db_manager import DBManager
 
 
-
-
 db = DBManager.db
 
 
 async def post_add_report(request: Request, report: JsonUserReport):
-    if not hasattr(request.state, 'user_id'):
+    if not hasattr(request.state, "user_id"):
         raise HTTPException(status_code=400, detail="No user found")
     user_id = request.state.user_id
 
     new_report = UserReport(
         id=user_id,
-        reported_user=report.reported_user, 
+        reported_user=report.reported_user,
         reported_by=user_id,
         rule_violations=report.rule_violations,
         report_comments=report.report_comments,
-        reported_at=datetime.datetime.now()
+        reported_at=datetime.datetime.now(),
     )
 
     try:
@@ -35,4 +33,3 @@ async def post_add_report(request: Request, report: JsonUserReport):
     except Exception as e:
         print(e)
         return Response(status_code=400, content=str(e))
-

@@ -7,10 +7,10 @@ from bson import ObjectId
 from typing import Any
 
 
-
-
 class IssueReport(BaseModel):
-    id: ObjectId = Field(default_factory=ObjectId, alias="_id", description="MongoDB ObjectID")
+    id: ObjectId = Field(
+        default_factory=ObjectId, alias="_id", description="MongoDB ObjectID"
+    )
     user_id: str
     description: str
     email: str
@@ -21,27 +21,31 @@ class IssueReport(BaseModel):
     class Config:
         arbitrary_types_allowed = True
 
-    @field_validator('id')
+    @field_validator("id")
     def validate_id(cls, value):
         if not isinstance(value, ObjectId):
-            raise ValueError('Invalid ObjectId')
+            raise ValueError("Invalid ObjectId")
         return value
-    
-    
-    
+
         # Custom dict method to handle _id
+
     def dict(self):
         ##turn the objectID into a string
         data = self.model_dump(by_alias=True)  # Use by_alias to get the alias names
         return data
-    
+
     def to_json(self) -> dict:
         """Convert BSON object to a JSON-serializable dictionary."""
-        bson_obj = self.dict()  # Assuming self.dict() returns a dictionary representation of the object
+        bson_obj = (
+            self.dict()
+        )  # Assuming self.dict() returns a dictionary representation of the object
         if isinstance(bson_obj, ObjectId):
             return str(bson_obj)  # Convert ObjectId to string
         elif isinstance(bson_obj, dict):
-            return {key: self._convert_value_to_json(value) for key, value in bson_obj.items()}
+            return {
+                key: self._convert_value_to_json(value)
+                for key, value in bson_obj.items()
+            }
         elif isinstance(bson_obj, list):
             return [self._convert_value_to_json(item) for item in bson_obj]
         else:
@@ -59,6 +63,6 @@ class IssueReport(BaseModel):
             return [self._convert_value_to_json(item) for item in value]
         else:
             return value
-    
+
     class Config:
         arbitrary_types_allowed = True
