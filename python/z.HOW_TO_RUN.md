@@ -16,8 +16,13 @@ Then install the requirements using
 
 Then run the server using 
 
-``` uvicorn main:app --reload ```
+``` python main.py ```
 
+
+For live reloading use
+
+
+``` uvicorn main:app --reload ```
 
 
 If you install any new python packages please add them to the requirements.txt file using 

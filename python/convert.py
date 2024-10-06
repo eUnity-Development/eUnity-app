@@ -16,49 +16,32 @@ client = openai.Client(
 
 
 @ell.tool(model="llama3-groq-70b-8192-tool-use-preview", client=client)
-def save_python(path: str, code: str) -> dict:
-    """Saves python file."""  # Tool description
+def save_file(file_name: str, code: str) -> dict:
+    """Saves code file, file_name must include extension"""  # Tool description
     ## save the file
-    with open(f"testing/{path}", "w") as f:
+    with open(f"testing/{file_name}", "w") as f:
         f.write(code)
     return {"message": "File saved."}
 
 
 @ell.complex(
-    model="llama3-groq-70b-8192-tool-use-preview", tools=[save_python], client=client
+    model="llama3-groq-70b-8192-tool-use-preview", tools=[save_file], client=client
 )
-def to_file(message: str, save_name: str) -> str:
+def to_file(message: str) -> str:
     return [
         ell.user(
-            f"Save the following code to a file using the save_python tool, and path {save_name}"
+            f"Save the following code to a file using the save_file tool, and give it a name"
             + message
         )
     ]
 
 
 @ell.simple(model="llama3-70b-8192", client=client)
-def convert_to_python(message: str):
-    return f"Translate the following go code to python's fast api: {message}"
+def convert_to(code: str, language: str):
+    return f"Translate the following code to {language}: {code}"
 
 
-# @ell.simple(model="llama3-70b-8192", client=client)
-# def convert_to_go(prompt: str):
-#     """You are a go web app converter use fast_api in python"""
-#     return f"Convert the following go code to python if it's a web app use fast_api: {prompt}"
 
-
-### list all files in their relative paths to backend folder
-def list_files():
-    import os
-
-    for root, dirs, files in os.walk(directory):
-        for f in files:
-            print(f"{root}/{f}")
-
-
-# list_files()
-
-##grab the files under routes folder and convert them to python
 
 
 def getAllFilesFromSubDir(sub_dir):
@@ -78,35 +61,35 @@ def getAllFilesFromSubDir(sub_dir):
     return names
 
 
+
+## ignore this I am messing around
 def convert_main_go():
 
-    files = getAllFilesFromSubDir(f"{directory}/{sub_dir}")
+    file ="testing/test.bash"
+    codes = []
 
-    print(files)
+    with open(f"{file}", "r") as f:
+        content = f.read()
+        codes.append(convert_to(content, "python"))
+        codes.append(convert_to(content, "javascript"))
+        codes.append(convert_to(content, "java"))
+        codes.append(convert_to(content, "c"))
+        codes.append(convert_to(content, "c++"))
+        codes.append(convert_to(content, "c#"))
+        codes.append(convert_to(content, "ruby"))
+        codes.append(convert_to(content, "php"))
+        codes.append(convert_to(content, "swift"))
+        codes.append(convert_to(content, "kotlin"))
+        codes.append(convert_to(content, "typescript"))
+        codes.append(convert_to(content, "rust"))
+        codes.append(convert_to(content, "golang"))
 
-    for file in files:
-        with open(f"{file}.go", "r") as f:
-            content = f.read()
-            ## save name just change extension to .py also get rif of the absolute path
-            save_name = file.split("/")[-1].replace(".go", ".py")
-            print("Save name: ", save_name)
-            converted_code = convert_to_python(content)
-            response = to_file(converted_code, save_name)
-            ## save response to file as json
+        for code in codes:
+            response = to_file(code)
             if response.content[0].tool_call is not None:
-                print(response.__dict__)
-               
-
-                ## I can just call directly
                 print(response.content[0].tool_call())
+        
 
-                # print(response.content[0].tool_call.params)
-                # ## check if params is object, dict or list or string
-                # print(type(response.content[0].tool_call.params))
-                # save_python(
-                #     response.content[0].tool_call.params.path,
-                #     response.content[0].tool_call.params.code,
-                # )
-
+        
 
 convert_main_go()
