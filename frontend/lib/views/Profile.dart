@@ -3,7 +3,7 @@ import 'package:eunity/views/EditProfile.dart';
 import 'package:eunity/views/LoginSignup.dart';
 import 'package:eunity/views/ReportIssue.dart';
 import 'package:eunity/views/Settings.dart';
-import 'package:eunity/widgets/PremiumWidget/PremiumAd.dart';
+import 'package:eunity/widgets/PremiumWidgets/PremiumAd.dart';
 import 'package:flutter/material.dart';
 import 'package:eunity/classes/DesignVariables.dart';
 import 'package:eunity/views/FeedbackScreen.dart';
