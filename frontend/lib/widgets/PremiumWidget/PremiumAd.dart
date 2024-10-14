@@ -13,7 +13,6 @@ class PremiumAd extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     Widget svg(String path) {
       return SvgPicture.asset(
         path,
@@ -25,114 +24,84 @@ class PremiumAd extends StatelessWidget {
     Widget x = svg('assets/premium/x.svg');
     Widget checkmark = svg('assets/premium/check.svg');
 
-    Widget tableText(String text, [bool isHeader = false, bool isGold = false]) {
-      return Text(
-            text,
-            style: isHeader
-                ? TextStyle(
-                    fontWeight: FontWeight.w700, color: isGold ? DesignVariables.gold : Colors.black, fontSize: 17)
-                : const TextStyle(fontSize: 17)
-          );
+    Widget tableText(String text,
+        [bool isHeader = false, bool isGold = false]) {
+      return Padding(
+          padding: EdgeInsets.only(bottom: isHeader ? 5.0 : 0.0),
+          child: Text(text,
+              textAlign: text == 'Included' ? TextAlign.left : TextAlign.center,
+              style: isHeader
+                  ? TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: isGold ? DesignVariables.gold : Colors.black,
+                      fontSize: 17)
+                  : const TextStyle(fontSize: 17)));
     }
 
-    Widget tableEntry(dynamic content, [bool isSvg = false, bool isLast = false, bool isHeader = false]) {
-      double boxHeight = 0;
-      if (isHeader) {
-        boxHeight = 4;
-      } else if (isSvg) {
-        boxHeight = 2;
-      } else if (!isLast) {
-        boxHeight = 2;
-      }
-      return Column(
+    TableRow tableRow(String feature, [bool isLast = false]) {
+      double bottomPadding = isLast ? 0.0 : 3.0;
+      return TableRow(
         children: [
-          content,
-          SizedBox(height: boxHeight)
-        ]
+          Padding(
+            padding: EdgeInsets.only(bottom: bottomPadding),
+            child: tableText(feature),
+          ),
+          Center(
+            child: x,
+          ),
+          Center(
+            child: checkmark,
+          ),
+        ],
       );
     }
 
-
     return Container(
-      width: 349 * DesignVariables.widthConversion,
-      height: 389 * DesignVariables.heightConversion,
-      decoration: BoxDecoration(
-        border: Border.all(color: DesignVariables.greyLines),
-        borderRadius: BorderRadius.circular(25)
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(height: 20 * DesignVariables.widthConversion),
-          Image.asset("assets/premium/premium-logo.png"),
-          const Spacer(),
-
-          Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30 * DesignVariables.widthConversion),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+        width: 349 * DesignVariables.widthConversion,
+        height: 389 * DesignVariables.heightConversion,
+        decoration: BoxDecoration(
+            border: Border.all(color: DesignVariables.greyLines),
+            borderRadius: BorderRadius.circular(25)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: 20 * DesignVariables.widthConversion),
+            Image.asset("assets/premium/premium-logo.png"),
+            const Spacer(),
+            Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: 30 * DesignVariables.widthConversion),
+                child: Table(
                   children: [
-                    // Included
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    TableRow(
                       children: [
-                        tableEntry(tableText('Included', true), false, false, true),
-                        tableEntry(tableText('Feature 1')),
-                        tableEntry(tableText('Feature 2')),
-                        tableEntry(tableText('Feature 3')),
-                        tableEntry(tableText('Feature 4')),
-                        tableEntry(tableText('Feature 5'), false, true),
+                        tableText('Included', true),
+                        tableText('Free', true, true),
+                        tableText('Premium', true, true),
                       ],
                     ),
-
-                    // Free
-                    Column(
-                      children: [
-                        tableEntry(tableText('Free', true), false, false, true),
-                        tableEntry(x, true),
-                        tableEntry(x, true),
-                        tableEntry(x, true),
-                        tableEntry(x, true),
-                        tableEntry(x, true, true),
-                      ],
-                    ),
-
-                    // Premium
-                    Column(
-                      children: [
-                        tableEntry(tableText('Premium', true, true), false, false, true),
-                        tableEntry(checkmark, true),
-                        tableEntry(checkmark, true),
-                        tableEntry(checkmark, true),
-                        tableEntry(checkmark, true),
-                        tableEntry(checkmark, true, true),
-                      ],
-                    )
-                  ]),
-            ),
-
-          const Spacer(),
-          LoginSignupButton(
-            color: DesignVariables.gold, 
-            onTap: purchase, 
-            borderColor: Colors.transparent, 
-            height: 45, 
-            width: 189, 
-            buttonContent: 
-              const Text(
-                "Upgrade",
-                style: TextStyle(
-                  fontSize: 24, 
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                )
-              )
-          ),
-          SizedBox(height: 20 * DesignVariables.widthConversion),
-        ],
-        
-      )
-    );
+                    tableRow('Feature #1'),
+                    tableRow('Feature #2'),
+                    tableRow('Feature #3'),
+                    tableRow('Feature #4'),
+                    tableRow('Feature #5', true),
+                  ],
+                )),
+            const Spacer(),
+            LoginSignupButton(
+                color: DesignVariables.gold,
+                onTap: purchase,
+                borderColor: Colors.transparent,
+                height: 45,
+                width: 189,
+                buttonContent: const Text("Upgrade",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ))),
+            SizedBox(height: 20 * DesignVariables.widthConversion),
+          ],
+        ));
   }
 }
