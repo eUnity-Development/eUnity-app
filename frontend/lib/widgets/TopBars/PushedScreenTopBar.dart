@@ -5,8 +5,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 class PushedScreenTopBar extends StatefulWidget implements PreferredSizeWidget {
   final bool? hasArrow;
   final bool? hasSkip;
+  final bool? isPremium;
   final VoidCallback? onSkip;
-  const PushedScreenTopBar({super.key, this.hasArrow, this.hasSkip, this.onSkip});
+  const PushedScreenTopBar({super.key, this.hasArrow, this.hasSkip, this.onSkip, this.isPremium});
 
   @override
   State<PushedScreenTopBar> createState() => _PushedScreenTopBarState();
@@ -18,9 +19,12 @@ class PushedScreenTopBar extends StatefulWidget implements PreferredSizeWidget {
 class _PushedScreenTopBarState extends State<PushedScreenTopBar> {
   @override
   Widget build(BuildContext context) {
+    bool isPremium = widget.isPremium ?? false;
     bool hasArrow = widget.hasArrow ?? true;
     bool hasSkip = widget.hasSkip ?? false;
     VoidCallback onTapSkip = widget.onSkip ?? () => {print('Add function for onSkip param')};
+
+    String logoLocation = isPremium ? "assets/premium/premium-logo.png" : "assets/e-unity-logo-and-name.png";
 
     return AppBar(
       title: Stack(
@@ -42,8 +46,8 @@ class _PushedScreenTopBarState extends State<PushedScreenTopBar> {
           Container(
             child: Center(
               child: SizedBox(
-                width: 120,
-                child: Image.asset("assets/e-unity-logo-and-name.png"),
+                width: isPremium ? 220 : 120,
+                child: Image.asset(logoLocation),
               ),
             ),
           ),
