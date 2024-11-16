@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "177243638780",
+    "project_id": "eunityusa",
+    "storage_bucket": "eunityusa.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:177243638780:android:12f0fbca606c23b5f5c079",
+        "android_client_info": {
+          "package_name": "com.eunity.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "177243638780-h03qhaap7ranjc56cfp1o79gepl0tq74.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCs9Mq2uwt81GPJexLMv8olQrvaJjqTo-M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "177243638780-h03qhaap7ranjc56cfp1o79gepl0tq74.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

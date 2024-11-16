@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:eunity/classes/AuthHelper.dart';
 import 'package:eunity/classes/DesignVariables.dart';
@@ -51,7 +52,20 @@ class _LoginSignupState extends State<LoginSignup> {
   }
 
   Future<void> handleGoogleSignInClick() async {
-    await AuthHelper.signInWithGoogle();
+    //await AuthHelper.signInWithGoogle();
+    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+    AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken
+    );
+
+    //add firebase stuff
+    UserCredential user = await FirebaseAuth.instance.signInWithCredential(credential);
+
+    print(user.user?.displayName);
   }
 
   void testSignup() async {
