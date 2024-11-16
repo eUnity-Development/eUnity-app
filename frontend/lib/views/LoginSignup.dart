@@ -55,12 +55,19 @@ class _LoginSignupState extends State<LoginSignup> {
     //await AuthHelper.signInWithGoogle();
     GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
+    print("googleUser");
+
+
     GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+    print(googleAuth);
 
     AuthCredential credential = GoogleAuthProvider.credential(
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken
     );
+
+    print(credential);
 
     //add firebase stuff
     UserCredential user = await FirebaseAuth.instance.signInWithCredential(credential);

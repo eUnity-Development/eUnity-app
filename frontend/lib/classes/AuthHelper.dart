@@ -4,6 +4,8 @@ import 'package:eunity/classes/RouteHandler.dart';
 import 'package:eunity/classes/UserInfoHelper.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:eunity/firebase_options.dart';
 
 class AuthHelper {
   static String defaultHost = RouteHandler.defaultHost;
@@ -20,6 +22,9 @@ class AuthHelper {
           "473125180287-80hn1kcn8k3juut9p7ocvi6j77v9lnct.apps.googleusercontent.com");
 
   static Future<void> init() async {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     prefs = await SharedPreferences.getInstance();
     loggedIn = prefs!.getBool('loggedIn') ?? false;
     setLoggedIn(loggedIn);

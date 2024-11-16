@@ -6,6 +6,7 @@ import 'package:eunity/views/LoginSignup.dart';
 import 'package:flutter/material.dart';
 import 'package:eunity/views/CoreTemplate.dart';
 
+
 class Home extends StatefulWidget {
   const Home({super.key});
 
